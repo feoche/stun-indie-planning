@@ -30,3 +30,11 @@ Usage : `python build_schedule6.py && python make_xlsx2.py && python build_site.
 - Jeff : présent les 3 jours de 11h à 22h, Run continu, sur Awards dès 18h30 le samedi.
 - Briefing vendredi 10h00-10h30 (toute l'équipe, Chris compris, sans Jeff).
 - `roles.py` : libellés et couleurs partagés Excel / site. `site/` : PWA publiée sur GitHub Pages (spec : `docs/superpowers/specs/`, plan : `docs/superpowers/plans/`).
+
+## Publier une mise à jour du planning
+1. Modifier les règles dans `build_schedule6.py`, puis `python build_schedule6.py && python make_xlsx2.py && python build_site.py`.
+2. `git add -A && git commit -m "Planning: ..." && git push` sur `main` : le workflow `.github/workflows/pages.yml` déploie `site/` (visible après environ une minute).
+3. Les bénévoles voient la bannière « Planning mis à jour » à la prochaine ouverture ou dans la minute si l'appli est ouverte.
+- Site : https://feoche.github.io/stun-indie-planning/ (réglage unique : Settings > Pages > Source = GitHub Actions, fait).
+- Tests : `python -m pytest` et `npm run test:js` ; test local : `python -m http.server 8000 -d site`, puis `?now=2026-10-24T14:10:00%2B02:00` pour simuler l'heure.
+- Si un fichier de `site/js` ou `site/*.css` change de façon incompatible, incrémenter `SHELL_CACHE` dans `site/sw.js`.
