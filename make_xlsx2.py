@@ -1,0 +1,140 @@
+import json, os
+from openpyxl import Workbook
+from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+from openpyxl.utils import get_column_letter
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+sched = json.load(open(os.path.join(HERE, 'schedule.json'), encoding='utf-8'))
+
+DAY_PERSONS = {
+    'Vendredi 23 octobre': ['François','Chris','Étienne','Florent','Arthur','Mael','Gabriel','Lylou','Suliac','Jeff'],
+    'Samedi 24 octobre':   ['François','Chris','Étienne','Florent','Arthur','Mael','Gabriel','Lylou','Suliac','Robin','Jeff'],
+    'Dimanche 25 octobre': ['François','Chris','Étienne','Florent','Arthur','Mael','Gabriel','Lylou','Suliac','Robin','Jeff'],
+}
+
+ROLE_LABELS = {
+    'Backup': 'Standiers',
+    'Run': 'Run',
+    'Stand': 'Stand IC',
+    'Vote': 'Vote public',
+    'Awards': 'Awards',
+    'Media': 'Média',
+    'Off': 'Off',
+    'Pause': 'Off',
+    '': '—',
+}
+ROLE_COLORS = {
+    'Backup': '2E7D32',
+    'Run':    '1565C0',
+    'Stand':  'E65100',
+    'Vote':   '6A1B9A',
+    'Awards': 'B71C1C',
+    'Media':  '00838F',
+    'Off':    '212121',
+    'Pause':  '212121',
+    '':       '3A3A3A',
+}
+TEXT_WHITE = 'FFFFFF'
+
+def slot_label(idx):
+    h = 9 + idx//2
+    m = '00' if idx % 2 == 0 else '30'
+    return f"{h}h{m}"
+
+wb = Workbook()
+wb.remove(wb.active)
+
+thin = Side(style='thin', color='444444')
+border = Border(left=thin, right=thin, top=thin, bottom=thin)
+
+for day, persons in DAY_PERSONS.items():
+    ws = wb.create_sheet(title=day.replace('octobre', 'oct'))
+    ws.sheet_view.showGridLines = False
+
+    ncols = len(persons) + 1
+    last_col_letter = get_column_letter(ncols)
+    ws.merge_cells(f'A1:{last_col_letter}1')
+    ws['A1'] = f"STUNFEST 2026 — Planning bénévolat Indé — {day}"
+    ws['A1'].font = Font(name='Arial', size=14, bold=True, color=TEXT_WHITE)
+    ws['A1'].fill = PatternFill('solid', fgColor='000000')
+    ws['A1'].alignment = Alignment(horizontal='center', vertical='center')
+    ws.row_dimensions[1].height = 26
+
+    ws.cell(row=2, column=1, value='Horaire').font = Font(name='Arial', bold=True, color=TEXT_WHITE)
+    ws.cell(row=2, column=1).fill = PatternFill('solid', fgColor='000000')
+    ws.cell(row=2, column=1).alignment = Alignment(horizontal='center', vertical='center')
+    ws.cell(row=2, column=1).border = border
+    for ci, p in enumerate(persons, start=2):
+        c = ws.cell(row=2, column=ci, value=p)
+        c.font = Font(name='Arial', bold=True, color=TEXT_WHITE)
+        c.fill = PatternFill('solid', fgColor='000000')
+        c.alignment = Alignment(horizontal='center', vertical='center')
+        c.border = border
+    ws.row_dimensions[2].height = 20
+
+    day_sched = sched[day]
+    n_slots = len(day_sched)
+    for idx in range(n_slots):
+        r = 3 + idx
+        tc = ws.cell(row=r, column=1, value=slot_label(idx))
+        tc.font = Font(name='Arial', bold=True, color=TEXT_WHITE, size=9)
+        tc.fill = PatternFill('solid', fgColor='000000')
+        tc.alignment = Alignment(horizontal='center', vertical='center')
+        tc.border = border
+
+        row_vals = day_sched[str(idx)]
+        for ci, p in enumerate(persons, start=2):
+            role = row_vals.get(p, '')
+            label_r = ROLE_LABELS.get(role, role)
+            c = ws.cell(row=r, column=ci, value=label_r)
+            color = ROLE_COLORS.get(role, '424242')
+            c.fill = PatternFill('solid', fgColor=color)
+            c.font = Font(name='Arial', size=9, bold=(role not in ('Off','Pause','')), color=TEXT_WHITE)
+            c.alignment = Alignment(horizontal='center', vertical='center', wrap_text=False)
+            c.border = border
+        ws.row_dimensions[r].height = 14
+
+    last_row = 3 + n_slots - 1
+
+    ws.column_dimensions['A'].width = 9
+    for ci in range(2, ncols+1):
+        ws.column_dimensions[get_column_letter(ci)].width = 11
+
+    legend_roles = ['Backup', 'Run', 'Stand', 'Vote', 'Awards', 'Media', 'Off', '']
+    legend_row = last_row + 3
+    ws.cell(row=legend_row, column=1, value='Légende').font = Font(name='Arial', bold=True, size=12)
+    full_names = {
+        'Backup': 'Standiers = Back-up standiers Indie',
+        'Run': 'Run = IC volant / Run',
+        'Stand': 'Stand IC = Stand IC / Stunjam',
+        'Vote': 'Vote public = Vote du public',
+        'Awards': 'Awards = Indie Awards (18h30-20h30, samedi) ; 2 personnes fixes restent en Standiers',
+        'Media': 'Média = Captation média (Chris, en continu les 3 jours)',
+        'Off': 'Off (inclut les 30 min de pause déjeuner + 30 min de pause dîner)',
+        '': '— = pas encore arrivé / absent ce jour-là',
+    }
+    for i, role in enumerate(legend_roles):
+        rr = legend_row + 1 + i
+        c1 = ws.cell(row=rr, column=1, value='')
+        c1.fill = PatternFill('solid', fgColor=ROLE_COLORS[role])
+        c2 = ws.cell(row=rr, column=2, value=full_names[role])
+        c2.font = Font(name='Arial', size=10)
+
+    note_row = legend_row + len(legend_roles) + 2
+    notes = []
+    notes.append("FERMETURE DE LA ZONE INDÉ À 19h30 TOUS LES SOIRS.")
+    if 'Vendredi' in day:
+        notes.append("Ouverture au public à 14h. Bénévoles présents dès 9h pour la préparation : tout le monde en Run de 9h à 14h.")
+    else:
+        notes.append("Ouverture au public à 10h. Bénévoles présents dès 9h pour la préparation : tout le monde en Run de 9h à 10h.")
+    notes.append("Robin : présent uniquement samedi et dimanche. Jeff : présent uniquement à partir de 20h. Chris : captation Média en continu.")
+    if 'Samedi' in day:
+        notes.append("Indie Awards 18h30-20h30 : 2 personnes restent fixes sur l'accueil Standiers (sans rotation), le reste de l'équipe (y compris Jeff dès 20h) est sur Awards ; Chris reste en Média. Le planning du samedi va jusqu'à 21h pour afficher les Awards en entier.")
+    notes.append("Règles : max 2h consécutives sur un même poste (hors Run de préparation du vendredi matin et Standiers fixes pendant les Awards, demandés explicitement) · 30 min de pause déjeuner (12h00 ou 13h30) + 30 min de pause dîner (19h00 ou 20h30) pour chacun·e, à effectif égal (affichées en Off).")
+    for i, txt in enumerate(notes):
+        ws.cell(row=note_row+i, column=1, value=txt).font = Font(name='Arial', italic=True, size=9)
+
+    ws.freeze_panes = 'B3'
+
+wb.save(os.path.join(HERE, 'Planning_Stunfest2026_Indie.xlsx'))
+print("done")
