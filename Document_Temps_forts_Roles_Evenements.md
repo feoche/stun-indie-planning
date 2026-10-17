@@ -11,14 +11,15 @@ Document d'accompagnement du planning bénévolat du pôle Indie pour le Stunfes
 | Jour | Horaires | Moment |
 | --- | --- | --- |
 | Vendredi 23 octobre | 9h00–14h00 | Préparation avant ouverture : toute l'équipe en Run en continu |
+| Vendredi 23 octobre | 10h00–10h30 | Briefing d'équipe (Jeff arrive à 11h) |
 | Vendredi 23 octobre | 14h00 | Ouverture du stand au public |
 | Vendredi 23 octobre | 9h00–19h30 | Présence des bénévoles, fermeture à 19h30 |
 | Samedi 24 octobre | 9h00–10h00 | Préparation avant ouverture |
 | Samedi 24 octobre | 10h00 | Ouverture du stand au public |
 | Samedi 24 octobre | 9h00–18h00 | Présence des bénévoles, rotation habituelle |
 | Samedi 24 octobre | 18h30–20h30 | Indie Awards : la majorité de l'équipe (hors Media) bascule sur Awards, 2 personnes restent fixes sur l'accueil Standiers pendant toute la durée (pas de rotation) |
-| Samedi 24 octobre | à partir de 20h00 | Arrivée de Jeff, affecté en Run en continu |
-| Samedi 24 octobre | fin à 21h00 | Fin de journée la plus tardive du week-end (au-delà de la fermeture 19h30, lié aux Indie Awards) |
+| Samedi 24 octobre | 11h00–22h00 | Jeff : Run en continu, sur Awards dès 18h30 |
+| Samedi 24 octobre | fin à 21h00 | Fin de journée de l'équipe la plus tardive (au-delà de la fermeture 19h30, lié aux Indie Awards) ; Jeff reste jusqu'à 22h |
 | Dimanche 25 octobre | 9h00–10h00 | Préparation avant ouverture |
 | Dimanche 25 octobre | 10h00 | Ouverture du stand au public |
 | Dimanche 25 octobre | 9h00–19h30 | Présence des bénévoles, fermeture et clôture du festival |
@@ -33,6 +34,7 @@ Chaque jour comprend une pause déjeuner et une pause dîner de 30 minutes par p
 | Run | IC volant / Run : déplacement entre les différents points du pôle selon les besoins. |
 | Stand IC | Tenue du Stand IC / Stunjam. |
 | Vote public | Créneau ponctuel (~30 minutes par jour) pour gérer le vote du public. |
+| Briefing | Briefing d'équipe du vendredi, 10h00–10h30. |
 | Off | Temps de repos ou pause repas, fondu visuellement dans le planning. |
 | Awards | Mobilisation sur les Indie Awards (samedi 18h30–20h30). |
 | Media | Captation média du pôle, assurée en continu par Chris. |
@@ -46,13 +48,13 @@ Règle générale : pas plus de 2 heures consécutives sur un même poste, sauf 
 | Personne | Présence | Particularité |
 | --- | --- | --- |
 | Chris | Vendredi, samedi, dimanche | Affecté en continu à Media (captation), hors rotation Standiers / Run / Stand |
-| Jeff | À partir de 20h, vendredi, samedi, dimanche | Toujours en Run dès son arrivée, sans pause ni rotation |
+| Jeff | Vendredi, samedi, dimanche, de 11h à 22h | Toujours en Run, sans pause ni rotation ; sur Awards le samedi dès 18h30 |
 | Robin | Samedi et dimanche uniquement | Intègre la rotation standard dès son arrivée |
 | François, Étienne, Florent, Arthur, Mael, Gabriel, Lylou, Suliac | Vendredi, samedi, dimanche | Rotation standard sur Standiers / Run / Stand IC, avec 2 personnes en Run en continu tout le week-end |
 
 ## Événements à déclarer
 
-- **Indie Awards** — samedi 24 octobre, 18h30–20h30. Cérémonie mobilisant l'équipe présente, hors Chris (captation média) et 2 personnes fixes qui restent sur l'accueil Standiers pendant toute la durée.
+- **Indie Awards** — samedi 24 octobre, 18h30–20h30. Cérémonie mobilisant l'équipe présente, y compris Jeff dès 18h30, hors Chris (captation média) et 2 personnes fixes qui restent sur l'accueil Standiers pendant toute la durée.
 - **Vote public** — créneau ponctuel quotidien (~30 minutes), à préciser selon l'organisation générale du festival.
 
 Aucun autre événement spécifique n'est identifié à ce stade pour le pôle Indie.

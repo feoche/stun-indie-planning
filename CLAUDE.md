@@ -8,7 +8,7 @@ Projet exporté depuis une conversation Claude.ai. Objectif : planning visuel (E
 - `schedule.json`, `Planning_Stunfest2026_Indie.xlsx` : sorties actuelles.
 - `Document_Temps_forts_Roles_Evenements.md` : version Markdown du document (la version en ligne a été éditée dans Claude Docs : https://claude.ai/code/artifact/bfbee688-4a61-448c-b12a-b69b46b4897b).
 
-Usage : `python3 build_schedule6.py && python3 make_xlsx2.py` (dépendance : openpyxl). Les chemins sont relatifs au dossier des scripts.
+Usage : `python build_schedule6.py && python make_xlsx2.py && python build_site.py` (dépendance : openpyxl). Les chemins sont relatifs au dossier des scripts.
 
 ## Règles métier (toutes implémentées)
 - Créneaux de 30 min, début à 9h00. Fin à 19h30 chaque soir ; le samedi va jusqu'à 21h pour afficher les Indie Awards en entier.
@@ -25,3 +25,8 @@ Usage : `python3 build_schedule6.py && python3 make_xlsx2.py` (dépendance : ope
 ## Points ouverts
 - Le créneau « Vote public » n'a pas d'horaire fixe dans le document (question posée en commentaire dans le doc en ligne) ; dans le planning il est placé vers 15h sur une personne libre.
 - Le script valide l'absence de dépassement des 2h consécutives hors dérogations (affiche `issues hors dérogations: []`). À conserver à chaque modification.
+
+## Mises à jour décidées (2026-10-17)
+- Jeff : présent les 3 jours de 11h à 22h, Run continu, sur Awards dès 18h30 le samedi.
+- Briefing vendredi 10h00-10h30 (toute l'équipe, Chris compris, sans Jeff).
+- `roles.py` : libellés et couleurs partagés Excel / site. `site/` : PWA publiée sur GitHub Pages (spec : `docs/superpowers/specs/`, plan : `docs/superpowers/plans/`).

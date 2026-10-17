@@ -2,6 +2,7 @@ import json, os
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
+from roles import ROLE_LABELS, ROLE_COLORS
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sched = json.load(open(os.path.join(HERE, 'schedule.json'), encoding='utf-8'))
@@ -12,28 +13,6 @@ DAY_PERSONS = {
     'Dimanche 25 octobre': ['François','Chris','Étienne','Florent','Arthur','Mael','Gabriel','Lylou','Suliac','Robin','Jeff'],
 }
 
-ROLE_LABELS = {
-    'Backup': 'Standiers',
-    'Run': 'Run',
-    'Stand': 'Stand IC',
-    'Vote': 'Vote public',
-    'Awards': 'Awards',
-    'Media': 'Média',
-    'Off': 'Off',
-    'Pause': 'Off',
-    '': '—',
-}
-ROLE_COLORS = {
-    'Backup': '2E7D32',
-    'Run':    '1565C0',
-    'Stand':  'E65100',
-    'Vote':   '6A1B9A',
-    'Awards': 'B71C1C',
-    'Media':  '00838F',
-    'Off':    '212121',
-    'Pause':  '212121',
-    '':       '3A3A3A',
-}
 TEXT_WHITE = 'FFFFFF'
 
 def slot_label(idx):
@@ -100,7 +79,7 @@ for day, persons in DAY_PERSONS.items():
     for ci in range(2, ncols+1):
         ws.column_dimensions[get_column_letter(ci)].width = 11
 
-    legend_roles = ['Backup', 'Run', 'Stand', 'Vote', 'Awards', 'Media', 'Off', '']
+    legend_roles = ['Backup', 'Run', 'Stand', 'Vote', 'Awards', 'Media', 'Briefing', 'Off', '']
     legend_row = last_row + 3
     ws.cell(row=legend_row, column=1, value='Légende').font = Font(name='Arial', bold=True, size=12)
     full_names = {
@@ -110,6 +89,7 @@ for day, persons in DAY_PERSONS.items():
         'Vote': 'Vote public = Vote du public',
         'Awards': 'Awards = Indie Awards (18h30-20h30, samedi) ; 2 personnes fixes restent en Standiers',
         'Media': 'Média = Captation média (Chris, en continu les 3 jours)',
+        'Briefing': "Briefing = Briefing d'équipe (vendredi 10h00-10h30)",
         'Off': 'Off (inclut les 30 min de pause déjeuner + 30 min de pause dîner)',
         '': '— = pas encore arrivé / absent ce jour-là',
     }
@@ -125,11 +105,12 @@ for day, persons in DAY_PERSONS.items():
     notes.append("FERMETURE DE LA ZONE INDÉ À 19h30 TOUS LES SOIRS.")
     if 'Vendredi' in day:
         notes.append("Ouverture au public à 14h. Bénévoles présents dès 9h pour la préparation : tout le monde en Run de 9h à 14h.")
+        notes.append("Briefing d'équipe 10h00-10h30 (Jeff arrive à 11h).")
     else:
         notes.append("Ouverture au public à 10h. Bénévoles présents dès 9h pour la préparation : tout le monde en Run de 9h à 10h.")
-    notes.append("Robin : présent uniquement samedi et dimanche. Jeff : présent uniquement à partir de 20h. Chris : captation Média en continu.")
+    notes.append("Robin : présent uniquement samedi et dimanche. Jeff : présent les 3 jours de 11h à 22h, en Run continu. Chris : captation Média en continu.")
     if 'Samedi' in day:
-        notes.append("Indie Awards 18h30-20h30 : 2 personnes restent fixes sur l'accueil Standiers (sans rotation), le reste de l'équipe (y compris Jeff dès 20h) est sur Awards ; Chris reste en Média. Le planning du samedi va jusqu'à 21h pour afficher les Awards en entier.")
+        notes.append("Indie Awards 18h30-20h30 : 2 personnes restent fixes sur l'accueil Standiers (sans rotation), le reste de l'équipe (y compris Jeff dès 18h30) est sur Awards ; Chris reste en Média. Le planning de l'équipe va jusqu'à 21h le samedi pour afficher les Awards en entier (Jeff jusqu'à 22h).")
     notes.append("Règles : max 2h consécutives sur un même poste (hors Run de préparation du vendredi matin et Standiers fixes pendant les Awards, demandés explicitement) · 30 min de pause déjeuner (12h00 ou 13h30) + 30 min de pause dîner (19h00 ou 20h30) pour chacun·e, à effectif égal (affichées en Off).")
     for i, txt in enumerate(notes):
         ws.cell(row=note_row+i, column=1, value=txt).font = Font(name='Arial', italic=True, size=9)
