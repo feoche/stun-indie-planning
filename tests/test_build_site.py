@@ -58,3 +58,65 @@ def test_planning_shape():
     assert PLANNING['roles']['Run'] == {'label': 'Run', 'color': '#1565C0'}
     slugs = [p['slug'] for p in PLANNING['people']]
     assert slugs == sorted(slugs) and len(slugs) == 11
+
+
+# --- .ics ---
+from build_site import build_ics, fold_line, ics_escape
+
+
+def _ics(name='François'):
+    return build_ics(name, slugify(name), person_blocks(SCHEDULE, name), GEN)
+
+
+def _unfold(text):
+    return text.replace('\r\n ', '')
+
+
+def test_ics_one_event_and_alarm_per_non_off_block():
+    text = _ics()
+    blocks = [b for b in person_blocks(SCHEDULE, 'François') if b.role != 'Off']
+    assert text.count('BEGIN:VEVENT') == text.count('BEGIN:VALARM') == len(blocks)
+    assert 'TRIGGER:-PT10M' in text
+    assert 'SUMMARY:Pause' in _unfold(text)
+    assert 'SUMMARY:Briefing' in _unfold(text)
+    assert 'SUMMARY:Off' not in _unfold(text)
+
+
+def test_ics_times_utc_and_dst():
+    text = _ics()
+    assert 'DTSTART:20261023T070000Z' in text
+    assert 'DTSTART:20261025T080000Z' in text
+
+
+def test_ics_crlf_and_line_length():
+    text = _ics()
+    assert text.endswith('\r\n') and '\n' not in text.replace('\r\n', '')
+    assert all(len(l.encode()) <= 75 for l in text.split('\r\n'))
+
+
+def test_fold_line_roundtrip():
+    line = 'X:' + 'é' * 100
+    folded = fold_line(line)
+    assert all(len(l.encode()) <= 75 for l in folded.split('\r\n'))
+    assert folded.replace('\r\n ', '') == line
+
+
+def test_ics_escape():
+    bs = chr(92)
+    assert ics_escape('a,b;c' + chr(10) + 'd' + bs + 'e') == 'a' + bs + ',b' + bs + ';c' + bs + 'nd' + bs + bs + 'e'
+
+
+def test_ics_uid_stable():
+    other = build_ics('François', 'francois', person_blocks(SCHEDULE, 'François'),
+                      datetime(2026, 10, 20, tzinfo=timezone.utc))
+    uids = lambda t: [l for l in t.split('\r\n') if l.startswith('UID:')]
+    assert uids(_ics()) == uids(other)
+    assert 'UID:francois-20261023-0900@stun-indie-planning' in _ics()
+
+
+def test_ics_calendar_headers():
+    text = _ics()
+    for h in ('X-WR-CALNAME:Stunfest Indie', 'REFRESH-INTERVAL;VALUE=DURATION:PT15M',
+              'X-PUBLISHED-TTL:PT15M'):
+        assert h in text
+    assert 'METHOD' not in text

@@ -4,11 +4,12 @@ import json
 import os
 import unicodedata
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 
 from roles import ROLE_COLORS, SITE_LABELS
 
+BS, LF, CRLF = chr(92), chr(10), chr(13) + chr(10)
 HERE = os.path.dirname(os.path.abspath(__file__))
 TZ = ZoneInfo('Europe/Paris')
 DAY_DATES = {
@@ -78,6 +79,51 @@ def build_planning(schedule, generated_at):
     return {'version': version, 'generatedAt': generated_at.isoformat(), **content}
 
 
+def ics_escape(text):
+    return (text.replace(BS, BS + BS).replace(';', BS + ';').replace(',', BS + ',')
+            .replace(CRLF, LF).replace(LF, BS + 'n'))
+
+
+def fold_line(line):
+    """Repli RFC 5545 : 75 octets max par ligne physique, sans couper un caractère UTF-8."""
+    out, cur, size = [], '', 0
+    for ch in line:
+        n = len(ch.encode())
+        if size + n > (75 if not out else 74):
+            out.append(cur)
+            cur, size = '', 0
+        cur += ch
+        size += n
+    out.append(cur)
+    return '\r\n '.join(out)
+
+
+def _utc(dt):
+    return dt.astimezone(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
+
+
+def build_ics(person, slug, blocks, generated_at):
+    lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Stunfest Indie//Planning//FR',
+             'CALSCALE:GREGORIAN', 'X-WR-CALNAME:Stunfest Indie', 'X-WR-TIMEZONE:Europe/Paris',
+             'REFRESH-INTERVAL;VALUE=DURATION:PT15M', 'X-PUBLISHED-TTL:PT15M']
+    for b in blocks:
+        if b.role == 'Off':
+            continue
+        label = SITE_LABELS[b.role]
+        lines += [
+            'BEGIN:VEVENT',
+            'UID:%s-%s@stun-indie-planning' % (slug, b.start.strftime('%Y%m%d-%H%M')),
+            'DTSTAMP:' + _utc(generated_at),
+            'DTSTART:' + _utc(b.start),
+            'DTEND:' + _utc(b.end),
+            'SUMMARY:' + ics_escape(label if b.role in ('Pause', 'Briefing') else label + ' — Stunfest Indie'),
+            'DESCRIPTION:' + ics_escape('%s, %s – %s' % (label, b.start.strftime('%Hh%M'), b.end.strftime('%Hh%M'))),
+            'BEGIN:VALARM', 'ACTION:DISPLAY', 'DESCRIPTION:' + ics_escape(label), 'TRIGGER:-PT10M', 'END:VALARM',
+            'END:VEVENT']
+    lines.append('END:VCALENDAR')
+    return ''.join(fold_line(l) + CRLF for l in lines)
+
+
 def write_site(schedule_path, out_dir, generated_at):
     with open(schedule_path, encoding='utf-8') as f:
         schedule = json.load(f)
@@ -85,3 +131,13 @@ def write_site(schedule_path, out_dir, generated_at):
     os.makedirs(os.path.join(out_dir, 'data'), exist_ok=True)
     with open(os.path.join(out_dir, 'data', 'planning.json'), 'w', encoding='utf-8') as f:
         json.dump(planning, f, ensure_ascii=False, indent=1)
+    os.makedirs(os.path.join(out_dir, 'cal'), exist_ok=True)
+    for name in _people(schedule):
+        slug = slugify(name)
+        with open(os.path.join(out_dir, 'cal', slug + '.ics'), 'w', encoding='utf-8', newline='') as f:
+            f.write(build_ics(name, slug, person_blocks(schedule, name), generated_at))
+
+
+if __name__ == '__main__':
+    write_site(os.path.join(HERE, 'schedule.json'), os.path.join(HERE, 'site'), datetime.now(timezone.utc))
+    print('site/ généré')
