@@ -44,3 +44,16 @@ test('network failure goes offline without throwing, then recovers', async () =>
   assert.equal(h.statuses.at(-1), 'online');
   assert.equal(h.updates.length, 1);
 });
+
+test('response served from the service-worker cache counts as offline but still updates', async () => {
+  const statuses = [];
+  const updates = [];
+  const source = createPlanningSource({
+    url: './data/planning.json',
+    fetchFn: async () => ({ ok: true, headers: new Headers({ 'x-sw-cache': '1' }), json: async () => ({ version: 'c' }) }),
+    onUpdate: (p) => updates.push(p), onStatus: (s) => statuses.push(s),
+  });
+  await source.pollNow();
+  assert.deepEqual(statuses, ['offline']);
+  assert.equal(updates.length, 1);
+});

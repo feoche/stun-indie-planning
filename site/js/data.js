@@ -10,7 +10,8 @@ export function createPlanningSource({
       const res = await fetchFn(url, { cache: 'no-store' });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const planning = await res.json();
-      onStatus('online');
+      // le service worker marque les réponses servies depuis son cache (réseau indisponible)
+      onStatus(res.headers?.get?.('x-sw-cache') ? 'offline' : 'online');
       if (planning.version !== lastVersion) {
         lastVersion = planning.version;
         onUpdate(planning);

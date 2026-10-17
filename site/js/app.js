@@ -116,3 +116,5 @@ window.addEventListener('hashchange', render);
 startReminders({
   getBlocks: () => currentBlocks, getSlug, nowFn, notify,
 });
+
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});
