@@ -1,4 +1,4 @@
-import { parseBlocks, findPerson, homeState, parisDate, changedBlocks, formatTime } from './model.js';
+import { parseBlocks, findPerson, homeState, parisDate, changedBlocks, formatTime, clockOffset } from './model.js';
 import { getSlug, setSlug, clearSlug, getSeen, setSeen } from './store.js';
 import { renderPicker, renderHome, renderReminders, el } from './render.js';
 import { startReminders } from './reminders.js';
@@ -6,10 +6,9 @@ import { createPlanningSource } from './data.js';
 
 const root = document.getElementById('app');
 
-// ?now=<ISO> simule l'heure (outil de test) ; l'horloge continue ensuite d'avancer.
-const nowParam = new URLSearchParams(location.search).get('now');
-const clockOffset = nowParam && !Number.isNaN(Date.parse(nowParam)) ? Date.parse(nowParam) - Date.now() : 0;
-const nowFn = () => new Date(Date.now() + clockOffset);
+// ?now=<ISO> simule l'heure, en local uniquement ; l'horloge continue ensuite d'avancer.
+const offset = clockOffset(location.search, location.hostname, Date.now());
+const nowFn = () => new Date(Date.now() + offset);
 
 let planning = null;
 let selectedDay = null;
@@ -76,7 +75,10 @@ function notify(block) {
 }
 
 function render() {
-  if (!planning) return;
+  if (!planning) {
+    root.replaceChildren(el('p', 'message', online ? 'Chargement…' : "Hors-ligne : le planning n'a pas encore été téléchargé. Reconnecte-toi une fois."));
+    return;
+  }
   const person = getSlug() ? findPerson(planning, getSlug()) : null;
   if (!person) {
     if (getSlug()) clearSlug();
@@ -98,7 +100,7 @@ function render() {
   renderHome(root, {
     person, planning, blocks, now, selectedDay, changed,
     state: homeState(blocks, planning.days, now),
-    extra: [alertBlock ? alertBanner() : null, changed.size ? updateBanner(person, changed) : null, statusLine()],
+    extra: [offset ? el('div', 'alert', 'Heure simulée (test)') : null, alertBlock ? alertBanner() : null, changed.size ? updateBanner(person, changed) : null, statusLine()],
     onSelectDay: (d) => { selectedDay = d; render(); },
     onChangePerson: () => { clearSlug(); render(); },
   });

@@ -16,11 +16,11 @@ Usage : `python build_schedule6.py && python make_xlsx2.py && python build_site.
 - Postes (libellé Excel) : Backup = « Standiers » (ex-Back-up standiers Indie), Run (IC volant), Stand = « Stand IC » (Stand IC / Stunjam), Vote public (~30 min/jour), Awards, Média (Chris), Off (inclut les pauses repas).
 - Max 2h consécutives sur un même poste. Dérogations explicites : préparation du vendredi matin (tout le monde en Run), Jeff en Run continu, Standiers fixes pendant les Awards (2h30, sans rotation).
 - Pauses : 30 min déjeuner (12h00 ou 13h30) + 30 min dîner (19h00 ou 20h30) par personne, affichées en « Off ».
-- Équipe (11) : François, Chris, Étienne, Florent, Arthur, Mael, Gabriel, Lylou, Robin (samedi et dimanche seulement), Suliac, Jeff (à partir de 20h seulement, toujours en Run, sans pause ni rotation).
+- Équipe (11) : François, Chris, Étienne, Florent, Arthur, Mael, Gabriel, Lylou, Robin (samedi et dimanche seulement), Suliac, Jeff (3 jours, de 11h à 22h, toujours en Run, sans pause ni rotation).
 - Chris : captation Média en continu les 3 jours (hors rotation), pause repas alignée.
 - 2 personnes en Run en continu tout le week-end (3 pendant un temps le samedi pour le jury des Awards, abandonné).
 - Standiers : 3 personnes simultanées sur les créneaux repas, ramené à 1 pendant l'instant précis des pauses.
-- Indie Awards (samedi 18h30-20h30) : 2 personnes fixes restent en Standiers sur toute la durée ; le reste de l'équipe (Jeff dès 20h inclus) est sur Awards ; Chris reste en Média.
+- Indie Awards (samedi 18h30-20h30) : 2 personnes fixes restent en Standiers sur toute la durée ; le reste de l'équipe (Jeff dès 18h30 inclus) est sur Awards ; Chris reste en Média.
 
 ## Points ouverts
 - Le créneau « Vote public » n'a pas d'horaire fixe dans le document (question posée en commentaire dans le doc en ligne) ; dans le planning il est placé vers 15h sur une personne libre.

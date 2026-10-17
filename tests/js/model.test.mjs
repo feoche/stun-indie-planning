@@ -113,3 +113,15 @@ test('changedBlocks marks moved or new blocks only', () => {
   assert.deepEqual([...changed], [at('2026-10-24T10:00:00+02:00').toISOString()]);
   assert.equal(changedBlocks(person.blocks, person.blocks).size, 0);
 });
+
+import { clockOffset } from '../../site/js/model.js';
+
+test('clockOffset: ?now= is honoured on localhost only', () => {
+  const real = Date.parse('2026-10-24T10:00:00Z');
+  const q = '?now=2026-10-24T14:10:00%2B02:00';
+  assert.equal(clockOffset(q, 'localhost', real), Date.parse('2026-10-24T12:10:00Z') - real);
+  assert.equal(clockOffset(q, '127.0.0.1', real), Date.parse('2026-10-24T12:10:00Z') - real);
+  assert.equal(clockOffset(q, 'feoche.github.io', real), 0);
+  assert.equal(clockOffset('?now=garbage', 'localhost', real), 0);
+  assert.equal(clockOffset('', 'localhost', real), 0);
+});

@@ -57,3 +57,17 @@ test('response served from the service-worker cache counts as offline but still 
   assert.deepEqual(statuses, ['offline']);
   assert.equal(updates.length, 1);
 });
+
+test('a request that never answers times out and goes offline', async () => {
+  const statuses = [];
+  const source = createPlanningSource({
+    url: './data/planning.json',
+    timeoutMs: 20,
+    fetchFn: (url, { signal }) => new Promise((_, reject) => {
+      signal.addEventListener('abort', () => reject(new Error('aborted')));
+    }),
+    onUpdate: () => {}, onStatus: (s) => statuses.push(s),
+  });
+  await source.pollNow();
+  assert.deepEqual(statuses, ['offline']);
+});

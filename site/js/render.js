@@ -163,7 +163,7 @@ export function renderReminders(root, { slug, baseUrl, onBack }) {
         el('p', null, 'Chaque affectation arrive dans ton calendrier avec un rappel 10 minutes avant, même écran verrouillé.'),
         subscribe, download,
         el('p', 'note', 'Abonnement : le calendrier se met à jour tout seul, mais le téléphone le rafraîchit avec un délai variable (de quelques dizaines de minutes à plusieurs heures).'),
-        el('p', 'note', 'Android / Google Agenda : les calendriers auxquels on s\'abonne n\'envoient pas de rappel. Télécharge le fichier et importe-le, puis réimporte-le après un changement de planning.')),
+        el('p', 'note', 'Android / Google Agenda : les calendriers auxquels on s\'abonne n\'envoient pas de rappel. Télécharge le fichier et importe-le. Après un changement de planning, supprime d\'abord le calendrier « Stunfest Indie » puis réimporte le fichier, sinon les anciens créneaux restent.')),
       section('Dans l\'appli',
         el('p', null, 'L\'appli t\'alerte 10 minutes avant ton prochain poste, mais seulement tant qu\'elle est ouverte.'),
         ...alerts,

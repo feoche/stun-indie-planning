@@ -66,3 +66,11 @@ export function changedBlocks(oldBlocks, newBlocks) {
   const before = new Set(oldBlocks.map(sig));
   return new Set(newBlocks.filter((b) => !before.has(sig(b))).map((b) => new Date(b.start).toISOString()));
 }
+
+// ?now=<ISO> simule l'heure, uniquement en local (jamais en production : un lien partagé afficherait un faux poste).
+export function clockOffset(search, hostname, realNow) {
+  if (hostname !== 'localhost' && hostname !== '127.0.0.1') return 0;
+  const raw = new URLSearchParams(search).get('now');
+  const t = raw ? Date.parse(raw) : NaN;
+  return Number.isNaN(t) ? 0 : t - realNow;
+}

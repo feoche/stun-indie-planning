@@ -120,3 +120,20 @@ def test_ics_calendar_headers():
               'X-PUBLISHED-TTL:PT15M'):
         assert h in text
     assert 'METHOD' not in text
+
+
+def test_ics_sequence_increases_with_build_time():
+    later = build_ics('François', 'francois', person_blocks(SCHEDULE, 'François'),
+                      datetime(2026, 10, 24, 12, 0, tzinfo=timezone.utc))
+    seq = lambda t: [int(l.split(':')[1]) for l in t.split('\r\n') if l.startswith('SEQUENCE:')]
+    assert seq(_ics()) and len(set(seq(_ics()))) == 1
+    assert seq(later)[0] > seq(_ics())[0]
+
+
+def test_committed_ics_files_are_crlf():
+    import glob
+    files = glob.glob('site/cal/*.ics')
+    assert len(files) == 11
+    for f in files:
+        data = open(f, 'rb').read()
+        assert b'\r\n' in data and b'\n' not in data.replace(b'\r\n', b'')

@@ -114,6 +114,7 @@ def build_ics(person, slug, blocks, generated_at):
             'BEGIN:VEVENT',
             'UID:%s-%s@stun-indie-planning' % (slug, b.start.strftime('%Y%m%d-%H%M')),
             'DTSTAMP:' + _utc(generated_at),
+            'SEQUENCE:%d' % (int(generated_at.timestamp()) // 60),
             'DTSTART:' + _utc(b.start),
             'DTEND:' + _utc(b.end),
             'SUMMARY:' + ics_escape(label if b.role in ('Pause', 'Briefing') else label + ' — Stunfest Indie'),

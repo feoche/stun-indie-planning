@@ -1,13 +1,20 @@
 // Rechargement du planning : onUpdate seulement quand la version change, onStatus à chaque tentative.
 export function createPlanningSource({
-  url, intervalMs = 60000, fetchFn = (...args) => fetch(...args), onUpdate, onStatus,
+  url, intervalMs = 60000, timeoutMs = 6000, fetchFn = (...args) => fetch(...args), onUpdate, onStatus,
 }) {
   let lastVersion = null;
   let timer = null;
 
   async function pollNow() {
     try {
-      const res = await fetchFn(url, { cache: 'no-store' });
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+      let res;
+      try {
+        res = await fetchFn(url, { cache: 'no-store', signal: ctrl.signal });
+      } finally {
+        clearTimeout(timer);
+      }
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const planning = await res.json();
       // le service worker marque les réponses servies depuis son cache (réseau indisponible)
