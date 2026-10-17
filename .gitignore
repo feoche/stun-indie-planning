@@ -3,3 +3,6 @@
 .claude/
 __pycache__/
 .superpowers/
+.pytest_cache/
+pytest-cache-files-*/
+node_modules/
