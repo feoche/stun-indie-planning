@@ -106,7 +106,9 @@ export function renderHome(root, ctx) {
   const change = el('button', 'link-btn', 'Changer');
   change.type = 'button';
   change.addEventListener('click', ctx.onChangePerson);
-  top.append(change);
+  const reminders = el('a', 'link-btn', 'Rappels');
+  reminders.href = '#rappels';
+  top.append(el('div', 'top-actions', reminders, change));
 
   const content = el('main', 'content');
   content.append(...(ctx.extra ?? []).filter(Boolean));
@@ -124,4 +126,47 @@ export function renderHome(root, ctx) {
   }
   content.append(tabs, timeline(planning, blocks, selectedDay, state, changed));
   root.replaceChildren(top, content);
+}
+
+function section(title, ...children) {
+  return el('section', 'help', el('h2', null, title), ...children);
+}
+
+// Écran « Rappels » : calendrier du téléphone (abonnement / fichier) et alertes dans l'appli.
+export function renderReminders(root, { slug, baseUrl, onBack }) {
+  const calUrl = `${baseUrl}cal/${slug}.ics`;
+  const back = el('button', 'link-btn', 'Retour');
+  back.type = 'button';
+  back.addEventListener('click', onBack);
+
+  const subscribe = el('a', 'action', "S'abonner au calendrier");
+  subscribe.href = calUrl.replace(/^https?:/, 'webcal:');
+  const download = el('a', 'action secondary', 'Télécharger le fichier (.ics)');
+  download.href = calUrl;
+  download.download = `stunfest-${slug}.ics`;
+
+  const alerts = [];
+  if ('Notification' in window) {
+    const enable = el('button', 'action secondary', 'Activer les alertes dans l\'appli');
+    enable.type = 'button';
+    enable.addEventListener('click', async () => {
+      const result = await Notification.requestPermission();
+      enable.textContent = result === 'granted' ? 'Alertes activées' : 'Alertes refusées';
+    });
+    alerts.push(enable);
+  }
+
+  root.replaceChildren(
+    el('header', 'top', el('h1', null, 'Rappels'), back),
+    el('main', 'content',
+      section('Dans le calendrier du téléphone',
+        el('p', null, 'Chaque affectation arrive dans ton calendrier avec un rappel 10 minutes avant, même écran verrouillé.'),
+        subscribe, download,
+        el('p', 'note', 'Abonnement : le calendrier se met à jour tout seul, mais le téléphone le rafraîchit avec un délai variable (de quelques dizaines de minutes à plusieurs heures).'),
+        el('p', 'note', 'Android / Google Agenda : les calendriers auxquels on s\'abonne n\'envoient pas de rappel. Télécharge le fichier et importe-le, puis réimporte-le après un changement de planning.')),
+      section('Dans l\'appli',
+        el('p', null, 'L\'appli t\'alerte 10 minutes avant ton prochain poste, mais seulement tant qu\'elle est ouverte.'),
+        ...alerts,
+        el('p', 'note', 'iPhone : ajoute d\'abord l\'appli à l\'écran d\'accueil (Partager > Sur l\'écran d\'accueil) pour pouvoir recevoir des notifications.'))),
+  );
 }
