@@ -1,0 +1,4 @@
+openpyxl
+tzdata
+pytest
+Pillow

@@ -26,15 +26,15 @@
   },
   "2": {
    "Jeff": "",
-   "François": "Run",
-   "Étienne": "Run",
-   "Florent": "Run",
-   "Arthur": "Run",
-   "Mael": "Run",
-   "Gabriel": "Run",
-   "Lylou": "Run",
-   "Suliac": "Run",
-   "Chris": "Media"
+   "François": "Briefing",
+   "Étienne": "Briefing",
+   "Florent": "Briefing",
+   "Arthur": "Briefing",
+   "Mael": "Briefing",
+   "Gabriel": "Briefing",
+   "Lylou": "Briefing",
+   "Suliac": "Briefing",
+   "Chris": "Briefing"
   },
   "3": {
    "Jeff": "",
@@ -49,7 +49,7 @@
    "Chris": "Media"
   },
   "4": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Run",
    "Étienne": "Run",
    "Florent": "Run",
@@ -61,7 +61,7 @@
    "Chris": "Media"
   },
   "5": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Run",
    "Étienne": "Run",
    "Florent": "Run",
@@ -73,7 +73,7 @@
    "Chris": "Media"
   },
   "6": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Run",
    "Étienne": "Run",
    "Florent": "Run",
@@ -85,7 +85,7 @@
    "Chris": "Pause"
   },
   "7": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Run",
    "Étienne": "Run",
    "Florent": "Run",
@@ -97,7 +97,7 @@
    "Chris": "Media"
   },
   "8": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Run",
    "Étienne": "Run",
    "Florent": "Run",
@@ -109,7 +109,7 @@
    "Chris": "Media"
   },
   "9": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Run",
    "Étienne": "Run",
    "Florent": "Run",
@@ -121,7 +121,7 @@
    "Chris": "Media"
   },
   "10": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Backup",
    "Étienne": "Stand",
    "Florent": "Run",
@@ -133,7 +133,7 @@
    "Chris": "Media"
   },
   "11": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Off",
    "Étienne": "Off",
    "Florent": "Off",
@@ -145,7 +145,7 @@
    "Chris": "Media"
   },
   "12": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Stand",
    "Étienne": "Backup",
    "Florent": "Vote",
@@ -157,7 +157,7 @@
    "Chris": "Media"
   },
   "13": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Run",
    "Étienne": "Run",
    "Florent": "Backup",
@@ -169,7 +169,7 @@
    "Chris": "Media"
   },
   "14": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Off",
    "Étienne": "Off",
    "Florent": "Run",
@@ -181,7 +181,7 @@
    "Chris": "Media"
   },
   "15": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Off",
    "Étienne": "Off",
    "Florent": "Off",
@@ -193,7 +193,7 @@
    "Chris": "Media"
   },
   "16": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Run",
    "Étienne": "Run",
    "Florent": "Stand",
@@ -205,7 +205,7 @@
    "Chris": "Media"
   },
   "17": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Off",
    "Étienne": "Off",
    "Florent": "Off",
@@ -217,7 +217,7 @@
    "Chris": "Media"
   },
   "18": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Backup",
    "Étienne": "Stand",
    "Florent": "Run",
@@ -229,7 +229,7 @@
    "Chris": "Media"
   },
   "19": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Off",
    "Étienne": "Off",
    "Florent": "Off",
@@ -241,7 +241,7 @@
    "Chris": "Media"
   },
   "20": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Pause",
    "Étienne": "Pause",
    "Florent": "Pause",
@@ -251,6 +251,21 @@
    "Lylou": "Backup",
    "Suliac": "Stand",
    "Chris": "Pause"
+  },
+  "21": {
+   "Jeff": "Run"
+  },
+  "22": {
+   "Jeff": "Run"
+  },
+  "23": {
+   "Jeff": "Run"
+  },
+  "24": {
+   "Jeff": "Run"
+  },
+  "25": {
+   "Jeff": "Run"
   }
  },
  "Samedi 24 octobre": {
@@ -307,7 +322,7 @@
    "Chris": "Media"
   },
   "4": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Stand",
    "Étienne": "Run",
    "Florent": "Off",
@@ -320,7 +335,7 @@
    "Chris": "Media"
   },
   "5": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Off",
    "Étienne": "Off",
    "Florent": "Backup",
@@ -333,7 +348,7 @@
    "Chris": "Media"
   },
   "6": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Pause",
    "Étienne": "Pause",
    "Florent": "Pause",
@@ -346,7 +361,7 @@
    "Chris": "Pause"
   },
   "7": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Run",
    "Étienne": "Backup",
    "Florent": "Stand",
@@ -359,7 +374,7 @@
    "Chris": "Media"
   },
   "8": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Backup",
    "Étienne": "Run",
    "Florent": "Run",
@@ -372,7 +387,7 @@
    "Chris": "Media"
   },
   "9": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Run",
    "Étienne": "Off",
    "Florent": "Off",
@@ -385,7 +400,7 @@
    "Chris": "Media"
   },
   "10": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Off",
    "Étienne": "Off",
    "Florent": "Off",
@@ -398,7 +413,7 @@
    "Chris": "Media"
   },
   "11": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Off",
    "Étienne": "Backup",
    "Florent": "Off",
@@ -411,7 +426,7 @@
    "Chris": "Media"
   },
   "12": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Run",
    "Étienne": "Vote",
    "Florent": "Backup",
@@ -424,7 +439,7 @@
    "Chris": "Media"
   },
   "13": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Off",
    "Étienne": "Stand",
    "Florent": "Run",
@@ -437,7 +452,7 @@
    "Chris": "Media"
   },
   "14": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Off",
    "Étienne": "Off",
    "Florent": "Off",
@@ -450,7 +465,7 @@
    "Chris": "Media"
   },
   "15": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Stand",
    "Étienne": "Run",
    "Florent": "Off",
@@ -463,7 +478,7 @@
    "Chris": "Media"
   },
   "16": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Off",
    "Étienne": "Off",
    "Florent": "Backup",
@@ -476,7 +491,7 @@
    "Chris": "Media"
   },
   "17": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Run",
    "Étienne": "Run",
    "Florent": "Stand",
@@ -489,7 +504,7 @@
    "Chris": "Media"
   },
   "18": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Off",
    "Étienne": "Off",
    "Florent": "Off",
@@ -502,7 +517,7 @@
    "Chris": "Media"
   },
   "19": {
-   "Jeff": "",
+   "Jeff": "Awards",
    "François": "Awards",
    "Étienne": "Awards",
    "Florent": "Awards",
@@ -515,7 +530,7 @@
    "Chris": "Media"
   },
   "20": {
-   "Jeff": "",
+   "Jeff": "Awards",
    "François": "Awards",
    "Étienne": "Awards",
    "Florent": "Awards",
@@ -528,7 +543,7 @@
    "Chris": "Pause"
   },
   "21": {
-   "Jeff": "",
+   "Jeff": "Awards",
    "François": "Awards",
    "Étienne": "Awards",
    "Florent": "Awards",
@@ -565,6 +580,12 @@
    "Suliac": "Backup",
    "Robin": "Backup",
    "Chris": "Media"
+  },
+  "24": {
+   "Jeff": "Run"
+  },
+  "25": {
+   "Jeff": "Run"
   }
  },
  "Dimanche 25 octobre": {
@@ -621,7 +642,7 @@
    "Chris": "Media"
   },
   "4": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Stand",
    "Étienne": "Run",
    "Florent": "Off",
@@ -634,7 +655,7 @@
    "Chris": "Media"
   },
   "5": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Off",
    "Étienne": "Off",
    "Florent": "Backup",
@@ -647,7 +668,7 @@
    "Chris": "Media"
   },
   "6": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Pause",
    "Étienne": "Pause",
    "Florent": "Pause",
@@ -660,7 +681,7 @@
    "Chris": "Pause"
   },
   "7": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Run",
    "Étienne": "Backup",
    "Florent": "Stand",
@@ -673,7 +694,7 @@
    "Chris": "Media"
   },
   "8": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Backup",
    "Étienne": "Run",
    "Florent": "Run",
@@ -686,7 +707,7 @@
    "Chris": "Media"
   },
   "9": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Run",
    "Étienne": "Off",
    "Florent": "Off",
@@ -699,7 +720,7 @@
    "Chris": "Media"
   },
   "10": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Off",
    "Étienne": "Off",
    "Florent": "Off",
@@ -712,7 +733,7 @@
    "Chris": "Media"
   },
   "11": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Off",
    "Étienne": "Backup",
    "Florent": "Off",
@@ -725,7 +746,7 @@
    "Chris": "Media"
   },
   "12": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Run",
    "Étienne": "Vote",
    "Florent": "Backup",
@@ -738,7 +759,7 @@
    "Chris": "Media"
   },
   "13": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Off",
    "Étienne": "Stand",
    "Florent": "Run",
@@ -751,7 +772,7 @@
    "Chris": "Media"
   },
   "14": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Off",
    "Étienne": "Off",
    "Florent": "Off",
@@ -764,7 +785,7 @@
    "Chris": "Media"
   },
   "15": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Stand",
    "Étienne": "Run",
    "Florent": "Off",
@@ -777,7 +798,7 @@
    "Chris": "Media"
   },
   "16": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Off",
    "Étienne": "Off",
    "Florent": "Backup",
@@ -790,7 +811,7 @@
    "Chris": "Media"
   },
   "17": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Run",
    "Étienne": "Run",
    "Florent": "Stand",
@@ -803,7 +824,7 @@
    "Chris": "Media"
   },
   "18": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Off",
    "Étienne": "Off",
    "Florent": "Off",
@@ -816,7 +837,7 @@
    "Chris": "Media"
   },
   "19": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Off",
    "Étienne": "Off",
    "Florent": "Run",
@@ -829,7 +850,7 @@
    "Chris": "Media"
   },
   "20": {
-   "Jeff": "",
+   "Jeff": "Run",
    "François": "Pause",
    "Étienne": "Pause",
    "Florent": "Pause",
@@ -840,6 +861,21 @@
    "Suliac": "Stand",
    "Robin": "Run",
    "Chris": "Pause"
+  },
+  "21": {
+   "Jeff": "Run"
+  },
+  "22": {
+   "Jeff": "Run"
+  },
+  "23": {
+   "Jeff": "Run"
+  },
+  "24": {
+   "Jeff": "Run"
+  },
+  "25": {
+   "Jeff": "Run"
   }
  }
 }

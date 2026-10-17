@@ -1,6 +1,6 @@
 """Génère schedule.json : planning bénévoles pôle Indie, Stunfest 2026 (23-25 octobre).
 Créneaux de 30 min à partir de 9h00 (idx 0 = 9h00, idx 1 = 9h30, ...).
-Rôles internes : Backup (affiché Standiers), Run, Stand, Vote, Awards, Media, Pause/Off.
+Rôles internes : Backup (affiché Standiers), Run, Stand, Vote, Awards, Media, Briefing, Pause/Off.
 """
 import json, os, itertools as it
 
@@ -20,16 +20,17 @@ MEDIA_PERSON = 'Chris'
 DAYS = {
     'Vendredi 23 octobre': {
         'full_day': ['François', 'Étienne', 'Florent', 'Arthur', 'Mael', 'Gabriel', 'Lylou', 'Suliac'],
-        'late': [('Jeff', 20)],
+        'late': [('Jeff', 11, 22)],
         'awards': None,
         'end_hour': 19.5,
         'all_run_until': 14,   # préparation avant ouverture (14h) : tout le monde en Run
         'prep_counts_toward_limit': False,  # dérogation explicite : pas de limite de 2h sur cette période
+        'briefing_slot': slot_index(10, 0),  # briefing 10h00-10h30, toute l'équipe sauf Jeff
         'run_count': 2,
     },
     'Samedi 24 octobre': {
         'full_day': ['François', 'Étienne', 'Florent', 'Arthur', 'Mael', 'Gabriel', 'Lylou', 'Suliac', 'Robin'],
-        'late': [('Jeff', 20)],
+        'late': [('Jeff', 11, 22)],
         'awards': {'start_slot': awards_start, 'end_slot': awards_end},
         'end_hour': 19.5,
         'all_run_until': 10,   # préparation 9h-10h avant ouverture : tout le monde en Run
@@ -38,7 +39,7 @@ DAYS = {
     },
     'Dimanche 25 octobre': {
         'full_day': ['François', 'Étienne', 'Florent', 'Arthur', 'Mael', 'Gabriel', 'Lylou', 'Suliac', 'Robin'],
-        'late': [('Jeff', 20)],
+        'late': [('Jeff', 11, 22)],
         'awards': None,
         'end_hour': 19.5,
         'all_run_until': 10,   # préparation 9h-10h avant ouverture : tout le monde en Run
@@ -59,7 +60,8 @@ def build_day(day_name, cfg):
     run_count_cfg = cfg.get('run_count', 2)
 
     base_end_slots = slot_index(int(end_hour), 1 if end_hour % 1 else 0)
-    day_n_slots = max(base_end_slots, awards['end_slot'] + 1) if awards else base_end_slots
+    team_end_slots = max(base_end_slots, awards['end_slot'] + 1) if awards else base_end_slots
+    day_n_slots = max(team_end_slots, max(end for _, _, end in late) * 2 - 18)  # fin tardive des 'late'
 
     meal_window = set(range(lunch6, lunch9 + 1)) | set(range(dinner20, dinner23 + 1))
 
@@ -82,9 +84,14 @@ def build_day(day_name, cfg):
         else:
             media_role = 'Media'
 
-        # Jeff (arrivée tardive) : toujours en Run dès son arrivée
-        for person, start_h in late:
-            row[person] = 'Run' if h >= start_h else ''
+        # Jeff (présence décalée) : toujours en Run entre son arrivée et son départ
+        for person, start_h, end_h in late:
+            row[person] = 'Run' if start_h <= h < end_h else ''
+
+        # Après le départ de l'équipe, seuls les 'late' restent
+        if idx >= team_end_slots:
+            schedule[idx] = row
+            continue
 
         # Indie Awards : 2 personnes fixes en Standiers, le reste de l'équipe sur Awards (Chris reste en Média)
         if awards and awards['start_slot'] <= idx <= awards['end_slot']:
@@ -102,10 +109,19 @@ def build_day(day_name, cfg):
                     row[p] = 'Awards'
                     cur_role[p] = None
                     run_len[p] = 0
-            for person, start_h in late:
-                if h >= start_h:
+            for person, start_h, end_h in late:
+                if start_h <= h < end_h:
                     row[person] = 'Awards'
             row[MEDIA_PERSON] = media_role
+            schedule[idx] = row
+            continue
+
+        # Briefing : toute l'équipe (Chris compris) ; Jeff n'est pas encore arrivé
+        if idx == cfg.get('briefing_slot'):
+            for p in full_day:
+                row[p] = 'Briefing'
+                cur_role[p], run_len[p] = None, 0
+            row[MEDIA_PERSON] = 'Briefing'
             schedule[idx] = row
             continue
 
@@ -193,12 +209,10 @@ def build_day(day_name, cfg):
 
     return schedule
 
-if __name__ == '__main__':
-    all_sched = {day: build_day(day, cfg) for day, cfg in DAYS.items()}
-
-    # Validation : pas plus de 4 créneaux (2h) consécutifs sur un même poste de travail,
-    # hors dérogations explicites : Run du vendredi avant 14h, Standiers pendant les Awards,
-    # Jeff (Run continu), Chris (Média continu).
+def find_issues(all_sched):
+    """Validation : pas plus de 4 créneaux (2h) consécutifs sur un même poste de travail,
+    hors dérogations explicites : Run du vendredi avant 14h, Standiers pendant les Awards,
+    Jeff (Run continu), Chris (Média continu)."""
     roles_work = {'Backup', 'Run', 'Stand'}
     issues = []
     for day, cfg in DAYS.items():
@@ -223,6 +237,12 @@ if __name__ == '__main__':
                 if run_l > 4:
                     issues.append((day, p, r, run_l, h))
                 prev = r
+    return issues
+
+if __name__ == '__main__':
+    all_sched = {day: build_day(day, cfg) for day, cfg in DAYS.items()}
+
+    issues = find_issues(all_sched)
     print('issues hors dérogations:', issues)
 
     out = {day: {str(idx): row for idx, row in sched.items()} for day, sched in all_sched.items()}
