@@ -77,7 +77,7 @@ const MESSAGES = {
   'done-today': 'Ta journée est terminée. Merci !',
 };
 
-function timeline(planning, blocks, selectedDay, state, now) {
+function timeline(planning, blocks, selectedDay, state, changed) {
   const list = el('ol', 'timeline');
   const day = blocksOfDay(blocks, selectedDay);
   if (day.length === 0) {
@@ -91,6 +91,7 @@ function timeline(planning, blocks, selectedDay, state, now) {
       roleChip(planning, b.role));
     item.style.borderLeftColor = info.color;
     if (state.current === b) item.classList.add('current');
+    if (changed.has(b.start.toISOString())) item.classList.add('changed');
     if (b.role === 'Off' || b.role === 'Pause') item.classList.add('quiet');
     list.append(item);
   }
@@ -100,6 +101,7 @@ function timeline(planning, blocks, selectedDay, state, now) {
 // ctx : { person, planning, blocks, state, selectedDay, now, onSelectDay, onChangePerson, extra }
 export function renderHome(root, ctx) {
   const { person, planning, blocks, state, selectedDay, now } = ctx;
+  const changed = ctx.changed ?? new Set();
   const top = el('header', 'top', el('h1', null, person.name));
   const change = el('button', 'link-btn', 'Changer');
   change.type = 'button';
@@ -107,7 +109,7 @@ export function renderHome(root, ctx) {
   top.append(change);
 
   const content = el('main', 'content');
-  if (ctx.extra) content.append(...ctx.extra);
+  content.append(...(ctx.extra ?? []).filter(Boolean));
   if (state.current) content.append(currentCard(planning, state.current, now));
   else content.append(el('p', 'message', MESSAGES[state.kind] ?? ''));
   if (state.next) content.append(nextCard(planning, state.next, state.kind === 'before' || state.kind === 'off-day' || state.kind === 'done-today'));
@@ -120,6 +122,6 @@ export function renderHome(root, ctx) {
     btn.addEventListener('click', () => ctx.onSelectDay(d.date));
     tabs.append(btn);
   }
-  content.append(tabs, timeline(planning, blocks, selectedDay, state, now));
+  content.append(tabs, timeline(planning, blocks, selectedDay, state, changed));
   root.replaceChildren(top, content);
 }
