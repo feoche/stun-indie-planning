@@ -1,0 +1,125 @@
+// Rendu DOM. Tout texte passe par textContent (jamais innerHTML).
+import { blocksOfDay, formatTime, parisDate } from './model.js';
+
+export function el(tag, className, ...children) {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  for (const child of children) {
+    if (child === null || child === undefined) continue;
+    node.append(child);
+  }
+  return node;
+}
+
+export function renderPicker(root, people, onPick) {
+  const list = el('div', 'picker-list');
+  for (const p of people) {
+    const btn = el('button', 'picker-btn', p.name);
+    btn.type = 'button';
+    btn.addEventListener('click', () => onPick(p.slug));
+    list.append(btn);
+  }
+  root.replaceChildren(
+    el('header', 'top', el('h1', null, 'Stunfest Indie')),
+    el('main', 'content', el('p', 'lead', 'Qui es-tu ?'), list),
+  );
+}
+
+function roleInfo(planning, role) {
+  return planning.roles[role] ?? { label: role, color: '#424242' };
+}
+
+function roleChip(planning, role) {
+  const info = roleInfo(planning, role);
+  const chip = el('span', 'chip', info.label);
+  chip.style.background = info.color;
+  return chip;
+}
+
+function dayLabel(planning, date) {
+  return planning.days.find((d) => d.date === date)?.label ?? '';
+}
+
+function minutesLeft(end, now) {
+  const min = Math.max(1, Math.ceil((end - now) / 60000));
+  if (min < 60) return `encore ${min} min`;
+  const h = Math.floor(min / 60);
+  const m = min % 60;
+  return `encore ${h} h${m ? String(m).padStart(2, '0') : ''}`;
+}
+
+function currentCard(planning, block, now) {
+  const info = roleInfo(planning, block.role);
+  const card = el('section', 'card now',
+    el('h2', null, 'En ce moment'),
+    el('p', 'role', info.label),
+    el('p', 'meta', `jusqu'à ${formatTime(block.end)} · ${minutesLeft(block.end, now)}`));
+  card.style.background = info.color;
+  return card;
+}
+
+function nextCard(planning, block, withDay) {
+  const info = roleInfo(planning, block.role);
+  const when = withDay ? dayLabel(planning, parisDate(block.start)) : '';
+  const card = el('section', 'card next',
+    el('h2', null, 'Ensuite'),
+    el('p', 'role', info.label),
+    el('p', 'meta', `à ${formatTime(block.start)}${when ? ' · ' + when : ''}`));
+  card.style.borderLeftColor = info.color;
+  return card;
+}
+
+const MESSAGES = {
+  before: 'Le festival commence vendredi 23 octobre.',
+  after: 'Le festival est terminé. Merci !',
+  'off-day': 'Pas de service ce jour-là.',
+  'not-started': 'Ta journée n\'a pas encore commencé.',
+  'done-today': 'Ta journée est terminée. Merci !',
+};
+
+function timeline(planning, blocks, selectedDay, state, now) {
+  const list = el('ol', 'timeline');
+  const day = blocksOfDay(blocks, selectedDay);
+  if (day.length === 0) {
+    list.append(el('li', 'empty', 'Pas de service ce jour-là.'));
+    return list;
+  }
+  for (const b of day) {
+    const info = roleInfo(planning, b.role);
+    const item = el('li', 'slot',
+      el('span', 'slot-time', `${formatTime(b.start)}–${formatTime(b.end)}`),
+      roleChip(planning, b.role));
+    item.style.borderLeftColor = info.color;
+    if (state.current === b) item.classList.add('current');
+    if (b.role === 'Off' || b.role === 'Pause') item.classList.add('quiet');
+    list.append(item);
+  }
+  return list;
+}
+
+// ctx : { person, planning, blocks, state, selectedDay, now, onSelectDay, onChangePerson, extra }
+export function renderHome(root, ctx) {
+  const { person, planning, blocks, state, selectedDay, now } = ctx;
+  const top = el('header', 'top', el('h1', null, person.name));
+  const change = el('button', 'link-btn', 'Changer');
+  change.type = 'button';
+  change.addEventListener('click', ctx.onChangePerson);
+  top.append(change);
+
+  const content = el('main', 'content');
+  if (ctx.extra) content.append(...ctx.extra);
+  if (state.current) content.append(currentCard(planning, state.current, now));
+  else content.append(el('p', 'message', MESSAGES[state.kind] ?? ''));
+  if (state.next) content.append(nextCard(planning, state.next, state.kind === 'before' || state.kind === 'off-day' || state.kind === 'done-today'));
+
+  const tabs = el('nav', 'tabs');
+  for (const d of planning.days) {
+    const btn = el('button', 'tab', d.label.split(' ')[0]);
+    btn.type = 'button';
+    if (d.date === selectedDay) btn.classList.add('active');
+    btn.addEventListener('click', () => ctx.onSelectDay(d.date));
+    tabs.append(btn);
+  }
+  content.append(tabs, timeline(planning, blocks, selectedDay, state, now));
+  root.replaceChildren(top, content);
+}

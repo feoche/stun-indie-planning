@@ -1,0 +1,36 @@
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: #000; color: #fff;
+  font: 17px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+#app { max-width: 480px; margin: 0 auto; min-height: 100vh; }
+.top { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid #333; }
+.top h1 { margin: 0; font-size: 1.4rem; }
+.content { padding: 16px; display: grid; gap: 14px; }
+.lead { font-size: 1.2rem; margin: 0; }
+.message { font-size: 1.15rem; padding: 12px 0; margin: 0; }
+.link-btn { background: none; border: 1px solid #666; color: #fff; border-radius: 8px; padding: 10px 14px; font: inherit; min-height: 44px; }
+
+.picker-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.picker-btn { background: #1c1c1c; color: #fff; border: 1px solid #444; border-radius: 12px; padding: 14px; min-height: 56px; font: inherit; font-size: 1.1rem; }
+.picker-btn:active { background: #333; }
+
+.card { border-radius: 14px; padding: 16px; }
+.card h2 { margin: 0 0 4px; font-size: .9rem; text-transform: uppercase; letter-spacing: .06em; opacity: .85; }
+.card .role { margin: 0; font-size: 2rem; font-weight: 700; }
+.card .meta { margin: 4px 0 0; opacity: .9; }
+.card.next { background: #161616; border-left: 8px solid #666; }
+
+.tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 6px; }
+.tab { background: #1c1c1c; color: #fff; border: 1px solid #444; border-radius: 10px; min-height: 48px; font: inherit; }
+.tab.active { background: #fff; color: #000; font-weight: 700; }
+
+.timeline { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.slot { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: #141414; border-left: 8px solid #666; border-radius: 8px; padding: 10px 12px; }
+.slot.quiet { opacity: .55; }
+.slot.current { outline: 2px solid #fff; background: #222; }
+.slot-time { font-variant-numeric: tabular-nums; }
+.chip { color: #fff; border-radius: 999px; padding: 3px 12px; font-weight: 600; white-space: nowrap; }
+.empty { padding: 12px 0; opacity: .8; }
