@@ -29,7 +29,7 @@ def test_jeff_blocks_span_11h_to_22h_each_day():
     for date, off in (('2026-10-23', '+02:00'), ('2026-10-24', '+02:00'), ('2026-10-25', '+01:00')):
         day = [b for b in person('Jeff')['blocks'] if b['start'].startswith(date)]
         assert day[0]['start'] == f'{date}T11:00:00{off}'
-        assert day[-1]['end'] == f'{date}T22:00:00{off}'
+        assert day[-1]['end'] == f'{date}T20:00:00{off}'
         assert len({b['role'] for b in day}) > 1  # plus uniquement du Run
 
 

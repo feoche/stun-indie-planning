@@ -12,21 +12,21 @@ def role(day, idx, person):
 
 
 @pytest.mark.parametrize('day', [FRI, SAT, SUN])
-def test_all_days_have_26_slots(day):
-    assert len(sched[day]) == 26
+def test_everyone_ends_at_20h(day):
+    assert len(sched[day]) == 22  # 9h00 -> 20h00
+    assert all(sched[day][21].get(p) for p in TEAM[day])  # encore tous en poste à 19h30
 
 
 @pytest.mark.parametrize('day', [FRI, SAT, SUN])
-def test_jeff_present_11h_to_22h_all_days(day):
+def test_jeff_present_11h_to_20h_all_days(day):
     assert all(role(day, i, 'Jeff') == '' for i in range(0, 4))
-    assert all(role(day, i, 'Jeff') != '' for i in range(4, 26))
+    assert all(role(day, i, 'Jeff') != '' for i in range(4, 22))
 
 
 def test_jeff_awards_only_during_saturday_awards():
     for day in (FRI, SUN):
-        assert all(role(day, i, 'Jeff') != 'Awards' for i in range(26))
-    assert all(role(SAT, i, 'Jeff') in ('Awards', 'Backup', 'Off') for i in range(19, 24))
-    assert all(role(SAT, i, 'Jeff') == 'Run' for i in (24, 25))
+        assert all(role(day, i, 'Jeff') != 'Awards' for i in range(22))
+    assert all(role(SAT, i, 'Jeff') in ('Awards', 'Backup', 'Off') for i in range(19, 22))
 
 
 @pytest.mark.parametrize('day', [FRI, SAT, SUN])
@@ -40,18 +40,16 @@ def test_friday_briefing_10h():
         assert role(FRI, 2, p) == 'Briefing'
     assert role(FRI, 2, 'Jeff') == ''
     for day in (FRI, SAT, SUN):
-        for i in range(26):
+        for i in range(22):
             if (day, i) != (FRI, 2):
                 assert 'Briefing' not in sched[day][i].values()
 
 
-def test_team_leaves_after_1930():
-    for day, first in ((FRI, 21), (SUN, 21), (SAT, 24)):
-        for i in range(first, 26):
-            others = [p for p, r in sched[day][i].items() if p != 'Jeff' and r != '']
-            assert others == []
-            assert role(day, i, 'Jeff') == 'Run'  # seul après la fermeture : reste en Run
-    assert role(SAT, 23, 'Robin') in ('Awards', 'Backup', 'Off')
+@pytest.mark.parametrize('day', [FRI, SUN])
+def test_closing_half_hour_everyone_in_run(day):
+    """Fermeture de la zone à 19h30 : tout le monde en Run (rangement) jusqu'à 20h, Chris en Média."""
+    for p in TEAM[day]:
+        assert role(day, 21, p) == ('Media' if p == 'Chris' else 'Run'), (day, p)
 
 
 def test_no_rotation_violation():
@@ -63,9 +61,9 @@ def test_two_in_run_with_jeff_counted():
     assert sum(1 for p, r in row.items() if p != 'Chris' and r == 'Run') == 2
 
 
-# --- fenêtres repas : 11h30-14h (idx 5-9) et 18h30-21h (idx 19-23) ---
+# --- fenêtres repas : 11h30-14h (idx 5-9) et 18h30-20h (idx 19-21, avant la clôture de 19h30 hors samedi) ---
 LUNCH = range(5, 10)
-DINNER = range(19, 24)
+DINNER = range(19, 22)
 TEAM = {
     FRI: TEAM_FRI + ['Jeff', 'Chris'],
     SAT: TEAM_FRI + ['Robin', 'Jeff', 'Chris'],
@@ -89,6 +87,8 @@ def test_at_least_3_off_together_to_eat(day):
 @pytest.mark.parametrize('day', [FRI, SAT, SUN])
 def test_meals_only_inside_windows(day):
     assert all(idx in LUNCH or idx in DINNER for idx in MEALS[day])
+    if day != SAT:
+        assert all(idx != 21 for idx in MEALS[day])  # pas de repas pendant la clôture
 
 
 @pytest.mark.parametrize('day', [FRI, SAT, SUN])
@@ -105,15 +105,15 @@ def test_chris_eats_with_others_and_is_media_otherwise(day):
         mine = [i for i in window if 'Chris' in MEALS[day].get(i, [])]
         assert len(mine) == 1, (day, mine)
         assert len(MEALS[day][mine[0]]) >= 3  # jamais seul
-    for i in range(26):
+    for i in range(22):
         r = role(day, i, 'Chris')
-        if i < 21 or (day == SAT and i < 24):
+        if True:
             expected = 'Briefing' if (day, i) == (FRI, 2) else ('Off' if 'Chris' in MEALS[day].get(i, []) else 'Media')
             assert r == expected, (day, i, r)
 
 
 def test_saturday_stand_always_covered_by_two_standiers_during_awards():
-    for idx in range(19, 24):
+    for idx in range(19, 22):
         assert sum(1 for p in TEAM[SAT] if role(SAT, idx, p) == 'Backup') == 2, idx
 
 
@@ -133,7 +133,7 @@ def test_two_in_run_during_lunch_window(day):
 
 
 def test_awards_keep_at_least_3_people_while_others_eat():
-    for idx in range(19, 24):
+    for idx in range(19, 22):
         assert sum(1 for p in TEAM[SAT] if role(SAT, idx, p) == 'Awards') >= 3
 
 

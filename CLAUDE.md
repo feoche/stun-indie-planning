@@ -11,23 +11,23 @@ Projet exporté depuis une conversation Claude.ai. Objectif : planning visuel (E
 Usage : `python build_schedule6.py && python make_xlsx2.py && python build_site.py` (dépendance : openpyxl). Les chemins sont relatifs au dossier des scripts.
 
 ## Règles métier (toutes implémentées)
-- Créneaux de 30 min, début à 9h00. Fin à 19h30 chaque soir ; le samedi va jusqu'à 21h pour afficher les Indie Awards en entier.
+- Créneaux de 30 min, début à 9h00. Tout le monde finit à 20h tous les jours (décidé le 2026-10-18). La zone Indé ferme à 19h30 : de 19h30 à 20h, rangement, tout le monde en Run (Chris en Média) ; le samedi, les Awards occupent ce dernier créneau.
 - Ouverture au public : vendredi 14h, samedi et dimanche 10h. Bénévoles présents dès 9h pour la préparation (tout le monde en Run : vendredi 9h-14h, samedi/dimanche 9h-10h). Fermeture de la zone Indé à 19h30 tous les soirs.
 - Postes (libellé Excel) : Backup = « Standiers » (ex-Back-up standiers Indie), Run (IC volant), Stand = « Stand IC » (Stand IC / Stunjam), Awards, Média (Chris), Off (inclut les pauses repas).
 - Max 2h consécutives sur un même poste. Dérogations explicites : préparation du vendredi matin (tout le monde en Run), Standiers fixes pendant les Awards (2h30, sans rotation).
-- Repas : 30 min déjeuner (fenêtre 11h30-14h) + 30 min dîner (fenêtre 18h30-21h) par personne, affichés en « Off » (le rôle « Pause » n'existe plus). Voir « Repas » ci-dessous.
-- Équipe (11) : François, Chris, Étienne, Florent, Arthur, Mael, Gabriel, Lylou, Robin (samedi et dimanche seulement), Suliac, Jeff (3 jours, de 11h à 22h, dans la rotation comme les autres ; seul en Run après la fermeture).
+- Repas : 30 min déjeuner (fenêtre 11h30-14h) + 30 min dîner (fenêtre 18h30-20h) par personne, affichés en « Off » (le rôle « Pause » n'existe plus). Voir « Repas » ci-dessous.
+- Équipe (11) : François, Chris, Étienne, Florent, Arthur, Mael, Gabriel, Lylou, Robin (samedi et dimanche seulement), Suliac, Jeff (3 jours, de 11h à 20h, dans la rotation comme les autres ; seul en Run après la fermeture).
 - Chris : captation Média en continu les 3 jours (hors rotation), pause repas alignée.
 - 2 personnes en Run en continu tout le week-end (3 pendant un temps le samedi pour le jury des Awards, abandonné).
 - Standiers : 3 personnes simultanées sur les créneaux repas, ramené à 1 pendant l'instant précis des pauses.
-- Indie Awards (samedi 18h30-20h30) : 2 personnes fixes restent en Standiers sur toute la durée ; le reste de l'équipe (Jeff dès 18h30 inclus) est sur Awards ; Chris reste en Média.
+- Indie Awards (samedi 18h30-20h, tronqués à la fin de journée ; la cérémonie prévoyait jusqu'à 20h30, à confirmer) : 2 personnes fixes restent en Standiers sur toute la durée ; le reste de l'équipe (Jeff dès 18h30 inclus) est sur Awards ; Chris reste en Média.
 
 ## Points ouverts
 - Le rôle « Vote public » a été supprimé (2026-10-18) : le vote du public et le check des stands font partie du Run.
 - Le script valide l'absence de dépassement des 2h consécutives hors dérogations (affiche `issues hors dérogations: []`). À conserver à chaque modification.
 
 ## Mises à jour décidées (2026-10-17)
-- Jeff : présent les 3 jours de 11h à 22h, dans la rotation (Standiers / Run / Stand IC, pauses repas comprises) depuis le 2026-10-18 ; en Run seul après la fermeture ; sur Awards dès 18h30 le samedi.
+- Jeff : présent les 3 jours de 11h à 20h, dans la rotation (Standiers / Run / Stand IC, pauses repas comprises) depuis le 2026-10-18 ; sur Awards dès 18h30 le samedi.
 - Briefing vendredi 10h00-10h30 (toute l'équipe, Chris compris, sans Jeff).
 - `roles.py` : libellés et couleurs partagés Excel / site. `site/` : PWA publiée sur GitHub Pages (spec : `docs/superpowers/specs/`, plan : `docs/superpowers/plans/`).
 
@@ -38,5 +38,5 @@ Usage : `python build_schedule6.py && python make_xlsx2.py && python build_site.
 - Site : https://feoche.github.io/stun-indie-planning/ (réglage unique : Settings > Pages > Source = GitHub Actions, fait).
 - Tests : `python -m pytest` et `npm run test:js` ; test local : `python -m http.server 8000 -d site`, puis `?now=2026-10-24T14:10:00%2B02:00` pour simuler l'heure.
 - Si un fichier de `site/js` ou `site/*.css` change de façon incompatible, incrémenter `SHELL_CACHE` dans `site/sw.js`.
-- Repas (2026-10-18) : fenêtres 11h30-14h et 18h30-21h, 30 min par personne, étalés sur toute la fenêtre par groupes d'au moins 3 personnes en Off ensemble (déjeuner : 11h30, 12h30, 13h30 ; dîner vendredi/dimanche : 18h30 et 19h00 ; dîner samedi : 18h30, 19h30 et 20h30). Vendredi : le déjeuner a lieu pendant la préparation. Samedi : le dîner a lieu pendant les Awards (hypothèse, à confirmer) ; les 2 Standiers fixes mangent ensemble à 19h30, remplacés sur l'accueil par 2 personnes des Awards. Tout le monde mange midi et soir (testé). Chris (Média, libre de ses horaires) mange lui aussi dans un groupe d'au moins 3 personnes en Off et reste en Média le reste du temps. Garde-fous : `tests/test_schedule.py`.
+- Repas (2026-10-18) : fenêtres 11h30-14h et 18h30-20h (pas de repas pendant le rangement de 19h30), 30 min par personne, étalés sur toute la fenêtre par groupes d'au moins 3 personnes en Off ensemble (déjeuner : 11h30, 12h30, 13h30 ; dîner vendredi/dimanche : 18h30 et 19h00 ; dîner samedi : 18h30, 19h00 et 19h30). Vendredi : le déjeuner a lieu pendant la préparation. Samedi : le dîner a lieu pendant les Awards (hypothèse, à confirmer) ; les 2 Standiers fixes mangent ensemble à 19h30, remplacés sur l'accueil par 2 personnes des Awards. Tout le monde mange midi et soir (testé). Chris (Média, libre de ses horaires) mange lui aussi dans un groupe d'au moins 3 personnes en Off et reste en Média le reste du temps. Garde-fous : `tests/test_schedule.py`.
 - Appli : bouton « Voir le planning complet » (route `#equipe`, `site/js/team.js`) : qui est où maintenant + grille du jour par personne.

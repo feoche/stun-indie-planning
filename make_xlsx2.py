@@ -86,10 +86,10 @@ for day, persons in DAY_PERSONS.items():
         'Backup': 'Standiers = Back-up standiers Indie',
         'Run': 'Run = IC volant / Run (inclut le vote du public et le check des stands)',
         'Stand': 'Stand IC = Stand IC / Stunjam',
-        'Awards': 'Awards = Indie Awards (18h30-20h30, samedi) ; 2 personnes fixes restent en Standiers',
+        'Awards': 'Awards = Indie Awards (18h30-20h, samedi) ; 2 personnes fixes restent en Standiers',
         'Media': 'Média = Captation média (Chris, en continu les 3 jours)',
         'Briefing': "Briefing = Briefing d'équipe (vendredi 10h00-10h30)",
-        'Off': 'Off (inclut les repas : 30 min le midi, 30 min le soir, répartis sur les fenêtres 11h30-14h et 18h30-21h)',
+        'Off': 'Off (inclut les repas : 30 min le midi, 30 min le soir, répartis sur les fenêtres 11h30-14h et 18h30-20h)',
         '': '— = pas encore arrivé / absent ce jour-là',
     }
     for i, role in enumerate(legend_roles):
@@ -101,16 +101,16 @@ for day, persons in DAY_PERSONS.items():
 
     note_row = legend_row + len(legend_roles) + 2
     notes = []
-    notes.append("FERMETURE DE LA ZONE INDÉ À 19h30 TOUS LES SOIRS.")
+    notes.append("FERMETURE DE LA ZONE INDÉ À 19h30 TOUS LES SOIRS (hors Awards du samedi). TOUT LE MONDE FINIT À 20h : rangement de 19h30 à 20h, tout le monde en Run.")
     if 'Vendredi' in day:
         notes.append("Ouverture au public à 14h. Bénévoles présents dès 9h pour la préparation : tout le monde en Run de 9h à 14h.")
         notes.append("Briefing d'équipe 10h00-10h30 (Jeff arrive à 11h).")
     else:
         notes.append("Ouverture au public à 10h. Bénévoles présents dès 9h pour la préparation : tout le monde en Run de 9h à 10h.")
-    notes.append("Robin : présent uniquement samedi et dimanche. Jeff : présent les 3 jours de 11h à 22h, dans la rotation (seul en Run après 19h30). Chris : captation Média en continu.")
+    notes.append("Robin : présent uniquement samedi et dimanche. Jeff : présent les 3 jours de 11h à 20h, dans la rotation. Chris : captation Média en continu.")
     if 'Samedi' in day:
-        notes.append("Indie Awards 18h30-20h30 : 2 personnes restent fixes sur l'accueil Standiers (sans rotation), le reste de l'équipe (y compris Jeff dès 18h30) est sur Awards ; Chris reste en Média. Le planning de l'équipe va jusqu'à 21h le samedi pour afficher les Awards en entier (Jeff jusqu'à 22h).")
-    notes.append("Règles : max 2h consécutives sur un même poste (hors Run de préparation du vendredi matin et Standiers fixes pendant les Awards, demandés explicitement) · un repas de 30 min le midi (fenêtre 11h30-14h) et le soir (fenêtre 18h30-21h) pour chacun·e, y compris Chris (Média le reste du temps) et Jeff, jamais seul : au moins 3 personnes en Off en même temps. Le samedi, les 2 Standiers fixes des Awards mangent ensemble à 19h30, remplacés par 2 personnes des Awards.")
+        notes.append("Indie Awards 18h30-20h : 2 personnes restent fixes sur l'accueil Standiers (sans rotation), le reste de l'équipe (y compris Jeff dès 18h30) est sur Awards ; Chris reste en Média. Tout le monde finit à 20h.")
+    notes.append("Règles : max 2h consécutives sur un même poste (hors Run de préparation du vendredi matin et Standiers fixes pendant les Awards, demandés explicitement) · un repas de 30 min le midi (fenêtre 11h30-14h) et le soir (fenêtre 18h30-20h) pour chacun·e, y compris Chris (Média le reste du temps) et Jeff, jamais seul : au moins 3 personnes en Off en même temps. Le samedi, les 2 Standiers fixes des Awards mangent ensemble à 19h30, remplacés par 2 personnes des Awards.")
     for i, txt in enumerate(notes):
         ws.cell(row=note_row+i, column=1, value=txt).font = Font(name='Arial', italic=True, size=9)
 

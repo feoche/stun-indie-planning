@@ -14,41 +14,41 @@ def slot_index(hour, half):
 LUNCH_WINDOW = set(range(slot_index(11, 1), slot_index(14, 0)))
 DINNER_WINDOW = set(range(slot_index(18, 1), slot_index(21, 0)))
 meal_window = LUNCH_WINDOW | DINNER_WINDOW  # Standiers renforcés (jusqu'à 3) pendant les fenêtres repas
-awards_start, awards_end = slot_index(18, 1), slot_index(20, 1)  # 18h30 -> 20h30 (inclus, 5 créneaux)
+awards_start, awards_end = slot_index(18, 1), slot_index(19, 1)  # 18h30 -> 20h (fin de journée de tout le monde ; dernier créneau 19h30, inclus)
 
 MEDIA_PERSON = 'Chris'
-PRESENCE = {'Jeff': (11, 22)}  # présent de 11h à 22h (les autres : toute la journée d'équipe)
+PRESENCE = {'Jeff': (11, 20)}  # Jeff : de 11h à 20h (les autres : de 9h à 20h)
+CLOSING_SLOT = slot_index(19, 1)  # fermeture de la zone à 19h30 : rangement jusqu'à 20h
 
 DAYS = {
     'Vendredi 23 octobre': {
         'full_day': ['François', 'Étienne', 'Florent', 'Arthur', 'Mael', 'Gabriel', 'Lylou', 'Suliac', 'Jeff'],
         'presence': PRESENCE,
         'awards': None,
-        'end_hour': 19.5,
+        'closing_slot': CLOSING_SLOT,
+        'end_hour': 20,
         'all_run_until': 14,   # préparation avant ouverture (14h) : tout le monde en Run
         'prep_counts_toward_limit': False,  # dérogation explicite : pas de limite de 2h sur cette période
         'briefing_slot': slot_index(10, 0),  # briefing 10h00-10h30, toute l'équipe sauf Jeff
-        'dinner_slots': (slot_index(18, 1), slot_index(19, 0)),  # 18h30 puis 19h00 (fermeture 19h30)
         'run_count': 2,
     },
     'Samedi 24 octobre': {
         'full_day': ['François', 'Étienne', 'Florent', 'Arthur', 'Mael', 'Gabriel', 'Lylou', 'Suliac', 'Robin', 'Jeff'],
         'presence': PRESENCE,
         'awards': {'start_slot': awards_start, 'end_slot': awards_end},
-        'end_hour': 19.5,
+        'end_hour': 20,
         'all_run_until': 10,   # préparation 9h-10h avant ouverture : tout le monde en Run
         'prep_counts_toward_limit': True,
-        'dinner_slots': (slot_index(19, 0), slot_index(19, 1)),  # pendant les Awards : 19h00 puis 19h30
         'run_count': 2,
     },
     'Dimanche 25 octobre': {
         'full_day': ['François', 'Étienne', 'Florent', 'Arthur', 'Mael', 'Gabriel', 'Lylou', 'Suliac', 'Robin', 'Jeff'],
         'presence': PRESENCE,
         'awards': None,
-        'end_hour': 19.5,
+        'closing_slot': CLOSING_SLOT,
+        'end_hour': 20,
         'all_run_until': 10,   # préparation 9h-10h avant ouverture : tout le monde en Run
         'prep_counts_toward_limit': True,
-        'dinner_slots': (slot_index(18, 1), slot_index(19, 0)),  # 18h30 puis 19h00 (fermeture 19h30)
         'run_count': 2,
     },
 }
@@ -74,6 +74,8 @@ def build_day_with_meals(day_name, cfg):
     run_count_cfg = cfg.get('run_count', 2)
 
     team_end_slots, day_n_slots = day_layout(cfg)
+    closing_slot = cfg.get('closing_slot')
+    meal_cutoff = closing_slot if closing_slot is not None else team_end_slots  # pas de repas pendant la clôture
 
     cur_role = {p: None for p in full_day}
     run_len = {p: 0 for p in full_day}
@@ -99,7 +101,7 @@ def build_day_with_meals(day_name, cfg):
         if idx in LUNCH_WINDOW:
             meal, window = 'lunch', LUNCH_WINDOW
         elif idx in DINNER_WINDOW:
-            meal, window = 'dinner', {x for x in DINNER_WINDOW if x < team_end_slots}
+            meal, window = 'dinner', {x for x in DINNER_WINDOW if x < meal_cutoff}
         else:
             return set()
         if meal not in plans:
@@ -197,6 +199,16 @@ def build_day_with_meals(day_name, cfg):
             schedule[idx] = row
             continue
 
+        # Clôture (hors samedi) : zone fermée, tout le monde en Run pour le rangement jusqu'à 20h
+        if closing_slot is not None and idx >= closing_slot:
+            eating = set()
+            for p in crew:
+                row[p] = 'Run'
+                cur_role[p], run_len[p] = None, 0
+            row[MEDIA_PERSON] = 'Media'
+            schedule[idx] = row
+            continue
+
         # Rotation normale : ceux qui mangent sont Off, les autres couvrent Standiers / Stand IC / Run
         eating = eating_now(idx, crew + [MEDIA_PERSON])
         available = [p for p in crew if p not in eating]
@@ -264,8 +276,9 @@ def find_issues(all_sched):
                 r = all_sched[day][idx].get(p, '')
                 forced_run = (cfg.get('all_run_until') is not None and h < cfg['all_run_until']
                               and not cfg.get('prep_counts_toward_limit', True))
+                closing = cfg.get('closing_slot') is not None and idx >= cfg['closing_slot']
                 in_awards = cfg['awards'] and cfg['awards']['start_slot'] <= idx <= cfg['awards']['end_slot']
-                if forced_run or in_awards or idx >= team_end:
+                if forced_run or in_awards or closing or idx >= team_end:
                     prev, run_l = None, 0
                     continue
                 if r in roles_work and r == prev:

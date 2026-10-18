@@ -253,59 +253,16 @@
    "Chris": "Off"
   },
   "21": {
-   "François": "",
-   "Étienne": "",
-   "Florent": "",
-   "Arthur": "",
-   "Mael": "",
-   "Gabriel": "",
-   "Lylou": "",
-   "Suliac": "",
-   "Jeff": "Run"
-  },
-  "22": {
-   "François": "",
-   "Étienne": "",
-   "Florent": "",
-   "Arthur": "",
-   "Mael": "",
-   "Gabriel": "",
-   "Lylou": "",
-   "Suliac": "",
-   "Jeff": "Run"
-  },
-  "23": {
-   "François": "",
-   "Étienne": "",
-   "Florent": "",
-   "Arthur": "",
-   "Mael": "",
-   "Gabriel": "",
-   "Lylou": "",
-   "Suliac": "",
-   "Jeff": "Run"
-  },
-  "24": {
-   "François": "",
-   "Étienne": "",
-   "Florent": "",
-   "Arthur": "",
-   "Mael": "",
-   "Gabriel": "",
-   "Lylou": "",
-   "Suliac": "",
-   "Jeff": "Run"
-  },
-  "25": {
-   "François": "",
-   "Étienne": "",
-   "Florent": "",
-   "Arthur": "",
-   "Mael": "",
-   "Gabriel": "",
-   "Lylou": "",
-   "Suliac": "",
-   "Jeff": "Run"
+   "François": "Run",
+   "Étienne": "Run",
+   "Florent": "Run",
+   "Arthur": "Run",
+   "Mael": "Run",
+   "Gabriel": "Run",
+   "Lylou": "Run",
+   "Suliac": "Run",
+   "Jeff": "Run",
+   "Chris": "Media"
   }
  },
  "Samedi 24 octobre": {
@@ -574,19 +531,6 @@
    "Étienne": "Awards",
    "Florent": "Awards",
    "Arthur": "Awards",
-   "Mael": "Awards",
-   "Gabriel": "Awards",
-   "Lylou": "Backup",
-   "Suliac": "Backup",
-   "Robin": "Awards",
-   "Jeff": "Awards",
-   "Chris": "Media"
-  },
-  "21": {
-   "François": "Awards",
-   "Étienne": "Awards",
-   "Florent": "Awards",
-   "Arthur": "Awards",
    "Mael": "Off",
    "Gabriel": "Off",
    "Lylou": "Off",
@@ -595,20 +539,7 @@
    "Jeff": "Backup",
    "Chris": "Media"
   },
-  "22": {
-   "François": "Awards",
-   "Étienne": "Awards",
-   "Florent": "Awards",
-   "Arthur": "Awards",
-   "Mael": "Awards",
-   "Gabriel": "Awards",
-   "Lylou": "Backup",
-   "Suliac": "Backup",
-   "Robin": "Awards",
-   "Jeff": "Awards",
-   "Chris": "Media"
-  },
-  "23": {
+  "21": {
    "François": "Awards",
    "Étienne": "Awards",
    "Florent": "Awards",
@@ -620,30 +551,6 @@
    "Robin": "Off",
    "Jeff": "Off",
    "Chris": "Off"
-  },
-  "24": {
-   "François": "",
-   "Étienne": "",
-   "Florent": "",
-   "Arthur": "",
-   "Mael": "",
-   "Gabriel": "",
-   "Lylou": "",
-   "Suliac": "",
-   "Robin": "",
-   "Jeff": "Run"
-  },
-  "25": {
-   "François": "",
-   "Étienne": "",
-   "Florent": "",
-   "Arthur": "",
-   "Mael": "",
-   "Gabriel": "",
-   "Lylou": "",
-   "Suliac": "",
-   "Robin": "",
-   "Jeff": "Run"
   }
  },
  "Dimanche 25 octobre": {
@@ -921,64 +828,17 @@
    "Chris": "Off"
   },
   "21": {
-   "François": "",
-   "Étienne": "",
-   "Florent": "",
-   "Arthur": "",
-   "Mael": "",
-   "Gabriel": "",
-   "Lylou": "",
-   "Suliac": "",
-   "Robin": "",
-   "Jeff": "Run"
-  },
-  "22": {
-   "François": "",
-   "Étienne": "",
-   "Florent": "",
-   "Arthur": "",
-   "Mael": "",
-   "Gabriel": "",
-   "Lylou": "",
-   "Suliac": "",
-   "Robin": "",
-   "Jeff": "Run"
-  },
-  "23": {
-   "François": "",
-   "Étienne": "",
-   "Florent": "",
-   "Arthur": "",
-   "Mael": "",
-   "Gabriel": "",
-   "Lylou": "",
-   "Suliac": "",
-   "Robin": "",
-   "Jeff": "Run"
-  },
-  "24": {
-   "François": "",
-   "Étienne": "",
-   "Florent": "",
-   "Arthur": "",
-   "Mael": "",
-   "Gabriel": "",
-   "Lylou": "",
-   "Suliac": "",
-   "Robin": "",
-   "Jeff": "Run"
-  },
-  "25": {
-   "François": "",
-   "Étienne": "",
-   "Florent": "",
-   "Arthur": "",
-   "Mael": "",
-   "Gabriel": "",
-   "Lylou": "",
-   "Suliac": "",
-   "Robin": "",
-   "Jeff": "Run"
+   "François": "Run",
+   "Étienne": "Run",
+   "Florent": "Run",
+   "Arthur": "Run",
+   "Mael": "Run",
+   "Gabriel": "Run",
+   "Lylou": "Run",
+   "Suliac": "Run",
+   "Robin": "Run",
+   "Jeff": "Run",
+   "Chris": "Media"
   }
  }
 }
