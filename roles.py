@@ -8,7 +8,6 @@ ROLE_LABELS = {
     'Media': 'Média',
     'Briefing': 'Briefing',
     'Off': 'Off',
-    'Pause': 'Off',
     '': '—',
 }
 ROLE_COLORS = {
@@ -19,8 +18,5 @@ ROLE_COLORS = {
     'Media':  '00838F',
     'Briefing': '827717',
     'Off':    '212121',
-    'Pause':  '212121',
     '':       '3A3A3A',
 }
-# L'appli distingue la pause repas du simple temps libre
-SITE_LABELS = {**ROLE_LABELS, 'Pause': 'Pause'}

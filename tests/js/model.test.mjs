@@ -13,7 +13,7 @@ const person = {
   blocks: [
     raw('2026-10-24T09:00:00+02:00', '2026-10-24T10:00:00+02:00', 'Run'),
     raw('2026-10-24T10:00:00+02:00', '2026-10-24T12:00:00+02:00', 'Backup'),
-    raw('2026-10-24T12:00:00+02:00', '2026-10-24T12:30:00+02:00', 'Pause'),
+    raw('2026-10-24T12:00:00+02:00', '2026-10-24T12:30:00+02:00', 'Stand'),
     raw('2026-10-24T12:30:00+02:00', '2026-10-24T13:00:00+02:00', 'Off'),
     raw('2026-10-25T09:00:00+01:00', '2026-10-25T10:00:00+01:00', 'Run'),
   ],
@@ -101,9 +101,9 @@ test('dueReminder ignores Off', () => {
   assert.equal(dueReminder(blocks, 'robin', at('2026-10-24T10:25:00Z'), new Set()), null); // 12:25 -> Off at 12:30
 });
 
-test('dueReminder includes Pause', () => {
-  const due = dueReminder(blocks, 'robin', at('2026-10-24T09:55:00Z'), new Set()); // 11:55 -> Pause at 12:00
-  assert.equal(due.block.role, 'Pause');
+test('dueReminder includes every role but Off', () => {
+  const due = dueReminder(blocks, 'robin', at('2026-10-24T09:55:00Z'), new Set()); // 11:55 -> Stand at 12:00
+  assert.equal(due.block.role, 'Stand');
 });
 
 test('changedBlocks marks moved or new blocks only', () => {

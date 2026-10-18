@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 
-from roles import ROLE_COLORS, SITE_LABELS
+from roles import ROLE_COLORS, ROLE_LABELS
 
 BS, LF, CRLF = chr(92), chr(10), chr(13) + chr(10)
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -72,7 +72,7 @@ def build_planning(schedule, generated_at):
                        for b in person_blocks(schedule, name)],
         })
     used = {b['role'] for p in people for b in p['blocks']}
-    roles = {r: {'label': SITE_LABELS[r], 'color': '#' + ROLE_COLORS[r]} for r in sorted(used)}
+    roles = {r: {'label': ROLE_LABELS[r], 'color': '#' + ROLE_COLORS[r]} for r in sorted(used)}
     days = [{'date': '%04d-%02d-%02d' % DAY_DATES[d], 'label': d} for d in DAY_DATES]
     content = {'timezone': 'Europe/Paris', 'days': days, 'roles': roles, 'people': people}
     version = hashlib.sha1(json.dumps(content, sort_keys=True, ensure_ascii=False).encode()).hexdigest()[:12]
@@ -109,7 +109,7 @@ def build_ics(person, slug, blocks, generated_at):
     for b in blocks:
         if b.role == 'Off':
             continue
-        label = SITE_LABELS[b.role]
+        label = ROLE_LABELS[b.role]
         lines += [
             'BEGIN:VEVENT',
             'UID:%s-%s@stun-indie-planning' % (slug, b.start.strftime('%Y%m%d-%H%M')),
@@ -117,7 +117,7 @@ def build_ics(person, slug, blocks, generated_at):
             'SEQUENCE:%d' % (int(generated_at.timestamp()) // 60),
             'DTSTART:' + _utc(b.start),
             'DTEND:' + _utc(b.end),
-            'SUMMARY:' + ics_escape(label if b.role in ('Pause', 'Briefing') else label + ' — Stunfest Indie'),
+            'SUMMARY:' + ics_escape(label if b.role == 'Briefing' else label + ' — Stunfest Indie'),
             'DESCRIPTION:' + ics_escape('%s, %s – %s' % (label, b.start.strftime('%Hh%M'), b.end.strftime('%Hh%M'))),
             'BEGIN:VALARM', 'ACTION:DISPLAY', 'DESCRIPTION:' + ics_escape(label), 'TRIGGER:-PT10M', 'END:VALARM',
             'END:VEVENT']

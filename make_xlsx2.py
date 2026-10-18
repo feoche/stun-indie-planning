@@ -68,7 +68,7 @@ for day, persons in DAY_PERSONS.items():
             c = ws.cell(row=r, column=ci, value=label_r)
             color = ROLE_COLORS.get(role, '424242')
             c.fill = PatternFill('solid', fgColor=color)
-            c.font = Font(name='Arial', size=9, bold=(role not in ('Off','Pause','')), color=TEXT_WHITE)
+            c.font = Font(name='Arial', size=9, bold=(role not in ('Off','')), color=TEXT_WHITE)
             c.alignment = Alignment(horizontal='center', vertical='center', wrap_text=False)
             c.border = border
         ws.row_dimensions[r].height = 14
@@ -89,7 +89,7 @@ for day, persons in DAY_PERSONS.items():
         'Awards': 'Awards = Indie Awards (18h30-20h30, samedi) ; 2 personnes fixes restent en Standiers',
         'Media': 'Média = Captation média (Chris, en continu les 3 jours)',
         'Briefing': "Briefing = Briefing d'équipe (vendredi 10h00-10h30)",
-        'Off': 'Off (inclut les 30 min de pause déjeuner + 30 min de pause dîner)',
+        'Off': 'Off (inclut les repas : 30 min le midi, 30 min le soir, répartis sur les fenêtres 11h30-14h et 18h30-21h)',
         '': '— = pas encore arrivé / absent ce jour-là',
     }
     for i, role in enumerate(legend_roles):

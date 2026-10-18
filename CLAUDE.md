@@ -15,7 +15,7 @@ Usage : `python build_schedule6.py && python make_xlsx2.py && python build_site.
 - Ouverture au public : vendredi 14h, samedi et dimanche 10h. Bénévoles présents dès 9h pour la préparation (tout le monde en Run : vendredi 9h-14h, samedi/dimanche 9h-10h). Fermeture de la zone Indé à 19h30 tous les soirs.
 - Postes (libellé Excel) : Backup = « Standiers » (ex-Back-up standiers Indie), Run (IC volant), Stand = « Stand IC » (Stand IC / Stunjam), Awards, Média (Chris), Off (inclut les pauses repas).
 - Max 2h consécutives sur un même poste. Dérogations explicites : préparation du vendredi matin (tout le monde en Run), Standiers fixes pendant les Awards (2h30, sans rotation).
-- Pauses : 30 min déjeuner (12h00 ou 13h30) + 30 min dîner (19h00 ou 20h30) par personne, affichées en « Off ».
+- Repas : 30 min déjeuner (fenêtre 11h30-14h) + 30 min dîner (fenêtre 18h30-21h) par personne, affichés en « Off » (le rôle « Pause » n'existe plus). Voir « Repas » ci-dessous.
 - Équipe (11) : François, Chris, Étienne, Florent, Arthur, Mael, Gabriel, Lylou, Robin (samedi et dimanche seulement), Suliac, Jeff (3 jours, de 11h à 22h, dans la rotation comme les autres ; seul en Run après la fermeture).
 - Chris : captation Média en continu les 3 jours (hors rotation), pause repas alignée.
 - 2 personnes en Run en continu tout le week-end (3 pendant un temps le samedi pour le jury des Awards, abandonné).
@@ -38,5 +38,5 @@ Usage : `python build_schedule6.py && python make_xlsx2.py && python build_site.
 - Site : https://feoche.github.io/stun-indie-planning/ (réglage unique : Settings > Pages > Source = GitHub Actions, fait).
 - Tests : `python -m pytest` et `npm run test:js` ; test local : `python -m http.server 8000 -d site`, puis `?now=2026-10-24T14:10:00%2B02:00` pour simuler l'heure.
 - Si un fichier de `site/js` ou `site/*.css` change de façon incompatible, incrémenter `SHELL_CACHE` dans `site/sw.js`.
-- Repas (2026-10-18) : fenêtres 11h30-14h et 18h30-21h, 30 min par personne, au moins 3 personnes en pause ensemble. Vendredi : déjeuner pendant la préparation, dîner 18h30/19h00. Samedi : dîner 19h00/19h30 pendant les Awards (hypothèse, à confirmer), les 2 Standiers fixes n'ont pas de pause. Garde-fous : `tests/test_schedule.py`.
+- Repas (2026-10-18) : fenêtres 11h30-14h et 18h30-21h, 30 min par personne, étalés sur toute la fenêtre par groupes d'au moins 3 personnes en Off ensemble (déjeuner : 11h30, 12h30, 13h30 ; dîner vendredi/dimanche : 18h30 et 19h00 ; dîner samedi : 19h00 et 20h00). Vendredi : le déjeuner a lieu pendant la préparation. Samedi : le dîner a lieu pendant les Awards (hypothèse, à confirmer), les 2 Standiers fixes n'ont pas de repas. Garde-fous : `tests/test_schedule.py`.
 - Appli : bouton « Voir le planning complet » (route `#equipe`, `site/js/team.js`) : qui est où maintenant + grille du jour par personne.

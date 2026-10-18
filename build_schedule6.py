@@ -1,6 +1,6 @@
 """Génère schedule.json : planning bénévoles pôle Indie, Stunfest 2026 (23-25 octobre).
 Créneaux de 30 min à partir de 9h00 (idx 0 = 9h00, idx 1 = 9h30, ...).
-Rôles internes : Backup (affiché Standiers), Run, Stand, Awards, Media, Briefing, Pause/Off.
+Rôles internes : Backup (affiché Standiers), Run, Stand, Awards, Media, Briefing, Off (repas compris).
 """
 import json, os, itertools as it
 
@@ -9,12 +9,13 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 def slot_index(hour, half):
     return (hour - 9) * 2 + half
 
-# Fenêtres repas : 11h30-14h et 18h30-21h. Au moins 3 personnes en pause en même temps (jamais 1 ou 2).
-lunch6, lunch9 = slot_index(12, 0), slot_index(13, 1)      # pauses déjeuner : 12h00 puis 13h30
-dinner20 = slot_index(19, 0)                               # pause dîner de Chris (Média) : 19h00
+# Fenêtres repas : 11h30-14h et 18h30-21h. Chacun mange 30 min (Off) ; les repas sont étalés sur toute la
+# fenêtre par groupes d'au moins 3 personnes (jamais 1 ou 2 seules).
+lunch6 = slot_index(12, 0)    # repas de Chris (Média) : 12h00
+dinner20 = slot_index(19, 0)  # et 19h00
 LUNCH_WINDOW = set(range(slot_index(11, 1), slot_index(14, 0)))
 DINNER_WINDOW = set(range(slot_index(18, 1), slot_index(21, 0)))
-meal_window = LUNCH_WINDOW | DINNER_WINDOW  # Standiers renforcés à 3 hors instants de pause
+meal_window = LUNCH_WINDOW | DINNER_WINDOW  # Standiers renforcés (jusqu'à 3) pendant les fenêtres repas
 awards_start, awards_end = slot_index(18, 1), slot_index(20, 1)  # 18h30 -> 20h30 (inclus, 5 créneaux)
 
 MEDIA_PERSON = 'Chris'
@@ -66,7 +67,7 @@ def day_layout(cfg):
     late_end = max((end for _, end in cfg['presence'].values()), default=0) * 2 - 18
     return team_end, max(team_end, late_end)
 
-def build_day(day_name, cfg):
+def build_day_with_meals(day_name, cfg):
     full_day = cfg['full_day']
     presence = cfg['presence']
     awards = cfg['awards']
@@ -76,35 +77,43 @@ def build_day(day_name, cfg):
 
     team_end_slots, day_n_slots = day_layout(cfg)
 
-    dinner_a, dinner_b = cfg['dinner_slots']
-    pause_set = {lunch6, lunch9, dinner_a, dinner_b}
-    first_slots = {lunch6, dinner_a}
-
     cur_role = {p: None for p in full_day}
     run_len = {p: 0 for p in full_day}
     total_work = {p: 0 for p in full_day}
     role_totals = {p: {'Backup': 0, 'Run': 0, 'Stand': 0} for p in full_day}
-    paused_meal = {p: {'lunch': False, 'dinner': False} for p in full_day}
+    taken = {p: {'lunch': False, 'dinner': False} for p in full_day}
     awards_standiers = None  # 2 personnes fixes sur l'accueil Standiers pendant toute la durée des Awards
 
     schedule = {idx: {} for idx in range(day_n_slots)}
+    meals = {}   # idx -> personnes en repas à ce créneau (affichées Off)
+    plans = {}   # 'lunch' / 'dinner' -> {idx: taille du groupe}
 
-    def meal_of(idx):
-        return 'lunch' if idx in (lunch6, lunch9) else 'dinner'
+    def spread(window, n):
+        """Répartit n personnes en k groupes de >= 3 sur k créneaux régulièrement espacés de la fenêtre."""
+        slots = sorted(window)
+        k = max(1, min(len(slots), n // 3))
+        picks = [slots[int((i + 0.5) * len(slots) / k)] for i in range(k)]
+        return {slot: n // k + (1 if i < n % k else 0) for i, slot in enumerate(picks)}
 
-    def choose_pausers(idx, candidates, n_working=None):
-        """Pausers à cet instant de repas. 1er instant : tous sauf n_working (ou la moitié) ; 2e : les restants.
-        Chaque groupe fait au moins 3 personnes (garanti par les tests)."""
-        meal = meal_of(idx)
-        if idx in first_slots:
-            ordered = sorted(candidates, key=lambda p: -total_work[p])
-            size = len(candidates) - n_working if n_working is not None else len(candidates) - len(candidates) // 2
-            pausers = set(ordered[:size])
+    def eating_now(idx, eligible):
+        """Personnes de `eligible` qui mangent au créneau idx (le dernier groupe prend tous ceux qui restent)."""
+        if idx in LUNCH_WINDOW:
+            meal, window = 'lunch', LUNCH_WINDOW
+        elif idx in DINNER_WINDOW:
+            meal, window = 'dinner', {x for x in DINNER_WINDOW if x < team_end_slots}
         else:
-            pausers = {p for p in candidates if not paused_meal[p][meal]}
-        for p in pausers:
-            paused_meal[p][meal] = True
-        return pausers
+            return set()
+        if meal not in plans:
+            plans[meal] = spread(window, len(eligible))
+        plan = plans[meal]
+        if idx not in plan:
+            return set()
+        todo = [p for p in eligible if not taken[p][meal]]
+        group = todo if idx == max(plan) else sorted(todo, key=lambda p: -total_work[p])[:plan[idx]]
+        for p in group:
+            taken[p][meal] = True
+        meals[idx] = sorted(group)
+        return set(group)
 
     for idx in range(day_n_slots):
         h = hour_of(idx)
@@ -114,7 +123,7 @@ def build_day(day_name, cfg):
 
         # Chris : Média en continu, pause repas sur le 1er sous-créneau de chaque repas
         if idx in (lunch6, dinner20):
-            media_role = 'Pause'
+            media_role = 'Off'
         else:
             media_role = 'Media'
 
@@ -130,10 +139,10 @@ def build_day(day_name, cfg):
             if awards_standiers is None:
                 candidates = sorted(crew, key=lambda p: sum(role_totals[p].values()))
                 awards_standiers = candidates[:2]
-            eating = choose_pausers(idx, [p for p in crew if p not in awards_standiers]) if idx in pause_set else set()
+            eating = eating_now(idx, [p for p in crew if p not in awards_standiers])
             for p in crew:
                 if p in eating:
-                    row[p] = 'Pause'
+                    row[p] = 'Off'
                     cur_role[p] = None
                     run_len[p] = 0
                 elif p in awards_standiers:
@@ -161,10 +170,10 @@ def build_day(day_name, cfg):
 
         # Préparation avant ouverture : tout le monde en Run (dérogation au max 2h)
         if all_run_until is not None and h < all_run_until:
-            # repas pendant la préparation : 3 personnes restent en Run, les autres mangent (au moins 3 ensemble)
-            eating = choose_pausers(idx, crew, n_working=3) if idx in pause_set else set()
+            # repas pendant la préparation : les groupes qui mangent sont Off, les autres restent en Run
+            eating = eating_now(idx, crew)
             for p in crew:
-                row[p] = 'Pause' if p in eating else 'Run'
+                row[p] = 'Off' if p in eating else 'Run'
                 if p in eating:
                     cur_role[p], run_len[p] = None, 0
                 elif cfg.get('prep_counts_toward_limit', True):
@@ -178,25 +187,18 @@ def build_day(day_name, cfg):
             schedule[idx] = row
             continue
 
-        # Rotation normale
-        is_pause_instant = idx in pause_set
-        backup_n = 3 if (idx in meal_window and not is_pause_instant) else 1
-        run_n = max(run_count_cfg - 1, 1) if is_pause_instant else run_count_cfg
-        stand_n = 1
+        # Rotation normale : ceux qui mangent sont Off, les autres couvrent Standiers / Stand IC / Run
+        eating = eating_now(idx, crew)
+        available = [p for p in crew if p not in eating]
+        run_n, stand_n = run_count_cfg, 1
+        backup_n = max(1, min(3, len(available) - stand_n - run_n)) if idx in meal_window else 1
         needed = ['Backup'] * backup_n + ['Stand'] * stand_n + ['Run'] * run_n
-
-        if is_pause_instant:
-            pausers = choose_pausers(idx, crew, n_working=len(needed))
-            available = [p for p in crew if p not in pausers]
-        else:
-            pausers = set()
-            available = list(crew)
 
         def valid(p, role):
             return not (cur_role.get(p) == role and run_len.get(p, 0) >= 4)
 
         avail_sorted = sorted(available, key=lambda p: sum(role_totals[p].values()))
-        cand_pool = avail_sorted[:max(len(needed) + 3, len(avail_sorted))]
+        cand_pool = avail_sorted[:len(needed) + 2]
         best, best_score = None, None
         for combo in it.permutations(cand_pool, len(needed)):
             if not all(valid(p, role) for p, role in zip(combo, needed)):
@@ -209,9 +211,7 @@ def build_day(day_name, cfg):
 
         assigned = {p: role for p, role in zip(best, needed)}
         for p in crew:
-            if p in pausers:
-                row[p] = 'Pause'
-            elif p in assigned:
+            if p in assigned:
                 row[p] = assigned[p]
             else:
                 row[p] = 'Off'
@@ -231,7 +231,12 @@ def build_day(day_name, cfg):
 
         schedule[idx] = row
 
-    return schedule
+    return schedule, meals
+
+
+def build_day(day_name, cfg):
+    return build_day_with_meals(day_name, cfg)[0]
+
 
 def find_issues(all_sched):
     """Validation : pas plus de 4 créneaux (2h) consécutifs sur un même poste de travail,

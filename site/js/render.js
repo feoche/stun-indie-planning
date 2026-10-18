@@ -92,7 +92,7 @@ function timeline(planning, blocks, selectedDay, state, changed) {
     item.style.borderLeftColor = info.color;
     if (state.current === b) item.classList.add('current');
     if (changed.has(b.start.toISOString())) item.classList.add('changed');
-    if (b.role === 'Off' || b.role === 'Pause') item.classList.add('quiet');
+    if (b.role === 'Off') item.classList.add('quiet');
     list.append(item);
   }
   return list;

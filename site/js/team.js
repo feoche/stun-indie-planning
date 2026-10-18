@@ -39,7 +39,7 @@ function grid(planning, selectedDay, now, mySlug) {
       const info = planning.roles[role];
       const cell = el('td', p.slug === mySlug ? 'me' : null, info ? info.label : '');
       if (info) cell.style.background = info.color;
-      if (role === 'Off' || role === 'Pause') cell.classList.add('quiet');
+      if (role === 'Off') cell.classList.add('quiet');
       row.append(cell);
     }
     body.append(row);

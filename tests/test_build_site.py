@@ -57,7 +57,7 @@ def test_planning_shape():
     assert set(PLANNING) == {'version', 'generatedAt', 'timezone', 'days', 'roles', 'people'}
     assert len(PLANNING['days']) == 3
     assert PLANNING['days'][0] == {'date': '2026-10-23', 'label': 'Vendredi 23 octobre'}
-    assert {'Pause', 'Briefing'} <= set(PLANNING['roles'])
+    assert 'Briefing' in PLANNING['roles'] and 'Pause' not in PLANNING['roles']
     assert PLANNING['roles']['Run'] == {'label': 'Run', 'color': '#1565C0'}
     slugs = [p['slug'] for p in PLANNING['people']]
     assert slugs == sorted(slugs) and len(slugs) == 11
@@ -80,7 +80,6 @@ def test_ics_one_event_and_alarm_per_non_off_block():
     blocks = [b for b in person_blocks(SCHEDULE, 'François') if b.role != 'Off']
     assert text.count('BEGIN:VEVENT') == text.count('BEGIN:VALARM') == len(blocks)
     assert 'TRIGGER:-PT10M' in text
-    assert 'SUMMARY:Pause' in _unfold(text)
     assert 'SUMMARY:Briefing' in _unfold(text)
     assert 'SUMMARY:Off' not in _unfold(text)
 
