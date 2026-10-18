@@ -27,7 +27,7 @@ def _texts(ws):
 def test_notes_and_legend_updated():
     for ws in _wb().worksheets:
         texts = ' '.join(_texts(ws))
-        assert '11h à 22h' in texts
+        assert '11h à 20h' in texts
         assert 'à partir de 20h' not in texts
     fri = ' '.join(_texts(_wb()['Vendredi 23 oct']))
     assert 'Briefing' in fri and '10h00-10h30' in fri
