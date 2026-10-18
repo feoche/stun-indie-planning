@@ -81,6 +81,7 @@ function notify(block) {
 }
 
 function render() {
+  document.body.classList.remove('wide');
   if (!planning) {
     root.replaceChildren(el('p', 'message', online ? 'Chargement…' : "Hors-ligne : le planning n'a pas encore été téléchargé. Reconnecte-toi une fois."));
     return;
@@ -99,6 +100,7 @@ function render() {
     return;
   }
   if (location.hash === '#equipe') {
+    document.body.classList.add('wide'); // le planning complet occupe toute la largeur
     const now = nowFn();
     if (selectedDay === null) selectedDay = defaultDay(planning.days, now);
     renderTeam(root, {

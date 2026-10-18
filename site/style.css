@@ -57,7 +57,7 @@ body {
 .who-names { flex: 1; min-width: 0; }
 .grid-wrap { overflow: auto; max-height: 70vh; border: 1px solid #333; border-radius: 10px; }
 .grid { border-collapse: separate; border-spacing: 0; font-size: .75rem; }
-.grid th, .grid td { padding: 6px 4px; text-align: center; white-space: nowrap; min-width: 72px; border-bottom: 1px solid #000; border-right: 1px solid #000; }
+.grid th, .grid td { padding: 6px 2px; text-align: center; white-space: nowrap; min-width: 60px; border-bottom: 1px solid #000; border-right: 1px solid #000; }
 .grid thead th { position: sticky; top: 0; background: #1c1c1c; z-index: 2; }
 .grid th.time, .grid th.corner { position: sticky; left: 0; background: #1c1c1c; min-width: 52px; z-index: 1; }
 .grid thead th.corner { z-index: 3; }
@@ -66,3 +66,9 @@ body {
 .grid th.me, .grid td.me { box-shadow: inset 2px 0 0 #fff, inset -2px 0 0 #fff; }
 .grid tr.now th.time { background: #fff; color: #000; }
 .grid tr.now td { outline: 2px solid #fff; outline-offset: -2px; }
+
+/* Planning complet : pleine largeur, la grille s'étire pour remplir l'écran */
+body.wide #app { max-width: none; }
+body.wide .content { padding: 8px; }
+body.wide .grid { width: 100%; }
+body.wide .grid-wrap { max-height: 78vh; }
