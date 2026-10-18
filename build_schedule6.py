@@ -95,8 +95,9 @@ def build_day_with_meals(day_name, cfg):
         picks = [slots[int((i + 0.5) * len(slots) / k)] for i in range(k)]
         return {slot: n // k + (1 if i < n % k else 0) for i, slot in enumerate(picks)}
 
-    def eating_now(idx, eligible):
-        """Personnes de `eligible` qui mangent au créneau idx (le dernier groupe prend tous ceux qui restent)."""
+    def eating_now(idx, eligible, pinned=()):
+        """Personnes de `eligible` qui mangent au créneau idx (le dernier groupe prend tous ceux qui restent).
+        `pinned` mangent ensemble au créneau central du plan (Standiers fixes des Awards)."""
         if idx in LUNCH_WINDOW:
             meal, window = 'lunch', LUNCH_WINDOW
         elif idx in DINNER_WINDOW:
@@ -109,7 +110,18 @@ def build_day_with_meals(day_name, cfg):
         if idx not in plan:
             return set()
         todo = [p for p in eligible if not taken[p][meal]]
-        group = todo if idx == max(plan) else sorted(todo, key=lambda p: -total_work[p])[:plan[idx]]
+        slots = sorted(plan)
+        pin_slot = slots[len(slots) // 2]
+        if pinned:
+            mine = [p for p in todo if p in pinned]
+            others = [p for p in todo if p not in pinned]
+            if idx == pin_slot:
+                rest = others if idx == max(plan) else sorted(others, key=lambda p: -total_work[p])[:max(0, plan[idx] - len(mine))]
+                group = mine + rest
+            else:
+                group = others if idx == max(plan) else sorted(others, key=lambda p: -total_work[p])[:plan[idx]]
+        else:
+            group = todo if idx == max(plan) else sorted(todo, key=lambda p: -total_work[p])[:plan[idx]]
         for p in group:
             taken[p][meal] = True
         meals[idx] = sorted(group)
@@ -139,13 +151,19 @@ def build_day_with_meals(day_name, cfg):
             if awards_standiers is None:
                 candidates = sorted(crew, key=lambda p: sum(role_totals[p].values()))
                 awards_standiers = candidates[:2]
-            eating = eating_now(idx, [p for p in crew if p not in awards_standiers])
+            eating = eating_now(idx, crew, pinned=awards_standiers)
+            # les 2 Standiers fixes ; s'ils mangent, 2 personnes des Awards tiennent l'accueil à leur place
+            on_stand = [p for p in awards_standiers if p not in eating]
+            if len(on_stand) < 2:
+                spare = sorted((p for p in crew if p not in eating and p not in awards_standiers),
+                               key=lambda p: sum(role_totals[p].values()))
+                on_stand += spare[:2 - len(on_stand)]
             for p in crew:
                 if p in eating:
                     row[p] = 'Off'
                     cur_role[p] = None
                     run_len[p] = 0
-                elif p in awards_standiers:
+                elif p in on_stand:
                     row[p] = 'Backup'
                     run_len[p] = run_len[p] + 1 if cur_role[p] == 'Backup' else 1
                     cur_role[p] = 'Backup'

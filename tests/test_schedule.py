@@ -51,7 +51,7 @@ def test_team_leaves_after_1930():
             others = [p for p, r in sched[day][i].items() if p != 'Jeff' and r != '']
             assert others == []
             assert role(day, i, 'Jeff') == 'Run'  # seul après la fermeture : reste en Run
-    assert role(SAT, 23, 'Robin') in ('Awards', 'Backup')
+    assert role(SAT, 23, 'Robin') in ('Awards', 'Backup', 'Off')
 
 
 def test_no_rotation_violation():
@@ -96,9 +96,18 @@ def test_everyone_eats_once_per_window(day):
     for p in TEAM[day]:
         lunch = sum(p in MEALS[day].get(i, []) for i in LUNCH)
         dinner = sum(p in MEALS[day].get(i, []) for i in DINNER)
-        fixed = day == SAT and all(role(day, i, p) == 'Backup' for i in range(19, 24))
-        assert lunch == 1, (day, p, lunch)
-        assert dinner == (0 if fixed else 1), (day, p, dinner)
+        assert (lunch, dinner) == (1, 1), (day, p, lunch, dinner)
+
+
+@pytest.mark.parametrize('day', [FRI, SAT, SUN])
+def test_chris_eats_too(day):
+    assert any(role(day, i, 'Chris') == 'Off' for i in LUNCH)
+    assert any(role(day, i, 'Chris') == 'Off' for i in DINNER)
+
+
+def test_saturday_stand_always_covered_by_two_standiers_during_awards():
+    for idx in range(19, 24):
+        assert sum(1 for p in TEAM[SAT] if role(SAT, idx, p) == 'Backup') == 2, idx
 
 
 @pytest.mark.parametrize('day', [FRI, SAT, SUN])
