@@ -11,8 +11,6 @@ def slot_index(hour, half):
 
 # Fenêtres repas : 11h30-14h et 18h30-21h. Chacun mange 30 min (Off) ; les repas sont étalés sur toute la
 # fenêtre par groupes d'au moins 3 personnes (jamais 1 ou 2 seules).
-lunch6 = slot_index(12, 0)    # repas de Chris (Média) : 12h00
-dinner20 = slot_index(19, 0)  # et 19h00
 LUNCH_WINDOW = set(range(slot_index(11, 1), slot_index(14, 0)))
 DINNER_WINDOW = set(range(slot_index(18, 1), slot_index(21, 0)))
 meal_window = LUNCH_WINDOW | DINNER_WINDOW  # Standiers renforcés (jusqu'à 3) pendant les fenêtres repas
@@ -79,9 +77,9 @@ def build_day_with_meals(day_name, cfg):
 
     cur_role = {p: None for p in full_day}
     run_len = {p: 0 for p in full_day}
-    total_work = {p: 0 for p in full_day}
+    total_work = {p: 0 for p in full_day + [MEDIA_PERSON]}
     role_totals = {p: {'Backup': 0, 'Run': 0, 'Stand': 0} for p in full_day}
-    taken = {p: {'lunch': False, 'dinner': False} for p in full_day}
+    taken = {p: {'lunch': False, 'dinner': False} for p in full_day + [MEDIA_PERSON]}
     awards_standiers = None  # 2 personnes fixes sur l'accueil Standiers pendant toute la durée des Awards
 
     schedule = {idx: {} for idx in range(day_n_slots)}
@@ -133,12 +131,6 @@ def build_day_with_meals(day_name, cfg):
         crew = [p for p in full_day if presence.get(p, (0, 99))[0] <= h < presence.get(p, (0, 99))[1]]
         row = {p: '' for p in full_day if p not in crew}
 
-        # Chris : Média en continu, pause repas sur le 1er sous-créneau de chaque repas
-        if idx in (lunch6, dinner20):
-            media_role = 'Off'
-        else:
-            media_role = 'Media'
-
         # Après la fermeture, seuls les présents tardifs restent (Jeff : Run seul)
         if idx >= team_end_slots:
             for p in full_day:
@@ -151,7 +143,7 @@ def build_day_with_meals(day_name, cfg):
             if awards_standiers is None:
                 candidates = sorted(crew, key=lambda p: sum(role_totals[p].values()))
                 awards_standiers = candidates[:2]
-            eating = eating_now(idx, crew, pinned=awards_standiers)
+            eating = eating_now(idx, crew + [MEDIA_PERSON], pinned=awards_standiers)
             # les 2 Standiers fixes ; s'ils mangent, 2 personnes des Awards tiennent l'accueil à leur place
             on_stand = [p for p in awards_standiers if p not in eating]
             if len(on_stand) < 2:
@@ -173,7 +165,7 @@ def build_day_with_meals(day_name, cfg):
                     row[p] = 'Awards'
                     cur_role[p] = None
                     run_len[p] = 0
-            row[MEDIA_PERSON] = media_role
+            row[MEDIA_PERSON] = 'Off' if MEDIA_PERSON in eating else 'Media'
             schedule[idx] = row
             continue
 
@@ -189,7 +181,7 @@ def build_day_with_meals(day_name, cfg):
         # Préparation avant ouverture : tout le monde en Run (dérogation au max 2h)
         if all_run_until is not None and h < all_run_until:
             # repas pendant la préparation : les groupes qui mangent sont Off, les autres restent en Run
-            eating = eating_now(idx, crew)
+            eating = eating_now(idx, crew + [MEDIA_PERSON])
             for p in crew:
                 row[p] = 'Off' if p in eating else 'Run'
                 if p in eating:
@@ -201,12 +193,12 @@ def build_day_with_meals(day_name, cfg):
                     role_totals[p]['Run'] += 1
                 else:
                     cur_role[p], run_len[p] = None, 0
-            row[MEDIA_PERSON] = media_role
+            row[MEDIA_PERSON] = 'Off' if MEDIA_PERSON in eating else 'Media'
             schedule[idx] = row
             continue
 
         # Rotation normale : ceux qui mangent sont Off, les autres couvrent Standiers / Stand IC / Run
-        eating = eating_now(idx, crew)
+        eating = eating_now(idx, crew + [MEDIA_PERSON])
         available = [p for p in crew if p not in eating]
         run_n, stand_n = run_count_cfg, 1
         backup_n = max(1, min(3, len(available) - stand_n - run_n)) if idx in meal_window else 1
@@ -245,7 +237,7 @@ def build_day_with_meals(day_name, cfg):
                 cur_role[p] = None
                 run_len[p] = 0
 
-        row[MEDIA_PERSON] = media_role
+        row[MEDIA_PERSON] = 'Off' if MEDIA_PERSON in eating else 'Media'
 
         schedule[idx] = row
 

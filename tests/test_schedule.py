@@ -67,9 +67,9 @@ def test_two_in_run_with_jeff_counted():
 LUNCH = range(5, 10)
 DINNER = range(19, 24)
 TEAM = {
-    FRI: TEAM_FRI + ['Jeff'],
-    SAT: TEAM_FRI + ['Robin', 'Jeff'],
-    SUN: TEAM_FRI + ['Robin', 'Jeff'],
+    FRI: TEAM_FRI + ['Jeff', 'Chris'],
+    SAT: TEAM_FRI + ['Robin', 'Jeff', 'Chris'],
+    SUN: TEAM_FRI + ['Robin', 'Jeff', 'Chris'],
 }
 MEALS = {d: build_day_with_meals(d, c)[1] for d, c in DAYS.items()}  # {idx: [personnes en repas]}
 
@@ -100,9 +100,16 @@ def test_everyone_eats_once_per_window(day):
 
 
 @pytest.mark.parametrize('day', [FRI, SAT, SUN])
-def test_chris_eats_too(day):
-    assert any(role(day, i, 'Chris') == 'Off' for i in LUNCH)
-    assert any(role(day, i, 'Chris') == 'Off' for i in DINNER)
+def test_chris_eats_with_others_and_is_media_otherwise(day):
+    for window in (LUNCH, DINNER):
+        mine = [i for i in window if 'Chris' in MEALS[day].get(i, [])]
+        assert len(mine) == 1, (day, mine)
+        assert len(MEALS[day][mine[0]]) >= 3  # jamais seul
+    for i in range(26):
+        r = role(day, i, 'Chris')
+        if i < 21 or (day == SAT and i < 24):
+            expected = 'Briefing' if (day, i) == (FRI, 2) else ('Off' if 'Chris' in MEALS[day].get(i, []) else 'Media')
+            assert r == expected, (day, i, r)
 
 
 def test_saturday_stand_always_covered_by_two_standiers_during_awards():
@@ -116,7 +123,7 @@ def test_meals_are_spread_over_the_windows(day):
     dinner_slots = [i for i in MEALS[day] if i in DINNER]
     assert len(lunch_slots) >= 3, (day, lunch_slots)
     assert len(dinner_slots) >= 2, (day, dinner_slots)
-    assert max(len(MEALS[day][i]) for i in MEALS[day]) <= 5
+    assert max(len(MEALS[day][i]) for i in MEALS[day]) <= 6
 
 
 @pytest.mark.parametrize('day', [SAT, SUN])

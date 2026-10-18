@@ -64,7 +64,7 @@
    "François": "Off",
    "Étienne": "Off",
    "Florent": "Off",
-   "Arthur": "Run",
+   "Arthur": "Off",
    "Mael": "Run",
    "Gabriel": "Run",
    "Lylou": "Run",
@@ -82,16 +82,16 @@
    "Lylou": "Run",
    "Suliac": "Run",
    "Jeff": "Run",
-   "Chris": "Off"
+   "Chris": "Media"
   },
   "7": {
    "François": "Run",
    "Étienne": "Run",
    "Florent": "Run",
-   "Arthur": "Off",
+   "Arthur": "Run",
    "Mael": "Off",
    "Gabriel": "Off",
-   "Lylou": "Run",
+   "Lylou": "Off",
    "Suliac": "Run",
    "Jeff": "Run",
    "Chris": "Media"
@@ -115,10 +115,10 @@
    "Arthur": "Run",
    "Mael": "Run",
    "Gabriel": "Run",
-   "Lylou": "Off",
+   "Lylou": "Run",
    "Suliac": "Off",
    "Jeff": "Off",
-   "Chris": "Media"
+   "Chris": "Off"
   },
   "10": {
    "François": "Backup",
@@ -398,61 +398,48 @@
    "Suliac": "Off",
    "Robin": "Off",
    "Jeff": "Backup",
-   "Chris": "Off"
+   "Chris": "Media"
   },
   "7": {
-   "François": "Off",
+   "François": "Run",
    "Étienne": "Backup",
    "Florent": "Backup",
    "Arthur": "Backup",
    "Mael": "Off",
    "Gabriel": "Off",
    "Lylou": "Off",
-   "Suliac": "Stand",
-   "Robin": "Run",
+   "Suliac": "Off",
+   "Robin": "Stand",
    "Jeff": "Run",
    "Chris": "Media"
   },
   "8": {
-   "François": "Backup",
+   "François": "Off",
    "Étienne": "Backup",
    "Florent": "Stand",
    "Arthur": "Run",
    "Mael": "Off",
    "Gabriel": "Run",
    "Lylou": "Off",
-   "Suliac": "Off",
+   "Suliac": "Backup",
    "Robin": "Off",
    "Jeff": "Backup",
    "Chris": "Media"
   },
   "9": {
-   "François": "Run",
+   "François": "Off",
    "Étienne": "Run",
-   "Florent": "Off",
-   "Arthur": "Stand",
+   "Florent": "Run",
+   "Arthur": "Off",
    "Mael": "Backup",
    "Gabriel": "Backup",
    "Lylou": "Backup",
-   "Suliac": "Off",
+   "Suliac": "Stand",
    "Robin": "Off",
    "Jeff": "Off",
-   "Chris": "Media"
+   "Chris": "Off"
   },
   "10": {
-   "François": "Off",
-   "Étienne": "Off",
-   "Florent": "Run",
-   "Arthur": "Off",
-   "Mael": "Off",
-   "Gabriel": "Off",
-   "Lylou": "Off",
-   "Suliac": "Backup",
-   "Robin": "Stand",
-   "Jeff": "Run",
-   "Chris": "Media"
-  },
-  "11": {
    "François": "Off",
    "Étienne": "Off",
    "Florent": "Off",
@@ -465,6 +452,19 @@
    "Jeff": "Stand",
    "Chris": "Media"
   },
+  "11": {
+   "François": "Backup",
+   "Étienne": "Off",
+   "Florent": "Off",
+   "Arthur": "Stand",
+   "Mael": "Off",
+   "Gabriel": "Off",
+   "Lylou": "Run",
+   "Suliac": "Run",
+   "Robin": "Off",
+   "Jeff": "Off",
+   "Chris": "Media"
+  },
   "12": {
    "François": "Backup",
    "Étienne": "Stand",
@@ -472,10 +472,10 @@
    "Arthur": "Off",
    "Mael": "Off",
    "Gabriel": "Off",
-   "Lylou": "Run",
-   "Suliac": "Run",
-   "Robin": "Off",
-   "Jeff": "Off",
+   "Lylou": "Off",
+   "Suliac": "Off",
+   "Robin": "Run",
+   "Jeff": "Run",
    "Chris": "Media"
   },
   "13": {
@@ -580,7 +580,7 @@
    "Suliac": "Backup",
    "Robin": "Awards",
    "Jeff": "Awards",
-   "Chris": "Off"
+   "Chris": "Media"
   },
   "21": {
    "François": "Awards",
@@ -588,7 +588,7 @@
    "Florent": "Awards",
    "Arthur": "Awards",
    "Mael": "Off",
-   "Gabriel": "Awards",
+   "Gabriel": "Off",
    "Lylou": "Off",
    "Suliac": "Off",
    "Robin": "Backup",
@@ -614,12 +614,12 @@
    "Florent": "Awards",
    "Arthur": "Awards",
    "Mael": "Awards",
-   "Gabriel": "Off",
+   "Gabriel": "Awards",
    "Lylou": "Backup",
    "Suliac": "Backup",
    "Robin": "Off",
    "Jeff": "Off",
-   "Chris": "Media"
+   "Chris": "Off"
   },
   "24": {
    "François": "",
@@ -736,61 +736,48 @@
    "Suliac": "Off",
    "Robin": "Off",
    "Jeff": "Backup",
-   "Chris": "Off"
+   "Chris": "Media"
   },
   "7": {
-   "François": "Off",
+   "François": "Run",
    "Étienne": "Backup",
    "Florent": "Backup",
    "Arthur": "Backup",
    "Mael": "Off",
    "Gabriel": "Off",
    "Lylou": "Off",
-   "Suliac": "Stand",
-   "Robin": "Run",
+   "Suliac": "Off",
+   "Robin": "Stand",
    "Jeff": "Run",
    "Chris": "Media"
   },
   "8": {
-   "François": "Backup",
+   "François": "Off",
    "Étienne": "Backup",
    "Florent": "Stand",
    "Arthur": "Run",
    "Mael": "Off",
    "Gabriel": "Run",
    "Lylou": "Off",
-   "Suliac": "Off",
+   "Suliac": "Backup",
    "Robin": "Off",
    "Jeff": "Backup",
    "Chris": "Media"
   },
   "9": {
-   "François": "Run",
+   "François": "Off",
    "Étienne": "Run",
-   "Florent": "Off",
-   "Arthur": "Stand",
+   "Florent": "Run",
+   "Arthur": "Off",
    "Mael": "Backup",
    "Gabriel": "Backup",
    "Lylou": "Backup",
-   "Suliac": "Off",
+   "Suliac": "Stand",
    "Robin": "Off",
    "Jeff": "Off",
-   "Chris": "Media"
+   "Chris": "Off"
   },
   "10": {
-   "François": "Off",
-   "Étienne": "Off",
-   "Florent": "Run",
-   "Arthur": "Off",
-   "Mael": "Off",
-   "Gabriel": "Off",
-   "Lylou": "Off",
-   "Suliac": "Backup",
-   "Robin": "Stand",
-   "Jeff": "Run",
-   "Chris": "Media"
-  },
-  "11": {
    "François": "Off",
    "Étienne": "Off",
    "Florent": "Off",
@@ -803,6 +790,19 @@
    "Jeff": "Stand",
    "Chris": "Media"
   },
+  "11": {
+   "François": "Backup",
+   "Étienne": "Off",
+   "Florent": "Off",
+   "Arthur": "Stand",
+   "Mael": "Off",
+   "Gabriel": "Off",
+   "Lylou": "Run",
+   "Suliac": "Run",
+   "Robin": "Off",
+   "Jeff": "Off",
+   "Chris": "Media"
+  },
   "12": {
    "François": "Backup",
    "Étienne": "Stand",
@@ -810,10 +810,10 @@
    "Arthur": "Off",
    "Mael": "Off",
    "Gabriel": "Off",
-   "Lylou": "Run",
-   "Suliac": "Run",
-   "Robin": "Off",
-   "Jeff": "Off",
+   "Lylou": "Off",
+   "Suliac": "Off",
+   "Robin": "Run",
+   "Jeff": "Run",
    "Chris": "Media"
   },
   "13": {
@@ -900,7 +900,7 @@
    "Florent": "Off",
    "Arthur": "Off",
    "Mael": "Off",
-   "Gabriel": "Backup",
+   "Gabriel": "Off",
    "Lylou": "Stand",
    "Suliac": "Backup",
    "Robin": "Run",
@@ -913,7 +913,7 @@
    "Florent": "Run",
    "Arthur": "Run",
    "Mael": "Stand",
-   "Gabriel": "Off",
+   "Gabriel": "Backup",
    "Lylou": "Off",
    "Suliac": "Off",
    "Robin": "Off",

@@ -24,7 +24,7 @@ Document d'accompagnement du planning bénévolat du pôle Indie pour le Stunfes
 | Dimanche 25 octobre | 10h00 | Ouverture du stand au public |
 | Dimanche 25 octobre | 9h00–19h30 | Présence des bénévoles, fermeture et clôture du festival |
 
-**Repas :** chaque jour, un repas de midi (fenêtre 11h30–14h) et un repas du soir (fenêtre 18h30–21h) de 30 minutes par personne, affichés en Off. Les repas sont étalés sur toute la fenêtre, par groupes d'**au moins 3 personnes** en Off en même temps (jamais 1 ou 2) : le midi à 11h30, 12h30 et 13h30 ; le soir à 18h30 et 19h00 (vendredi et dimanche, fermeture à 19h30) ou à 18h30, 19h30 et 20h30 (samedi, pendant les Indie Awards, au moins 3 personnes restent sur Awards). Le vendredi, le repas du midi a lieu pendant la préparation. **Tout le monde mange midi et soir**, Chris et Jeff compris. Le samedi soir, les 2 Standiers fixes mangent ensemble à 19h30 et 2 personnes des Awards tiennent l'accueil à leur place.
+**Repas :** chaque jour, un repas de midi (fenêtre 11h30–14h) et un repas du soir (fenêtre 18h30–21h) de 30 minutes par personne, affichés en Off. Les repas sont étalés sur toute la fenêtre, par groupes d'**au moins 3 personnes** en Off en même temps (jamais 1 ou 2) : le midi à 11h30, 12h30 et 13h30 ; le soir à 18h30 et 19h00 (vendredi et dimanche, fermeture à 19h30) ou à 18h30, 19h30 et 20h30 (samedi, pendant les Indie Awards, au moins 3 personnes restent sur Awards). Le vendredi, le repas du midi a lieu pendant la préparation. **Tout le monde mange midi et soir**, Chris et Jeff compris. Chris reste en Média en continu mais prend ses repas avec d'autres, jamais seul. Le samedi soir, les 2 Standiers fixes mangent ensemble à 19h30 et 2 personnes des Awards tiennent l'accueil à leur place.
 
 ## Rôles
 
