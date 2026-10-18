@@ -18,8 +18,8 @@ Usage : `python build_schedule6.py && python make_xlsx2.py && python build_site.
 - Repas : 30 min déjeuner (fenêtre 11h30-14h) + 30 min dîner (fenêtre 18h30-20h) par personne, affichés en « Off » (le rôle « Pause » n'existe plus). Voir « Repas » ci-dessous.
 - Équipe (11) : François, Chris, Étienne, Florent, Arthur, Mael, Gabriel, Lylou, Robin (samedi et dimanche seulement), Suliac, Jeff (3 jours, de 11h à 20h, dans la rotation comme les autres ; seul en Run après la fermeture).
 - Chris : captation Média en continu les 3 jours (hors rotation), pause repas alignée.
-- 2 personnes en Run en continu tout le week-end (3 pendant un temps le samedi pour le jury des Awards, abandonné).
-- Standiers : 3 personnes simultanées sur les créneaux repas, ramené à 1 pendant l'instant précis des pauses.
+- 2 personnes en Run, sauf aux horaires de repas (voir ci-dessous) ; le renfort à 3 le samedi pour le jury des Awards a été abandonné.
+- Horaires de repas (2026-10-18) : plus aucun Run. Les places de Run passent en Standiers : jusqu'à 5 Standiers + 1 Stand IC, ceux qui mangent ou qui atteindraient 2h consécutives sont en Off. Hors vendredi midi (préparation, tout le monde en Run) et hors clôture 19h30-20h (tout le monde en Run).
 - Indie Awards (samedi 18h30-20h, tronqués à la fin de journée ; la cérémonie prévoyait jusqu'à 20h30, à confirmer) : 2 personnes fixes restent en Standiers sur toute la durée ; le reste de l'équipe (Jeff dès 18h30 inclus) est sur Awards ; Chris reste en Média.
 
 ## Points ouverts

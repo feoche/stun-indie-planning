@@ -30,7 +30,7 @@ Document d'accompagnement du planning bénévolat du pôle Indie pour le Stunfes
 
 | Poste | Définition                                                                                                                                                                                                                     |
 | --- |--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Standiers | Accueil et backup des standiers Indie. Renforcé à 3 personnes simultanées sur les créneaux repas.                                                                                                                              |
+| Standiers | Accueil et backup des standiers Indie. Aux horaires de repas, il n'y a plus de Run : les places de Run passent en Standiers (jusqu'à 5 Standiers, plus 1 Stand IC).                                                                                                                              |
 | Run | IC volant / Run : déplacement entre les différents points du pôle selon les besoins ; inclut le vote du public et le check des stands 1 jour. Le vendredi/samedi, le poste de Run intègre la gestion du jury des Indie Awards. |
 | Stand IC | Tenue du Stand IC / Stunjam.                                                                                                                                                                                                   |
 | Briefing | Briefing d'équipe du vendredi, 10h00–10h30.                                                                                                                                                                                    |
@@ -49,7 +49,7 @@ Règle générale : pas plus de 2 heures consécutives sur un même poste, sauf 
 | Chris | Vendredi, samedi, dimanche | Affecté en continu à Media (captation), hors rotation Standiers / Run / Stand |
 | Jeff | Vendredi, samedi, dimanche, de 11h à 22h | Rotation standard, repas compris ; seul en Run après la fermeture de 19h30 ; sur Awards le samedi dès 18h30 |
 | Robin | Samedi et dimanche uniquement | Intègre la rotation standard dès son arrivée |
-| François, Étienne, Florent, Arthur, Mael, Gabriel, Lylou, Suliac | Vendredi, samedi, dimanche | Rotation standard sur Standiers / Run / Stand IC, avec 2 personnes en Run en continu tout le week-end |
+| François, Étienne, Florent, Arthur, Mael, Gabriel, Lylou, Suliac | Vendredi, samedi, dimanche | Rotation standard sur Standiers / Run / Stand IC, avec 2 personnes en Run, sauf aux horaires de repas où le Run bascule en Standiers |
 
 ## Événements à déclarer
 

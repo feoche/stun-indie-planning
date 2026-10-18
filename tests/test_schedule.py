@@ -126,10 +126,26 @@ def test_meals_are_spread_over_the_windows(day):
     assert max(len(MEALS[day][i]) for i in MEALS[day]) <= 6
 
 
-@pytest.mark.parametrize('day', [SAT, SUN])
-def test_two_in_run_during_lunch_window(day):
-    for idx in (5, 7, 8, 9):
-        assert sum(1 for p, r in sched[day][idx].items() if p != 'Chris' and r == 'Run') == 2, (day, idx)
+# Aux heures de repas (hors préparation du vendredi et clôture) : pas de Run, que des Standiers (+ le Stand IC)
+MEAL_SLOTS = {
+    FRI: list(DINNER)[:2],            # 18h30, 19h00 (le déjeuner du vendredi est la préparation)
+    SAT: list(LUNCH),                 # déjeuner ; le dîner est sur Awards
+    SUN: list(LUNCH) + list(DINNER)[:2],
+}
+
+
+@pytest.mark.parametrize('day', [FRI, SAT, SUN])
+def test_no_run_during_meal_windows_only_standiers(day):
+    for idx in MEAL_SLOTS[day]:
+        row = {p: r for p, r in sched[day][idx].items() if p != 'Chris'}
+        assert 'Run' not in row.values(), (day, idx)
+        assert set(row.values()) <= {'Backup', 'Stand', 'Off', ''}, (day, idx, set(row.values()))
+        assert 3 <= sum(r == 'Backup' for r in row.values()) <= 5, (day, idx)
+        assert sum(r == 'Stand' for r in row.values()) <= 1, (day, idx)
+
+
+def test_run_still_covered_outside_meal_windows():
+    assert sum(1 for p, r in sched[SAT][10].items() if p != 'Chris' and r == 'Run') == 2  # 14h00
 
 
 def test_awards_keep_at_least_3_people_while_others_eat():

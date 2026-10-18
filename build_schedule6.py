@@ -214,6 +214,9 @@ def build_day_with_meals(day_name, cfg):
         available = [p for p in crew if p not in eating]
         run_n, stand_n = run_count_cfg, 1
         backup_n = max(1, min(3, len(available) - stand_n - run_n)) if idx in meal_window else 1
+        if idx in meal_window:
+            # Heures de repas : pas de Run. Les places de Run passent en Standiers.
+            backup_n, run_n = backup_n + run_n, 0
         needed = ['Backup'] * backup_n + ['Stand'] * stand_n + ['Run'] * run_n
 
         def valid(p, role):
