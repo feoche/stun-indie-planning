@@ -55,6 +55,6 @@ Règle générale : pas plus de 2 heures consécutives sur un même poste, sauf 
 
 - **Indie Awards** — samedi 24 octobre, 18h30–20h30. Cérémonie mobilisant l'équipe présente, y compris Jeff dès 18h30, hors Chris (captation média) et 2 personnes fixes qui restent sur l'accueil Standiers pendant toute la durée.
 
-Le vote du public et le check des stands font partie du rôle Run (pas de créneau dédié).
+Le vote du public et le check des stands 1 jour font partie du rôle Run (pas de créneau dédié).
 
 Aucun autre événement spécifique n'est identifié à ce stade pour le pôle Indie.

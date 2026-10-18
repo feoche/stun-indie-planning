@@ -25,7 +25,7 @@ ROLE_COLORS = {
 ROLE_ORDER = ['Backup', 'Run', 'Stand', 'Awards', 'Briefing', 'Media', 'Off']
 ROLE_DESCRIPTIONS = {
     'Backup': "Accueil et animation au stand Indie. Renforcé à plusieurs personnes aux heures de repas ; pendant les Awards, 2 personnes tiennent l'accueil.",
-    'Run': "IC volant : tu te déplaces entre les différents points du pôle selon les besoins. Inclut le vote du public et le check des stands.",
+    'Run': "IC volant : tu te déplaces entre les différents points du pôle selon les besoins. Inclut le vote du public et le check des stands 1 jour.",
     'Stand': "Tenue du Stand IC / Stunjam.",
     'Awards': "Mobilisation sur les Indie Awards, le samedi de 18h30 à 20h.",
     'Briefing': "Briefing d'équipe du vendredi, de 10h00 à 10h30.",

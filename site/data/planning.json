@@ -1,6 +1,6 @@
 {
- "version": "4d75768f8df6",
- "generatedAt": "2026-10-18T08:09:28.728974+00:00",
+ "version": "28f8649c5243",
+ "generatedAt": "2026-10-18T08:11:10.881929+00:00",
  "timezone": "Europe/Paris",
  "days": [
   {
@@ -25,7 +25,7 @@
   "Run": {
    "label": "Run",
    "color": "#1565C0",
-   "description": "IC volant : tu te déplaces entre les différents points du pôle selon les besoins. Inclut le vote du public et le check des stands."
+   "description": "IC volant : tu te déplaces entre les différents points du pôle selon les besoins. Inclut le vote du public et le check des stands 1 jour."
   },
   "Stand": {
    "label": "Stand IC",

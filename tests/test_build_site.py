@@ -156,3 +156,7 @@ def test_every_role_has_a_description_and_a_stable_order():
     assert all(r['description'].strip() for r in roles.values())
     assert list(roles) == ['Backup', 'Run', 'Stand', 'Awards', 'Briefing', 'Media', 'Off']
     assert 'vote du public' in roles['Run']['description']
+
+
+def test_run_description_mentions_stand_check_one_day():
+    assert 'check des stands 1 jour' in PLANNING['roles']['Run']['description']

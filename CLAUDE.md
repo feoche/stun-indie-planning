@@ -23,7 +23,7 @@ Usage : `python build_schedule6.py && python make_xlsx2.py && python build_site.
 - Indie Awards (samedi 18h30-20h, tronqués à la fin de journée ; la cérémonie prévoyait jusqu'à 20h30, à confirmer) : 2 personnes fixes restent en Standiers sur toute la durée ; le reste de l'équipe (Jeff dès 18h30 inclus) est sur Awards ; Chris reste en Média.
 
 ## Points ouverts
-- Le rôle « Vote public » a été supprimé (2026-10-18) : le vote du public et le check des stands font partie du Run.
+- Le rôle « Vote public » a été supprimé (2026-10-18) : le vote du public et le check des stands 1 jour font partie du Run.
 - Le script valide l'absence de dépassement des 2h consécutives hors dérogations (affiche `issues hors dérogations: []`). À conserver à chaque modification.
 
 ## Mises à jour décidées (2026-10-17)
