@@ -187,3 +187,14 @@ test('whoIsWhere groups names by role at a given instant', () => {
   assert.deepEqual(whoIsWhere(team, at('2026-10-24T09:15:00Z')), { Backup: ['Jeff'] });
   assert.deepEqual(whoIsWhere(team, at('2026-10-22T09:15:00Z')), {});
 });
+
+import { slotProgress } from '../../site/js/model.js';
+
+test('slotProgress is the fraction of the 30-min slot elapsed, clamped to [0, 1]', () => {
+  const slot = at('2026-10-24T12:00:00Z');
+  assert.equal(slotProgress(slot, at('2026-10-24T12:00:00Z')), 0);
+  assert.equal(slotProgress(slot, at('2026-10-24T12:10:00Z')), 1 / 3);
+  assert.equal(slotProgress(slot, at('2026-10-24T12:15:00Z')), 0.5);
+  assert.equal(slotProgress(slot, at('2026-10-24T12:45:00Z')), 1);
+  assert.equal(slotProgress(slot, at('2026-10-24T11:50:00Z')), 0);
+});

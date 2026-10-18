@@ -124,3 +124,8 @@ export function whoIsWhere(planning, now) {
   }
   return out;
 }
+
+// Part (0 à 1) du créneau de 30 min écoulée à l'instant `now`.
+export function slotProgress(slotStart, now) {
+  return Math.min(1, Math.max(0, (now - slotStart) / SLOT_MS));
+}

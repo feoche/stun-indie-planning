@@ -72,3 +72,8 @@ body.wide #app { max-width: none; }
 body.wide .content { padding: 8px; }
 body.wide .grid { width: 100%; }
 body.wide .grid-wrap { max-height: 78vh; }
+
+/* Trait de l'heure courante dans le planning complet */
+.grid-wrap { position: relative; }
+.now-line { position: absolute; left: 0; height: 0; border-top: 2px solid #ff3b30; pointer-events: none; z-index: 1; }
+.now-line::before { content: ''; position: absolute; left: 0; top: -6px; width: 10px; height: 10px; border-radius: 50%; background: #ff3b30; }

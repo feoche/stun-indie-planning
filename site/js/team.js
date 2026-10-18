@@ -1,6 +1,6 @@
 // Vue « Planning complet » : qui est où, maintenant et sur toute la journée.
 import { el } from './render.js';
-import { formatTime, parseBlocks, roleAtTime, slotsOfDay, whoIsWhere } from './model.js';
+import { formatTime, parseBlocks, roleAtTime, slotProgress, slotsOfDay, whoIsWhere } from './model.js';
 
 function chip(planning, role) {
   const info = planning.roles[role] ?? { label: role, color: '#424242' };
@@ -46,6 +46,7 @@ function grid(planning, selectedDay, now, mySlug) {
   }
   const wrap = el('div', 'grid-wrap', el('table', 'grid', el('thead', null, head), body));
   wrap.currentRow = currentRow;
+  wrap.currentSlot = currentRow ? slots[[...body.children].indexOf(currentRow)] : null;
   return wrap;
 }
 
@@ -65,12 +66,31 @@ export function renderTeam(root, ctx) {
     tabs.append(btn);
   }
 
+  // on garde la position de défilement d'un rafraîchissement à l'autre (le trait avance toutes les 30 s)
+  const previous = root.querySelector('.grid-wrap');
+  const scroll = previous ? { top: previous.scrollTop, left: previous.scrollLeft } : null;
   const table = grid(planning, selectedDay, now, mySlug);
   const live = slotsOfDay(planning, selectedDay).length && table.currentRow ? nowSection(planning, now) : null;
   root.replaceChildren(
     el('header', 'top', el('h1', null, 'Planning complet'), back),
     el('main', 'content', live, tabs, table),
   );
-  // ouvre la grille sur le créneau en cours
-  table.currentRow?.scrollIntoView({ block: 'center' });
+  if (scroll) {
+    table.scrollTop = scroll.top;
+    table.scrollLeft = scroll.left;
+  } else {
+    table.currentRow?.scrollIntoView({ block: 'center' }); // ouvre la grille sur le créneau en cours
+  }
+  drawNowLine(table, now);
+}
+
+// Trait horizontal à l'heure courante, placé dans la ligne du créneau en cours selon les minutes écoulées.
+function drawNowLine(wrap, now) {
+  if (!wrap.currentRow || !wrap.currentSlot) return;
+  const wrapTop = wrap.getBoundingClientRect().top;
+  const rowRect = wrap.currentRow.getBoundingClientRect();
+  const line = el('div', 'now-line');
+  line.style.top = `${rowRect.top - wrapTop + wrap.scrollTop + rowRect.height * slotProgress(wrap.currentSlot, now)}px`;
+  line.style.width = `${wrap.scrollWidth}px`;
+  wrap.append(line);
 }
