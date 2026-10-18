@@ -116,6 +116,10 @@ export function renderHome(root, ctx) {
   else content.append(el('p', 'message', MESSAGES[state.kind] ?? ''));
   if (state.next) content.append(nextCard(planning, state.next, state.kind === 'before' || state.kind === 'off-day' || state.kind === 'done-today'));
 
+  const team = el('a', 'action secondary', 'Voir le planning complet');
+  team.href = '#equipe';
+  content.append(team);
+
   const tabs = el('nav', 'tabs');
   for (const d of planning.days) {
     const btn = el('button', 'tab', d.label.split(' ')[0]);

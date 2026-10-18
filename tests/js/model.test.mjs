@@ -150,3 +150,40 @@ test('platformOf', () => {
   assert.equal(platformOf('Mozilla/5.0 (Linux; Android 14; Pixel 8)'), 'android');
   assert.equal(platformOf('Mozilla/5.0 (Windows NT 10.0)'), 'other');
 });
+
+import { slotsOfDay, roleAtTime, whoIsWhere } from '../../site/js/model.js';
+
+const team = {
+  days,
+  roles: { Run: {}, Backup: {}, Off: {} },
+  people: [
+    { name: 'Robin', slug: 'robin', blocks: [
+      raw('2026-10-24T09:00:00+02:00', '2026-10-24T10:00:00+02:00', 'Run'),
+      raw('2026-10-24T10:00:00+02:00', '2026-10-24T10:30:00+02:00', 'Off'),
+    ] },
+    { name: 'Jeff', slug: 'jeff', blocks: [
+      raw('2026-10-24T11:00:00+02:00', '2026-10-24T12:00:00+02:00', 'Backup'),
+    ] },
+  ],
+};
+
+test('slotsOfDay lists 30-min starts from the earliest start to the latest end (exclusive)', () => {
+  const slots = slotsOfDay(team, '2026-10-24');
+  assert.equal(slots.length, 6); // 9h00 .. 11h30
+  assert.equal(formatTime(slots[0]), '9h00');
+  assert.equal(formatTime(slots.at(-1)), '11h30');
+  assert.deepEqual(slotsOfDay(team, '2026-10-23'), []);
+});
+
+test('roleAtTime is half-open and empty outside blocks', () => {
+  const b = parseBlocks(team.people[0]);
+  assert.equal(roleAtTime(b, at('2026-10-24T07:00:00Z')), 'Run'); // 09:00 Paris
+  assert.equal(roleAtTime(b, at('2026-10-24T08:00:00Z')), 'Off'); // 10:00 Paris
+  assert.equal(roleAtTime(b, at('2026-10-24T08:30:00Z')), ''); // 10:30 Paris
+});
+
+test('whoIsWhere groups names by role at a given instant', () => {
+  assert.deepEqual(whoIsWhere(team, at('2026-10-24T07:30:00Z')), { Run: ['Robin'] });
+  assert.deepEqual(whoIsWhere(team, at('2026-10-24T09:15:00Z')), { Backup: ['Jeff'] });
+  assert.deepEqual(whoIsWhere(team, at('2026-10-22T09:15:00Z')), {});
+});

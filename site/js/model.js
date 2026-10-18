@@ -97,3 +97,30 @@ export function clockOffset(search, hostname, realNow) {
   const t = raw ? Date.parse(raw) : NaN;
   return Number.isNaN(t) ? 0 : t - realNow;
 }
+
+const SLOT_MS = 30 * 60 * 1000;
+
+// Débuts (Date) des créneaux de 30 min d'un jour, du plus tôt au plus tard, tous bénévoles confondus.
+export function slotsOfDay(planning, dateStr) {
+  const all = planning.people.flatMap(parseBlocks).filter((b) => parisDate(b.start) === dateStr);
+  if (all.length === 0) return [];
+  const first = Math.min(...all.map((b) => b.start.getTime()));
+  const last = Math.max(...all.map((b) => b.end.getTime()));
+  const slots = [];
+  for (let t = first; t < last; t += SLOT_MS) slots.push(new Date(t));
+  return slots;
+}
+
+export function roleAtTime(blocks, date) {
+  return blocks.find((b) => b.start <= date && date < b.end)?.role ?? '';
+}
+
+// { rôle: [prénoms] } des personnes en poste à cet instant (ordre alphabétique des prénoms).
+export function whoIsWhere(planning, now) {
+  const out = {};
+  for (const p of planning.people) {
+    const role = roleAtTime(parseBlocks(p), now);
+    if (role) (out[role] ??= []).push(p.name);
+  }
+  return out;
+}

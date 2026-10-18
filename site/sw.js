@@ -5,7 +5,7 @@ const DATA_CACHE = 'stunindie-data-v1';
 const NETWORK_TIMEOUT_MS = 4000;
 const SHELL = [
   './', './index.html', './style.css', './manifest.webmanifest',
-  './js/app.js', './js/model.js', './js/store.js', './js/render.js', './js/data.js', './js/reminders.js',
+  './js/app.js', './js/model.js', './js/store.js', './js/render.js', './js/data.js', './js/reminders.js', './js/team.js',
   './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png',
 ];
 

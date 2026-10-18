@@ -39,3 +39,4 @@ Usage : `python build_schedule6.py && python make_xlsx2.py && python build_site.
 - Tests : `python -m pytest` et `npm run test:js` ; test local : `python -m http.server 8000 -d site`, puis `?now=2026-10-24T14:10:00%2B02:00` pour simuler l'heure.
 - Si un fichier de `site/js` ou `site/*.css` change de façon incompatible, incrémenter `SHELL_CACHE` dans `site/sw.js`.
 - Repas (2026-10-18) : fenêtres 11h30-14h et 18h30-21h, 30 min par personne, au moins 3 personnes en pause ensemble. Vendredi : déjeuner pendant la préparation, dîner 18h30/19h00. Samedi : dîner 19h00/19h30 pendant les Awards (hypothèse, à confirmer), les 2 Standiers fixes n'ont pas de pause. Garde-fous : `tests/test_schedule.py`.
+- Appli : bouton « Voir le planning complet » (route `#equipe`, `site/js/team.js`) : qui est où maintenant + grille du jour par personne.

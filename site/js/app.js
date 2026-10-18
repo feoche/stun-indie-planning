@@ -4,6 +4,7 @@ import {
 } from './model.js';
 import { getSlug, setSlug, clearSlug, getSeen, setSeen } from './store.js';
 import { renderPicker, renderHome, renderReminders, el } from './render.js';
+import { renderTeam } from './team.js';
 import { startReminders } from './reminders.js';
 import { createPlanningSource } from './data.js';
 
@@ -93,6 +94,16 @@ function render() {
   if (location.hash === '#rappels') {
     renderReminders(root, {
       slug: person.slug, baseUrl: new URL('.', location.href).href,
+      onBack: () => { location.hash = ''; },
+    });
+    return;
+  }
+  if (location.hash === '#equipe') {
+    const now = nowFn();
+    if (selectedDay === null) selectedDay = defaultDay(planning.days, now);
+    renderTeam(root, {
+      planning, now, selectedDay, mySlug: person.slug,
+      onSelectDay: (d) => { selectedDay = d; userPickedDay = true; render(); },
       onBack: () => { location.hash = ''; },
     });
     return;
