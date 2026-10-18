@@ -3,7 +3,7 @@ name: Déploiement GitHub Pages
 on:
   push:
     branches: [main]
-    paths: ['site/**', '.github/workflows/pages.yml']
+    paths: ['site/**', 'schedule.json', '.github/workflows/pages.yml']
   workflow_dispatch:
 
 permissions:
@@ -23,6 +23,12 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      # Garde-fou : site/ doit avoir été régénéré (python build_site.py) après un changement de schedule.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt
+      - run: python -m pytest tests/test_build_site.py -q
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

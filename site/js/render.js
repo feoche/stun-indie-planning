@@ -1,5 +1,5 @@
 // Rendu DOM. Tout texte passe par textContent (jamais innerHTML).
-import { blocksOfDay, formatTime, parisDate } from './model.js';
+import { blocksOfDay, formatTime, parisDate, platformOf } from './model.js';
 
 export function el(tag, className, ...children) {
   const node = document.createElement(tag);
@@ -139,15 +139,20 @@ export function renderReminders(root, { slug, baseUrl, onBack }) {
   back.type = 'button';
   back.addEventListener('click', onBack);
 
+  const platform = platformOf(navigator.userAgent);
   const subscribe = el('a', 'action', "S'abonner au calendrier");
   subscribe.href = calUrl.replace(/^https?:/, 'webcal:');
-  const download = el('a', 'action secondary', 'Télécharger le fichier (.ics)');
+  // iOS : ouvrir le fichier propose « Ajouter au calendrier » ; l'attribut download l'enverrait dans Fichiers.
+  const download = el('a', 'action secondary', platform === 'ios' ? 'Ouvrir le fichier (.ics)' : 'Télécharger le fichier (.ics)');
   download.href = calUrl;
-  download.download = `stunfest-${slug}.ics`;
+  if (platform !== 'ios') download.download = `stunfest-${slug}.ics`;
+  // Android (Chrome) ne gère pas webcal: : seul l'import du fichier fonctionne.
+  const actions = platform === 'android' ? [download] : [subscribe, download];
 
   const alerts = [];
   if ('Notification' in window) {
-    const enable = el('button', 'action secondary', 'Activer les alertes dans l\'appli');
+    const labels = { granted: 'Alertes activées', denied: 'Alertes refusées' };
+    const enable = el('button', 'action secondary', labels[Notification.permission] ?? 'Activer les alertes dans l\'appli');
     enable.type = 'button';
     enable.addEventListener('click', async () => {
       const result = await Notification.requestPermission();
@@ -161,7 +166,7 @@ export function renderReminders(root, { slug, baseUrl, onBack }) {
     el('main', 'content',
       section('Dans le calendrier du téléphone',
         el('p', null, 'Chaque affectation arrive dans ton calendrier avec un rappel 10 minutes avant, même écran verrouillé.'),
-        subscribe, download,
+        ...actions,
         el('p', 'note', 'Abonnement : le calendrier se met à jour tout seul, mais le téléphone le rafraîchit avec un délai variable (de quelques dizaines de minutes à plusieurs heures).'),
         el('p', 'note', 'Android / Google Agenda : les calendriers auxquels on s\'abonne n\'envoient pas de rappel. Télécharge le fichier et importe-le. Après un changement de planning, supprime d\'abord le calendrier « Stunfest Indie » puis réimporte le fichier, sinon les anciens créneaux restent.')),
       section('Dans l\'appli',

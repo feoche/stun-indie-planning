@@ -125,3 +125,28 @@ test('clockOffset: ?now= is honoured on localhost only', () => {
   assert.equal(clockOffset('?now=garbage', 'localhost', real), 0);
   assert.equal(clockOffset('', 'localhost', real), 0);
 });
+
+import { removedBlocks, isAlertActive, defaultDay, platformOf } from '../../site/js/model.js';
+
+test('removedBlocks reports blocks that disappeared', () => {
+  const next = person.blocks.slice(1);
+  assert.equal(removedBlocks(person.blocks, next).size, 1);
+  assert.equal(removedBlocks(person.blocks, person.blocks).size, 0);
+});
+
+test('isAlertActive stops once the block has started', () => {
+  assert.equal(isAlertActive(blocks[1], at('2026-10-24T07:55:00Z')), true);
+  assert.equal(isAlertActive(blocks[1], at('2026-10-24T08:00:00Z')), false);
+});
+
+test('defaultDay follows the Paris date, first day outside the festival', () => {
+  assert.equal(defaultDay(days, at('2026-10-24T08:00:00Z')), '2026-10-24');
+  assert.equal(defaultDay(days, at('2026-10-24T22:30:00Z')), '2026-10-25');
+  assert.equal(defaultDay(days, at('2026-10-01T08:00:00Z')), '2026-10-23');
+});
+
+test('platformOf', () => {
+  assert.equal(platformOf('Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X)'), 'ios');
+  assert.equal(platformOf('Mozilla/5.0 (Linux; Android 14; Pixel 8)'), 'android');
+  assert.equal(platformOf('Mozilla/5.0 (Windows NT 10.0)'), 'other');
+});

@@ -35,6 +35,8 @@ export function addFired(key) {
   write(KEYS.fired, JSON.stringify([...fired]));
 }
 
-// { version, blocks } : dernier planning vu par le bénévole (pour la bannière de mise à jour)
-export const getSeen = () => readJson(KEYS.seen);
-export const setSeen = (seen) => write(KEYS.seen, JSON.stringify(seen));
+// Dernier planning vu, par personne : { version, blocks } (pour la bannière de mise à jour)
+export const getSeen = (slug) => (readJson(KEYS.seen) ?? {})[slug] ?? null;
+export function setSeen(slug, seen) {
+  write(KEYS.seen, JSON.stringify({ ...(readJson(KEYS.seen) ?? {}), [slug]: seen }));
+}

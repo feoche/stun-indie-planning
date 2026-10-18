@@ -2,7 +2,7 @@
 export const REMINDER_LEAD_MS = 10 * 60 * 1000;
 const TZ = 'Europe/Paris';
 
-const dateFmt = new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit' });
+const dateFmt = new Intl.DateTimeFormat('fr-FR', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit' });
 const timeFmt = new Intl.DateTimeFormat('fr-FR', { timeZone: TZ, hour: 'numeric', minute: '2-digit', hourCycle: 'h23' });
 
 export function parseBlocks(person) {
@@ -16,7 +16,23 @@ export function findPerson(planning, slug) {
 }
 
 export function parisDate(date) {
-  return dateFmt.format(date);
+  const p = Object.fromEntries(dateFmt.formatToParts(date).map((x) => [x.type, x.value]));
+  return `${p.year}-${p.month}-${p.day}`;
+}
+
+export function defaultDay(days, now) {
+  const today = parisDate(now);
+  return days.some((d) => d.date === today) ? today : days[0].date;
+}
+
+export function isAlertActive(block, now) {
+  return now < block.start;
+}
+
+export function platformOf(userAgent) {
+  if (/iPhone|iPad|iPod/.test(userAgent)) return 'ios';
+  if (/Android/.test(userAgent)) return 'android';
+  return 'other';
 }
 
 export function formatTime(date) {
@@ -60,9 +76,16 @@ export function dueReminder(blocks, slug, now, fired) {
   return null;
 }
 
+const sig = (b) => `${new Date(b.start).toISOString()}|${new Date(b.end).toISOString()}|${b.role}`;
+
+// Débuts (ISO UTC) des blocs de oldBlocks qui n'existent plus à l'identique dans newBlocks.
+export function removedBlocks(oldBlocks, newBlocks) {
+  const after = new Set(newBlocks.map(sig));
+  return new Set(oldBlocks.filter((b) => !after.has(sig(b))).map((b) => new Date(b.start).toISOString()));
+}
+
 // Accepte des blocs bruts (chaînes ISO) ; renvoie les débuts (ISO UTC) des blocs nouveaux ou modifiés.
 export function changedBlocks(oldBlocks, newBlocks) {
-  const sig = (b) => `${new Date(b.start).toISOString()}|${new Date(b.end).toISOString()}|${b.role}`;
   const before = new Set(oldBlocks.map(sig));
   return new Set(newBlocks.filter((b) => !before.has(sig(b))).map((b) => new Date(b.start).toISOString()));
 }

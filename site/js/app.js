@@ -1,4 +1,7 @@
-import { parseBlocks, findPerson, homeState, parisDate, changedBlocks, formatTime, clockOffset } from './model.js';
+import {
+  parseBlocks, findPerson, homeState, parisDate, changedBlocks, removedBlocks, formatTime, clockOffset,
+  defaultDay, isAlertActive,
+} from './model.js';
 import { getSlug, setSlug, clearSlug, getSeen, setSeen } from './store.js';
 import { renderPicker, renderHome, renderReminders, el } from './render.js';
 import { startReminders } from './reminders.js';
@@ -12,42 +15,44 @@ const nowFn = () => new Date(Date.now() + offset);
 
 let planning = null;
 let selectedDay = null;
+let userPickedDay = false;
+let lastToday = null;
 let online = true;
 let alertBlock = null;
-let currentBlocks = [];
 
-function defaultDay(now) {
-  const today = parisDate(now);
-  return planning.days.some((d) => d.date === today) ? today : planning.days[0].date;
-}
+const dayFmt = new Intl.DateTimeFormat('fr-FR', { timeZone: 'Europe/Paris', day: 'numeric', month: 'short' });
 
 // Compare le planning vu en dernier par ce bénévole au planning courant.
 function pendingChanges(person) {
-  const seen = getSeen();
-  if (!seen || seen.slug !== person.slug) {
-    setSeen({ slug: person.slug, version: planning.version, blocks: person.blocks });
-    return new Set();
+  const remember = () => setSeen(person.slug, { version: planning.version, blocks: person.blocks });
+  const seen = getSeen(person.slug);
+  if (!seen) {
+    remember();
+    return { changed: new Set(), removed: new Set() };
   }
-  if (seen.version === planning.version) return new Set();
+  if (seen.version === planning.version) return { changed: new Set(), removed: new Set() };
   const changed = changedBlocks(seen.blocks, person.blocks);
-  if (changed.size === 0) setSeen({ slug: person.slug, version: planning.version, blocks: person.blocks });
-  return changed;
+  const removed = removedBlocks(seen.blocks, person.blocks);
+  if (changed.size === 0 && removed.size === 0) remember();
+  return { changed, removed };
 }
 
-function statusLine() {
-  const parts = [`Planning mis à jour à ${formatTime(new Date(planning.generatedAt))}`];
+function statusLine(now) {
+  const generated = new Date(planning.generatedAt);
+  const day = parisDate(generated) === parisDate(now) ? '' : ` le ${dayFmt.format(generated)}`;
+  const parts = [`Planning mis à jour${day} à ${formatTime(generated)}`];
   if (!online) parts.push('hors-ligne');
   return el('p', online ? 'status' : 'status offline', parts.join(' · '));
 }
 
-function updateBanner(person, changed) {
+function updateBanner(person, count) {
   const btn = el('button', 'link-btn', 'OK');
   btn.type = 'button';
   btn.addEventListener('click', () => {
-    setSeen({ slug: person.slug, version: planning.version, blocks: person.blocks });
+    setSeen(person.slug, { version: planning.version, blocks: person.blocks });
     render();
   });
-  return el('div', 'banner', el('span', null, `Planning mis à jour : ${changed.size} créneau(x) modifié(s)`), btn);
+  return el('div', 'banner', el('span', null, `Planning mis à jour : ${count} créneau(x) modifié(s) ou supprimé(s)`), btn);
 }
 
 function alertBanner() {
@@ -82,7 +87,7 @@ function render() {
   const person = getSlug() ? findPerson(planning, getSlug()) : null;
   if (!person) {
     if (getSlug()) clearSlug();
-    renderPicker(root, planning.people, (slug) => { setSlug(slug); selectedDay = null; render(); });
+    renderPicker(root, planning.people, (slug) => { setSlug(slug); selectedDay = null; userPickedDay = false; render(); });
     return;
   }
   if (location.hash === '#rappels') {
@@ -94,14 +99,19 @@ function render() {
   }
   const now = nowFn();
   const blocks = parseBlocks(person);
-  currentBlocks = blocks;
-  const changed = pendingChanges(person);
-  selectedDay ??= defaultDay(now);
+  const { changed, removed } = pendingChanges(person);
+  if (alertBlock && !isAlertActive(alertBlock, now)) alertBlock = null;
+  const today = parisDate(now);
+  if (today !== lastToday) {
+    lastToday = today;
+    if (!userPickedDay) selectedDay = null;
+  }
+  selectedDay ??= defaultDay(planning.days, now);
   renderHome(root, {
     person, planning, blocks, now, selectedDay, changed,
     state: homeState(blocks, planning.days, now),
-    extra: [offset ? el('div', 'alert', 'Heure simulée (test)') : null, alertBlock ? alertBanner() : null, changed.size ? updateBanner(person, changed) : null, statusLine()],
-    onSelectDay: (d) => { selectedDay = d; render(); },
+    extra: [offset ? el('div', 'alert', 'Heure simulée (test)') : null, alertBlock ? alertBanner() : null, changed.size + removed.size ? updateBanner(person, changed.size + removed.size) : null, statusLine(now)],
+    onSelectDay: (d) => { selectedDay = d; userPickedDay = true; render(); },
     onChangePerson: () => { clearSlug(); render(); },
   });
 }
@@ -116,7 +126,11 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) sour
 setInterval(render, 30000);
 window.addEventListener('hashchange', render);
 startReminders({
-  getBlocks: () => currentBlocks, getSlug, nowFn, notify,
+  getBlocks: () => {
+    const person = planning && getSlug() ? findPerson(planning, getSlug()) : null;
+    return person ? parseBlocks(person) : [];
+  },
+  getSlug, nowFn, notify,
 });
 
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});

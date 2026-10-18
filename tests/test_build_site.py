@@ -137,3 +137,9 @@ def test_committed_ics_files_are_crlf():
     for f in files:
         data = open(f, 'rb').read()
         assert b'\r\n' in data and b'\n' not in data.replace(b'\r\n', b'')
+
+
+def test_committed_site_matches_schedule():
+    """Garde-fou : site/data/planning.json doit être régénéré (python build_site.py) après chaque changement de schedule.json."""
+    committed = json.load(open('site/data/planning.json', encoding='utf-8'))
+    assert committed['version'] == PLANNING['version']
