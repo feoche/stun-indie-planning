@@ -9,9 +9,12 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 def slot_index(hour, half):
     return (hour - 9) * 2 + half
 
-lunch6, lunch9 = slot_index(12, 0), slot_index(13, 1)      # pauses déjeuner : 12h00 ou 13h30
-dinner20, dinner23 = slot_index(19, 0), slot_index(20, 1)  # pauses dîner : 19h00 ou 20h30
-pause_slots = {lunch6, lunch9, dinner20, dinner23}
+# Fenêtres repas : 11h30-14h et 18h30-21h. Au moins 3 personnes en pause en même temps (jamais 1 ou 2).
+lunch6, lunch9 = slot_index(12, 0), slot_index(13, 1)      # pauses déjeuner : 12h00 puis 13h30
+dinner20 = slot_index(19, 0)                               # pause dîner de Chris (Média) : 19h00
+LUNCH_WINDOW = set(range(slot_index(11, 1), slot_index(14, 0)))
+DINNER_WINDOW = set(range(slot_index(18, 1), slot_index(21, 0)))
+meal_window = LUNCH_WINDOW | DINNER_WINDOW  # Standiers renforcés à 3 hors instants de pause
 vote_slot = slot_index(15, 0)
 awards_start, awards_end = slot_index(18, 1), slot_index(20, 1)  # 18h30 -> 20h30 (inclus, 5 créneaux)
 
@@ -26,6 +29,7 @@ DAYS = {
         'all_run_until': 14,   # préparation avant ouverture (14h) : tout le monde en Run
         'prep_counts_toward_limit': False,  # dérogation explicite : pas de limite de 2h sur cette période
         'briefing_slot': slot_index(10, 0),  # briefing 10h00-10h30, toute l'équipe sauf Jeff
+        'dinner_slots': (slot_index(18, 1), slot_index(19, 0)),  # 18h30 puis 19h00 (fermeture 19h30)
         'run_count': 2,
     },
     'Samedi 24 octobre': {
@@ -35,6 +39,7 @@ DAYS = {
         'end_hour': 19.5,
         'all_run_until': 10,   # préparation 9h-10h avant ouverture : tout le monde en Run
         'prep_counts_toward_limit': True,
+        'dinner_slots': (slot_index(19, 0), slot_index(19, 1)),  # pendant les Awards : 19h00 puis 19h30
         'run_count': 2,
     },
     'Dimanche 25 octobre': {
@@ -44,6 +49,7 @@ DAYS = {
         'end_hour': 19.5,
         'all_run_until': 10,   # préparation 9h-10h avant ouverture : tout le monde en Run
         'prep_counts_toward_limit': True,
+        'dinner_slots': (slot_index(18, 1), slot_index(19, 0)),  # 18h30 puis 19h00 (fermeture 19h30)
         'run_count': 2,
     },
 }
@@ -63,7 +69,9 @@ def build_day(day_name, cfg):
     team_end_slots = max(base_end_slots, awards['end_slot'] + 1) if awards else base_end_slots
     day_n_slots = max(team_end_slots, max(end for _, _, end in late) * 2 - 18)  # fin tardive des 'late'
 
-    meal_window = set(range(lunch6, lunch9 + 1)) | set(range(dinner20, dinner23 + 1))
+    dinner_a, dinner_b = cfg['dinner_slots']
+    pause_set = {lunch6, lunch9, dinner_a, dinner_b}
+    first_slots = {lunch6, dinner_a}
 
     cur_role = {p: None for p in full_day}
     run_len = {p: 0 for p in full_day}
@@ -74,12 +82,29 @@ def build_day(day_name, cfg):
 
     schedule = {idx: {} for idx in range(day_n_slots)}
 
+    def meal_of(idx):
+        return 'lunch' if idx in (lunch6, lunch9) else 'dinner'
+
+    def choose_pausers(idx, candidates, n_working=None):
+        """Pausers à cet instant de repas. 1er instant : tous sauf n_working (ou la moitié) ; 2e : les restants.
+        Chaque groupe fait au moins 3 personnes (garanti par les tests)."""
+        meal = meal_of(idx)
+        if idx in first_slots:
+            ordered = sorted(candidates, key=lambda p: -total_work[p])
+            size = len(candidates) - n_working if n_working is not None else len(candidates) - len(candidates) // 2
+            pausers = set(ordered[:size])
+        else:
+            pausers = {p for p in candidates if not paused_meal[p][meal]}
+        for p in pausers:
+            paused_meal[p][meal] = True
+        return pausers
+
     for idx in range(day_n_slots):
         h = hour_of(idx)
         row = {}
 
         # Chris : Média en continu, pause repas sur le 1er sous-créneau de chaque repas
-        if idx in pause_slots and idx in (lunch6, dinner20):
+        if idx in (lunch6, dinner20):
             media_role = 'Pause'
         else:
             media_role = 'Media'
@@ -98,8 +123,13 @@ def build_day(day_name, cfg):
             if awards_standiers is None:
                 candidates = sorted(full_day, key=lambda p: sum(role_totals[p].values()))
                 awards_standiers = candidates[:2]
+            eating = choose_pausers(idx, [p for p in full_day if p not in awards_standiers]) if idx in pause_set else set()
             for p in full_day:
-                if p in awards_standiers:
+                if p in eating:
+                    row[p] = 'Pause'
+                    cur_role[p] = None
+                    run_len[p] = 0
+                elif p in awards_standiers:
                     row[p] = 'Backup'
                     run_len[p] = run_len[p] + 1 if cur_role[p] == 'Backup' else 1
                     cur_role[p] = 'Backup'
@@ -127,9 +157,13 @@ def build_day(day_name, cfg):
 
         # Préparation avant ouverture : tout le monde en Run (dérogation au max 2h)
         if all_run_until is not None and h < all_run_until:
+            # repas pendant la préparation : 3 personnes restent en Run, les autres mangent (au moins 3 ensemble)
+            eating = choose_pausers(idx, full_day, n_working=3) if idx in pause_set else set()
             for p in full_day:
-                row[p] = 'Run'
-                if cfg.get('prep_counts_toward_limit', True):
+                row[p] = 'Pause' if p in eating else 'Run'
+                if p in eating:
+                    cur_role[p], run_len[p] = None, 0
+                elif cfg.get('prep_counts_toward_limit', True):
                     run_len[p] = run_len[p] + 1 if cur_role[p] == 'Run' else 1
                     cur_role[p] = 'Run'
                     total_work[p] += 1
@@ -141,22 +175,14 @@ def build_day(day_name, cfg):
             continue
 
         # Rotation normale
-        is_pause_instant = idx in pause_slots
+        is_pause_instant = idx in pause_set
         backup_n = 3 if (idx in meal_window and not is_pause_instant) else 1
         run_n = max(run_count_cfg - 1, 1) if is_pause_instant else run_count_cfg
         stand_n = 1
         needed = ['Backup'] * backup_n + ['Stand'] * stand_n + ['Run'] * run_n
 
         if is_pause_instant:
-            meal = 'lunch' if idx in (lunch6, lunch9) else 'dinner'
-            is_first = idx in (lunch6, dinner20)
-            if is_first:
-                candidates = sorted(full_day, key=lambda p: (-total_work[p],))
-                pausers = set(candidates[:len(full_day) - len(needed)])
-            else:
-                pausers = {p for p in full_day if not paused_meal[p][meal]}
-            for p in pausers:
-                paused_meal[p][meal] = True
+            pausers = choose_pausers(idx, full_day, n_working=len(needed))
             available = [p for p in full_day if p not in pausers]
         else:
             pausers = set()

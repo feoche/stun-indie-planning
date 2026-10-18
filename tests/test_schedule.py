@@ -55,3 +55,50 @@ def test_no_rotation_violation():
 def test_run_rotation_unchanged_by_jeff():
     row = sched[FRI][10]
     assert sum(1 for p, r in row.items() if p not in ('Jeff', 'Chris') and r == 'Run') == 2
+
+
+# --- fenêtres repas : 11h30-14h (idx 5-9) et 18h30-21h (idx 19-23) ---
+LUNCH = range(5, 10)
+DINNER = range(19, 24)
+TEAM = {
+    FRI: TEAM_FRI,
+    SAT: TEAM_FRI + ['Robin'],
+    SUN: TEAM_FRI + ['Robin'],
+}
+
+
+def eaters(day, idx):
+    return [p for p in TEAM[day] if role(day, idx, p) == 'Pause']
+
+
+@pytest.mark.parametrize('day', [FRI, SAT, SUN])
+def test_at_least_3_off_together_to_eat(day):
+    for idx in range(26):
+        n = len(eaters(day, idx))
+        assert n == 0 or n >= 3, (day, idx, n)
+
+
+@pytest.mark.parametrize('day', [FRI, SAT, SUN])
+def test_meal_breaks_only_inside_windows(day):
+    for idx in range(26):
+        if eaters(day, idx):
+            assert idx in LUNCH or idx in DINNER, (day, idx)
+
+
+@pytest.mark.parametrize('day', [FRI, SAT, SUN])
+def test_everyone_gets_one_lunch_break(day):
+    for p in TEAM[day]:
+        assert sum(role(day, i, p) == 'Pause' for i in LUNCH) == 1, (day, p)
+
+
+@pytest.mark.parametrize('day', [FRI, SAT, SUN])
+def test_dinner_break_for_everyone_but_fixed_standiers(day):
+    for p in TEAM[day]:
+        n = sum(role(day, i, p) == 'Pause' for i in DINNER)
+        fixed = day == SAT and all(role(day, i, p) == 'Backup' for i in range(19, 24))
+        assert n == (0 if fixed else 1), (day, p, n)
+
+
+def test_awards_keep_at_least_3_people_while_others_eat():
+    for idx in range(19, 24):
+        assert sum(1 for p in TEAM[SAT] if role(SAT, idx, p) == 'Awards') >= 3

@@ -24,7 +24,7 @@ Document d'accompagnement du planning bénévolat du pôle Indie pour le Stunfes
 | Dimanche 25 octobre | 10h00 | Ouverture du stand au public |
 | Dimanche 25 octobre | 9h00–19h30 | Présence des bénévoles, fermeture et clôture du festival |
 
-Chaque jour comprend une pause déjeuner et une pause dîner de 30 minutes par personne, réparties à effectif égal pour garder le stand couvert en continu.
+**Repas :** chaque jour, une pause déjeuner (fenêtre 11h30–14h) et une pause dîner (fenêtre 18h30–21h) de 30 minutes par personne, toujours **au moins 3 personnes en pause en même temps** (jamais 1 ou 2), pour garder le stand couvert. Le vendredi, le déjeuner a lieu pendant la préparation. Le samedi, le dîner a lieu pendant les Indie Awards (19h00 et 19h30, au moins 3 personnes restent sur Awards). Exceptions : Jeff (Run continu, sans pause) et les 2 Standiers fixes des Awards. Fermeture à 19h30 : le dîner du vendredi et du dimanche est donc à 18h30 et 19h00.
 
 ## Rôles
 

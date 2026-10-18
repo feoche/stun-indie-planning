@@ -111,7 +111,7 @@ for day, persons in DAY_PERSONS.items():
     notes.append("Robin : présent uniquement samedi et dimanche. Jeff : présent les 3 jours de 11h à 22h, en Run continu. Chris : captation Média en continu.")
     if 'Samedi' in day:
         notes.append("Indie Awards 18h30-20h30 : 2 personnes restent fixes sur l'accueil Standiers (sans rotation), le reste de l'équipe (y compris Jeff dès 18h30) est sur Awards ; Chris reste en Média. Le planning de l'équipe va jusqu'à 21h le samedi pour afficher les Awards en entier (Jeff jusqu'à 22h).")
-    notes.append("Règles : max 2h consécutives sur un même poste (hors Run de préparation du vendredi matin et Standiers fixes pendant les Awards, demandés explicitement) · 30 min de pause déjeuner (12h00 ou 13h30) + 30 min de pause dîner (19h00 ou 20h30) pour chacun·e, à effectif égal (affichées en Off).")
+    notes.append("Règles : max 2h consécutives sur un même poste (hors Run de préparation du vendredi matin et Standiers fixes pendant les Awards, demandés explicitement) · 30 min de pause déjeuner (fenêtre 11h30-14h) + 30 min de pause dîner (fenêtre 18h30-21h) pour chacun·e, au moins 3 personnes en pause en même temps (affichées en Off). Exceptions : Jeff (Run continu) et, le samedi, les 2 Standiers fixes des Awards.")
     for i, txt in enumerate(notes):
         ws.cell(row=note_row+i, column=1, value=txt).font = Font(name='Arial', italic=True, size=9)
 
