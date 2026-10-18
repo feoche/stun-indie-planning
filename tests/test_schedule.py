@@ -19,15 +19,20 @@ def test_all_days_have_26_slots(day):
 @pytest.mark.parametrize('day', [FRI, SAT, SUN])
 def test_jeff_present_11h_to_22h_all_days(day):
     assert all(role(day, i, 'Jeff') == '' for i in range(0, 4))
-    assert all(role(day, i, 'Jeff') in ('Run', 'Awards') for i in range(4, 26))
+    assert all(role(day, i, 'Jeff') != '' for i in range(4, 26))
 
 
-def test_jeff_awards_only_saturday_1830_2030():
-    for i in range(4, 26):
-        expected = 'Awards' if 19 <= i <= 23 else 'Run'
-        assert role(SAT, i, 'Jeff') == expected
+def test_jeff_awards_only_during_saturday_awards():
     for day in (FRI, SUN):
         assert all(role(day, i, 'Jeff') != 'Awards' for i in range(26))
+    assert all(role(SAT, i, 'Jeff') in ('Awards', 'Backup', 'Pause') for i in range(19, 24))
+    assert all(role(SAT, i, 'Jeff') == 'Run' for i in (24, 25))
+
+
+@pytest.mark.parametrize('day', [FRI, SAT, SUN])
+def test_jeff_is_in_the_rotation(day):
+    work = {role(day, i, 'Jeff') for i in range(10, 19)} & {'Backup', 'Run', 'Stand'}
+    assert len(work) >= 2, (day, work)
 
 
 def test_friday_briefing_10h():
@@ -45,6 +50,7 @@ def test_team_leaves_after_1930():
         for i in range(first, 26):
             others = [p for p, r in sched[day][i].items() if p != 'Jeff' and r != '']
             assert others == []
+            assert role(day, i, 'Jeff') == 'Run'  # seul après la fermeture : reste en Run
     assert role(SAT, 23, 'Robin') in ('Awards', 'Backup')
 
 
@@ -52,18 +58,18 @@ def test_no_rotation_violation():
     assert find_issues(sched) == []
 
 
-def test_run_rotation_unchanged_by_jeff():
+def test_two_in_run_with_jeff_counted():
     row = sched[FRI][10]
-    assert sum(1 for p, r in row.items() if p not in ('Jeff', 'Chris') and r == 'Run') == 2
+    assert sum(1 for p, r in row.items() if p != 'Chris' and r == 'Run') == 2
 
 
 # --- fenêtres repas : 11h30-14h (idx 5-9) et 18h30-21h (idx 19-23) ---
 LUNCH = range(5, 10)
 DINNER = range(19, 24)
 TEAM = {
-    FRI: TEAM_FRI,
-    SAT: TEAM_FRI + ['Robin'],
-    SUN: TEAM_FRI + ['Robin'],
+    FRI: TEAM_FRI + ['Jeff'],
+    SAT: TEAM_FRI + ['Robin', 'Jeff'],
+    SUN: TEAM_FRI + ['Robin', 'Jeff'],
 }
 
 

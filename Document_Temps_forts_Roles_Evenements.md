@@ -18,13 +18,13 @@ Document d'accompagnement du planning bénévolat du pôle Indie pour le Stunfes
 | Samedi 24 octobre | 10h00 | Ouverture du stand au public |
 | Samedi 24 octobre | 9h00–18h00 | Présence des bénévoles, rotation habituelle |
 | Samedi 24 octobre | 18h30–20h30 | Indie Awards : la majorité de l'équipe (hors Media) bascule sur Awards, 2 personnes restent fixes sur l'accueil Standiers pendant toute la durée (pas de rotation) |
-| Samedi 24 octobre | 11h00–22h00 | Jeff : Run en continu, sur Awards dès 18h30 |
+| Samedi 24 octobre | 11h00–22h00 | Jeff : rotation standard, sur Awards dès 18h30 |
 | Samedi 24 octobre | fin à 21h00 | Fin de journée de l'équipe la plus tardive (au-delà de la fermeture 19h30, lié aux Indie Awards) ; Jeff reste jusqu'à 22h |
 | Dimanche 25 octobre | 9h00–10h00 | Préparation avant ouverture |
 | Dimanche 25 octobre | 10h00 | Ouverture du stand au public |
 | Dimanche 25 octobre | 9h00–19h30 | Présence des bénévoles, fermeture et clôture du festival |
 
-**Repas :** chaque jour, une pause déjeuner (fenêtre 11h30–14h) et une pause dîner (fenêtre 18h30–21h) de 30 minutes par personne, toujours **au moins 3 personnes en pause en même temps** (jamais 1 ou 2), pour garder le stand couvert. Le vendredi, le déjeuner a lieu pendant la préparation. Le samedi, le dîner a lieu pendant les Indie Awards (19h00 et 19h30, au moins 3 personnes restent sur Awards). Exceptions : Jeff (Run continu, sans pause) et les 2 Standiers fixes des Awards. Fermeture à 19h30 : le dîner du vendredi et du dimanche est donc à 18h30 et 19h00.
+**Repas :** chaque jour, une pause déjeuner (fenêtre 11h30–14h) et une pause dîner (fenêtre 18h30–21h) de 30 minutes par personne, toujours **au moins 3 personnes en pause en même temps** (jamais 1 ou 2), pour garder le stand couvert. Le vendredi, le déjeuner a lieu pendant la préparation. Le samedi, le dîner a lieu pendant les Indie Awards (19h00 et 19h30, au moins 3 personnes restent sur Awards). Exception : les 2 Standiers fixes des Awards. Fermeture à 19h30 : le dîner du vendredi et du dimanche est donc à 18h30 et 19h00.
 
 ## Rôles
 
@@ -38,7 +38,7 @@ Document d'accompagnement du planning bénévolat du pôle Indie pour le Stunfes
 | Awards | Mobilisation sur les Indie Awards (samedi 18h30–20h30). |
 | Media | Captation média du pôle, assurée en continu par Chris. |
 
-Règle générale : pas plus de 2 heures consécutives sur un même poste, sauf dérogations : préparation du vendredi matin (tout le monde en Run), Jeff en Run continu, Standiers fixes pendant les Awards.
+Règle générale : pas plus de 2 heures consécutives sur un même poste, sauf dérogations : préparation du vendredi matin (tout le monde en Run), Standiers fixes pendant les Awards.
 
 ## Équipe
 
@@ -47,7 +47,7 @@ Règle générale : pas plus de 2 heures consécutives sur un même poste, sauf 
 | Personne | Présence | Particularité |
 | --- | --- | --- |
 | Chris | Vendredi, samedi, dimanche | Affecté en continu à Media (captation), hors rotation Standiers / Run / Stand |
-| Jeff | Vendredi, samedi, dimanche, de 11h à 22h | Toujours en Run, sans pause ni rotation ; sur Awards le samedi dès 18h30 |
+| Jeff | Vendredi, samedi, dimanche, de 11h à 22h | Rotation standard, pauses repas comprises ; seul en Run après la fermeture de 19h30 ; sur Awards le samedi dès 18h30 |
 | Robin | Samedi et dimanche uniquement | Intègre la rotation standard dès son arrivée |
 | François, Étienne, Florent, Arthur, Mael, Gabriel, Lylou, Suliac | Vendredi, samedi, dimanche | Rotation standard sur Standiers / Run / Stand IC, avec 2 personnes en Run en continu tout le week-end |
 
