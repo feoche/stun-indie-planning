@@ -1,6 +1,6 @@
 {
- "version": "528017ccf4d8",
- "generatedAt": "2026-10-18T08:04:31.614666+00:00",
+ "version": "4d75768f8df6",
+ "generatedAt": "2026-10-18T08:09:28.728974+00:00",
  "timezone": "Europe/Paris",
  "days": [
   {
@@ -17,33 +17,40 @@
   }
  ],
  "roles": {
-  "Awards": {
-   "label": "Awards",
-   "color": "#B71C1C"
-  },
   "Backup": {
    "label": "Standiers",
-   "color": "#2E7D32"
-  },
-  "Briefing": {
-   "label": "Briefing",
-   "color": "#827717"
-  },
-  "Media": {
-   "label": "Média",
-   "color": "#00838F"
-  },
-  "Off": {
-   "label": "Off",
-   "color": "#212121"
+   "color": "#2E7D32",
+   "description": "Accueil et animation au stand Indie. Renforcé à plusieurs personnes aux heures de repas ; pendant les Awards, 2 personnes tiennent l'accueil."
   },
   "Run": {
    "label": "Run",
-   "color": "#1565C0"
+   "color": "#1565C0",
+   "description": "IC volant : tu te déplaces entre les différents points du pôle selon les besoins. Inclut le vote du public et le check des stands."
   },
   "Stand": {
    "label": "Stand IC",
-   "color": "#E65100"
+   "color": "#E65100",
+   "description": "Tenue du Stand IC / Stunjam."
+  },
+  "Awards": {
+   "label": "Awards",
+   "color": "#B71C1C",
+   "description": "Mobilisation sur les Indie Awards, le samedi de 18h30 à 20h."
+  },
+  "Briefing": {
+   "label": "Briefing",
+   "color": "#827717",
+   "description": "Briefing d'équipe du vendredi, de 10h00 à 10h30."
+  },
+  "Media": {
+   "label": "Média",
+   "color": "#00838F",
+   "description": "Captation média du pôle (Chris)."
+  },
+  "Off": {
+   "label": "Off",
+   "color": "#212121",
+   "description": "Temps libre ou repas : 30 minutes le midi et 30 minutes le soir, en groupe."
   }
  },
  "people": [

@@ -3,7 +3,7 @@ import {
   defaultDay, isAlertActive,
 } from './model.js';
 import { getSlug, setSlug, clearSlug, getSeen, setSeen } from './store.js';
-import { renderPicker, renderHome, renderReminders, el } from './render.js';
+import { renderPicker, renderHome, renderReminders, renderRoles, el } from './render.js';
 import { renderTeam } from './team.js';
 import { startReminders } from './reminders.js';
 import { createPlanningSource } from './data.js';
@@ -18,6 +18,7 @@ let planning = null;
 let selectedDay = null;
 let userPickedDay = false;
 let lastToday = null;
+let previousHash = ''; // écran d'où l'on vient (pour le bouton Retour de la page Rôles)
 let online = true;
 let alertBlock = null;
 
@@ -92,6 +93,11 @@ function render() {
     renderPicker(root, planning.people, (slug) => { setSlug(slug); selectedDay = null; userPickedDay = false; render(); });
     return;
   }
+  if (location.hash === '#roles') {
+    renderRoles(root, { planning, onBack: () => { location.hash = previousHash; } });
+    return;
+  }
+  previousHash = location.hash === '#equipe' ? '#equipe' : '';
   if (location.hash === '#rappels') {
     renderReminders(root, {
       slug: person.slug, baseUrl: new URL('.', location.href).href,

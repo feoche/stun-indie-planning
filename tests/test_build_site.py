@@ -58,7 +58,7 @@ def test_planning_shape():
     assert len(PLANNING['days']) == 3
     assert PLANNING['days'][0] == {'date': '2026-10-23', 'label': 'Vendredi 23 octobre'}
     assert 'Briefing' in PLANNING['roles'] and 'Pause' not in PLANNING['roles']
-    assert PLANNING['roles']['Run'] == {'label': 'Run', 'color': '#1565C0'}
+    assert PLANNING['roles']['Run']['label'] == 'Run' and PLANNING['roles']['Run']['color'] == '#1565C0'
     slugs = [p['slug'] for p in PLANNING['people']]
     assert slugs == sorted(slugs) and len(slugs) == 11
 
@@ -149,3 +149,10 @@ def test_committed_site_matches_schedule():
 
 def test_vote_role_removed_from_site():
     assert 'Vote' not in PLANNING['roles']
+
+
+def test_every_role_has_a_description_and_a_stable_order():
+    roles = PLANNING['roles']
+    assert all(r['description'].strip() for r in roles.values())
+    assert list(roles) == ['Backup', 'Run', 'Stand', 'Awards', 'Briefing', 'Media', 'Off']
+    assert 'vote du public' in roles['Run']['description']

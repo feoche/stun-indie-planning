@@ -118,7 +118,9 @@ export function renderHome(root, ctx) {
 
   const team = el('a', 'action secondary', 'Voir le planning complet');
   team.href = '#equipe';
-  content.append(team);
+  const roles = el('a', 'link-text', 'À quoi correspondent les rôles ?');
+  roles.href = '#roles';
+  content.append(team, roles);
 
   const tabs = el('nav', 'tabs');
   for (const d of planning.days) {
@@ -177,5 +179,21 @@ export function renderReminders(root, { slug, baseUrl, onBack }) {
         el('p', null, 'L\'appli t\'alerte 10 minutes avant ton prochain poste, mais seulement tant qu\'elle est ouverte.'),
         ...alerts,
         el('p', 'note', 'iPhone : ajoute d\'abord l\'appli à l\'écran d\'accueil (Partager > Sur l\'écran d\'accueil) pour pouvoir recevoir des notifications.'))),
+  );
+}
+
+// Page annexe « Rôles » : à quoi correspond chaque poste.
+export function renderRoles(root, { planning, onBack }) {
+  const back = el('button', 'link-btn', 'Retour');
+  back.type = 'button';
+  back.addEventListener('click', onBack);
+  const list = Object.values(planning.roles).map((info) => {
+    const chip = el('span', 'chip', info.label);
+    chip.style.background = info.color;
+    return el('section', 'help', chip, el('p', null, info.description));
+  });
+  root.replaceChildren(
+    el('header', 'top', el('h1', null, 'Les rôles'), back),
+    el('main', 'content', ...list),
   );
 }

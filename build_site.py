@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 
-from roles import ROLE_COLORS, ROLE_LABELS
+from roles import ROLE_COLORS, ROLE_DESCRIPTIONS, ROLE_LABELS, ROLE_ORDER
 
 BS, LF, CRLF = chr(92), chr(10), chr(13) + chr(10)
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -72,7 +72,8 @@ def build_planning(schedule, generated_at):
                        for b in person_blocks(schedule, name)],
         })
     used = {b['role'] for p in people for b in p['blocks']}
-    roles = {r: {'label': ROLE_LABELS[r], 'color': '#' + ROLE_COLORS[r]} for r in sorted(used)}
+    roles = {r: {'label': ROLE_LABELS[r], 'color': '#' + ROLE_COLORS[r], 'description': ROLE_DESCRIPTIONS[r]}
+             for r in ROLE_ORDER if r in used}
     days = [{'date': '%04d-%02d-%02d' % DAY_DATES[d], 'label': d} for d in DAY_DATES]
     content = {'timezone': 'Europe/Paris', 'days': days, 'roles': roles, 'people': people}
     version = hashlib.sha1(json.dumps(content, sort_keys=True, ensure_ascii=False).encode()).hexdigest()[:12]

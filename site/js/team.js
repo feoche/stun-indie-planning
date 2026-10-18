@@ -56,6 +56,8 @@ export function renderTeam(root, ctx) {
   const back = el('button', 'link-btn', 'Retour');
   back.type = 'button';
   back.addEventListener('click', ctx.onBack);
+  const roles = el('a', 'link-btn', 'Rôles');
+  roles.href = '#roles';
 
   const tabs = el('nav', 'tabs');
   for (const d of planning.days) {
@@ -72,7 +74,7 @@ export function renderTeam(root, ctx) {
   const table = grid(planning, selectedDay, now, mySlug);
   const live = slotsOfDay(planning, selectedDay).length && table.currentRow ? nowSection(planning, now) : null;
   root.replaceChildren(
-    el('header', 'top', el('h1', null, 'Planning complet'), back),
+    el('header', 'top', el('h1', null, 'Planning complet'), el('div', 'top-actions', roles, back)),
     el('main', 'content', live, tabs, table),
   );
   if (scroll) {
