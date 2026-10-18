@@ -79,14 +79,13 @@ for day, persons in DAY_PERSONS.items():
     for ci in range(2, ncols+1):
         ws.column_dimensions[get_column_letter(ci)].width = 11
 
-    legend_roles = ['Backup', 'Run', 'Stand', 'Vote', 'Awards', 'Media', 'Briefing', 'Off', '']
+    legend_roles = ['Backup', 'Run', 'Stand', 'Awards', 'Media', 'Briefing', 'Off', '']
     legend_row = last_row + 3
     ws.cell(row=legend_row, column=1, value='Légende').font = Font(name='Arial', bold=True, size=12)
     full_names = {
         'Backup': 'Standiers = Back-up standiers Indie',
-        'Run': 'Run = IC volant / Run',
+        'Run': 'Run = IC volant / Run (inclut le vote du public et le check des stands)',
         'Stand': 'Stand IC = Stand IC / Stunjam',
-        'Vote': 'Vote public = Vote du public',
         'Awards': 'Awards = Indie Awards (18h30-20h30, samedi) ; 2 personnes fixes restent en Standiers',
         'Media': 'Média = Captation média (Chris, en continu les 3 jours)',
         'Briefing': "Briefing = Briefing d'équipe (vendredi 10h00-10h30)",

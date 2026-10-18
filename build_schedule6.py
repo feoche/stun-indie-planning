@@ -1,6 +1,6 @@
 """Génère schedule.json : planning bénévoles pôle Indie, Stunfest 2026 (23-25 octobre).
 Créneaux de 30 min à partir de 9h00 (idx 0 = 9h00, idx 1 = 9h30, ...).
-Rôles internes : Backup (affiché Standiers), Run, Stand, Vote, Awards, Media, Briefing, Pause/Off.
+Rôles internes : Backup (affiché Standiers), Run, Stand, Awards, Media, Briefing, Pause/Off.
 """
 import json, os, itertools as it
 
@@ -15,7 +15,6 @@ dinner20 = slot_index(19, 0)                               # pause dîner de Chr
 LUNCH_WINDOW = set(range(slot_index(11, 1), slot_index(14, 0)))
 DINNER_WINDOW = set(range(slot_index(18, 1), slot_index(21, 0)))
 meal_window = LUNCH_WINDOW | DINNER_WINDOW  # Standiers renforcés à 3 hors instants de pause
-vote_slot = slot_index(15, 0)
 awards_start, awards_end = slot_index(18, 1), slot_index(20, 1)  # 18h30 -> 20h30 (inclus, 5 créneaux)
 
 MEDIA_PERSON = 'Chris'
@@ -224,12 +223,6 @@ def build_day(day_name, cfg):
                 run_len[p] = 0
 
         row[MEDIA_PERSON] = media_role
-
-        if idx == vote_slot:
-            free_people = [p for p in full_day if row[p] == 'Off']
-            if free_people:
-                free_people.sort(key=lambda p: total_work[p])
-                row[free_people[0]] = 'Vote'
 
         schedule[idx] = row
 

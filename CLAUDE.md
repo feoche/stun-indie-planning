@@ -13,7 +13,7 @@ Usage : `python build_schedule6.py && python make_xlsx2.py && python build_site.
 ## Règles métier (toutes implémentées)
 - Créneaux de 30 min, début à 9h00. Fin à 19h30 chaque soir ; le samedi va jusqu'à 21h pour afficher les Indie Awards en entier.
 - Ouverture au public : vendredi 14h, samedi et dimanche 10h. Bénévoles présents dès 9h pour la préparation (tout le monde en Run : vendredi 9h-14h, samedi/dimanche 9h-10h). Fermeture de la zone Indé à 19h30 tous les soirs.
-- Postes (libellé Excel) : Backup = « Standiers » (ex-Back-up standiers Indie), Run (IC volant), Stand = « Stand IC » (Stand IC / Stunjam), Vote public (~30 min/jour), Awards, Média (Chris), Off (inclut les pauses repas).
+- Postes (libellé Excel) : Backup = « Standiers » (ex-Back-up standiers Indie), Run (IC volant), Stand = « Stand IC » (Stand IC / Stunjam), Awards, Média (Chris), Off (inclut les pauses repas).
 - Max 2h consécutives sur un même poste. Dérogations explicites : préparation du vendredi matin (tout le monde en Run), Jeff en Run continu, Standiers fixes pendant les Awards (2h30, sans rotation).
 - Pauses : 30 min déjeuner (12h00 ou 13h30) + 30 min dîner (19h00 ou 20h30) par personne, affichées en « Off ».
 - Équipe (11) : François, Chris, Étienne, Florent, Arthur, Mael, Gabriel, Lylou, Robin (samedi et dimanche seulement), Suliac, Jeff (3 jours, de 11h à 22h, toujours en Run, sans pause ni rotation).
@@ -23,7 +23,7 @@ Usage : `python build_schedule6.py && python make_xlsx2.py && python build_site.
 - Indie Awards (samedi 18h30-20h30) : 2 personnes fixes restent en Standiers sur toute la durée ; le reste de l'équipe (Jeff dès 18h30 inclus) est sur Awards ; Chris reste en Média.
 
 ## Points ouverts
-- Le créneau « Vote public » n'a pas d'horaire fixe dans le document (question posée en commentaire dans le doc en ligne) ; dans le planning il est placé vers 15h sur une personne libre.
+- Le rôle « Vote public » a été supprimé (2026-10-18) : le vote du public et le check des stands font partie du Run.
 - Le script valide l'absence de dépassement des 2h consécutives hors dérogations (affiche `issues hors dérogations: []`). À conserver à chaque modification.
 
 ## Mises à jour décidées (2026-10-17)

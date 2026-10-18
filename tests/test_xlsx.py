@@ -31,3 +31,8 @@ def test_notes_and_legend_updated():
         assert 'à partir de 20h' not in texts
     fri = ' '.join(_texts(_wb()['Vendredi 23 oct']))
     assert 'Briefing' in fri and '10h00-10h30' in fri
+
+
+def test_no_vote_in_legend():
+    for ws in _wb().worksheets:
+        assert not any('Vote' in t for t in _texts(ws))

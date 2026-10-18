@@ -143,3 +143,7 @@ def test_committed_site_matches_schedule():
     """Garde-fou : site/data/planning.json doit être régénéré (python build_site.py) après chaque changement de schedule.json."""
     committed = json.load(open('site/data/planning.json', encoding='utf-8'))
     assert committed['version'] == PLANNING['version']
+
+
+def test_vote_role_removed_from_site():
+    assert 'Vote' not in PLANNING['roles']

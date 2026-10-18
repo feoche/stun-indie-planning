@@ -102,3 +102,7 @@ def test_dinner_break_for_everyone_but_fixed_standiers(day):
 def test_awards_keep_at_least_3_people_while_others_eat():
     for idx in range(19, 24):
         assert sum(1 for p in TEAM[SAT] if role(SAT, idx, p) == 'Awards') >= 3
+
+
+def test_no_vote_role_anymore():
+    assert all('Vote' not in sched[d][i].values() for d in sched for i in sched[d])

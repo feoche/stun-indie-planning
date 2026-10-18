@@ -31,9 +31,8 @@ Document d'accompagnement du planning bénévolat du pôle Indie pour le Stunfes
 | Poste | Définition |
 | --- | --- |
 | Standiers | Accueil et animation au stand Indie (ex-« Back-up standiers Indie »). Renforcé à 3 personnes simultanées sur les créneaux repas. |
-| Run | IC volant / Run : déplacement entre les différents points du pôle selon les besoins. |
+| Run | IC volant / Run : déplacement entre les différents points du pôle selon les besoins ; inclut le vote du public et le check des stands. |
 | Stand IC | Tenue du Stand IC / Stunjam. |
-| Vote public | Créneau ponctuel (~30 minutes par jour) pour gérer le vote du public. |
 | Briefing | Briefing d'équipe du vendredi, 10h00–10h30. |
 | Off | Temps de repos ou pause repas, fondu visuellement dans le planning. |
 | Awards | Mobilisation sur les Indie Awards (samedi 18h30–20h30). |
@@ -55,6 +54,7 @@ Règle générale : pas plus de 2 heures consécutives sur un même poste, sauf 
 ## Événements à déclarer
 
 - **Indie Awards** — samedi 24 octobre, 18h30–20h30. Cérémonie mobilisant l'équipe présente, y compris Jeff dès 18h30, hors Chris (captation média) et 2 personnes fixes qui restent sur l'accueil Standiers pendant toute la durée.
-- **Vote public** — créneau ponctuel quotidien (~30 minutes), à préciser selon l'organisation générale du festival.
+
+Le vote du public et le check des stands font partie du rôle Run (pas de créneau dédié).
 
 Aucun autre événement spécifique n'est identifié à ce stade pour le pôle Indie.
