@@ -10,7 +10,7 @@ Document d'accompagnement du planning bénévolat du pôle Indie pour le Stunfes
 
 | Jour | Horaires | Moment |
 | --- | --- | --- |
-| Vendredi 23 octobre | 9h00–14h00 | Préparation avant ouverture : toute l'équipe en Run en continu |
+| Vendredi 23 octobre | 9h00–14h00 | Préparation avant ouverture : toute l'équipe en Installation en continu |
 | Vendredi 23 octobre | 10h00–10h30 | Briefing d'équipe (Jeff arrive à 11h) |
 | Vendredi 23 octobre | 14h00 | Ouverture du stand au public |
 | Vendredi 23 octobre | 9h00–19h30 | Présence des bénévoles, fermeture à 19h30 |
@@ -34,6 +34,7 @@ Document d'accompagnement du planning bénévolat du pôle Indie pour le Stunfes
 | Run | IC volant / Run : déplacement entre les différents points du pôle selon les besoins ; inclut le vote du public et le check des stands 1 jour. Le vendredi/samedi, le poste de Run intègre la gestion du jury des Indie Awards. |
 | Stand IC | Tenue du Stand IC / Stunjam.                                                                                                                                                                                                   |
 | Briefing | Briefing d'équipe du vendredi, 10h00–10h30.                                                                                                                                                                                    |
+| Installation | Installation du pôle le vendredi avant l'ouverture (9h00–14h00), à la place du Run. |
 | Off | Temps de repos ou repas, fondu visuellement dans le planning.                                                                                                                                                                  |
 | Awards | Mobilisation sur les Indie Awards (samedi 18h30–20h30).                                                                                                                                                                        |
 | Media | Captation média du pôle, assurée en continu par Chris.                                                                                                                                                                         |

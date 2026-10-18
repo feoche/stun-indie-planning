@@ -198,3 +198,12 @@ test('slotProgress is the fraction of the 30-min slot elapsed, clamped to [0, 1]
   assert.equal(slotProgress(slot, at('2026-10-24T12:45:00Z')), 1);
   assert.equal(slotProgress(slot, at('2026-10-24T11:50:00Z')), 0);
 });
+
+import { roleLabel } from '../../site/js/model.js';
+
+test('roleLabel: easter egg suffix only for Florent', () => {
+  const info = { label: 'Run' };
+  assert.equal(roleLabel(info, 'florent'), 'Run Chapeau');
+  assert.equal(roleLabel(info, 'robin'), 'Run');
+  assert.equal(roleLabel(info, null), 'Run');
+});

@@ -1,5 +1,5 @@
 import {
-  parseBlocks, findPerson, homeState, parisDate, changedBlocks, removedBlocks, formatTime, clockOffset,
+  roleLabel, parseBlocks, findPerson, homeState, parisDate, changedBlocks, removedBlocks, formatTime, clockOffset,
   defaultDay, isAlertActive,
 } from './model.js';
 import { getSlug, setSlug, clearSlug, getSeen, setSeen } from './store.js';
@@ -57,9 +57,12 @@ function updateBanner(person, count) {
   return el('div', 'banner', el('span', null, `Planning mis à jour : ${count} créneau(x) modifié(s) ou supprimé(s)`), btn);
 }
 
+// Libellé d'un poste dans la vue de la personne connectée (easter egg inclus)
+const labelOf = (role) => roleLabel(planning.roles[role] ?? { label: role }, getSlug());
+
 function alertBanner() {
   const mins = Math.max(1, Math.ceil((alertBlock.start - nowFn()) / 60000));
-  const label = planning.roles[alertBlock.role]?.label ?? alertBlock.role;
+  const label = labelOf(alertBlock.role);
   const ok = el('button', 'link-btn', 'OK');
   ok.type = 'button';
   ok.addEventListener('click', () => { alertBlock = null; render(); });
@@ -69,7 +72,7 @@ function alertBanner() {
 // Alerte dans l'appli + vibration + notification système si la permission est accordée.
 function notify(block) {
   alertBlock = block;
-  const label = planning.roles[block.role]?.label ?? block.role;
+  const label = labelOf(block.role);
   const title = `Dans 10 min : ${label}`;
   const body = `à ${formatTime(block.start)}`;
   navigator.vibrate?.([200, 100, 200]);

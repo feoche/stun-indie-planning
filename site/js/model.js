@@ -129,3 +129,8 @@ export function whoIsWhere(planning, now) {
 export function slotProgress(slotStart, now) {
   return Math.min(1, Math.max(0, (now - slotStart) / SLOT_MS));
 }
+
+// Easter egg : dans la vue de Florent uniquement, tous les postes portent le suffixe « Chapeau » (affichage seulement).
+export function roleLabel(info, slug) {
+  return slug === 'florent' ? `${info.label} Chapeau` : info.label;
+}

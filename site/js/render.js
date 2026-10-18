@@ -1,5 +1,5 @@
 // Rendu DOM. Tout texte passe par textContent (jamais innerHTML).
-import { blocksOfDay, formatTime, parisDate, platformOf } from './model.js';
+import { blocksOfDay, formatTime, parisDate, platformOf, roleLabel } from './model.js';
 
 export function el(tag, className, ...children) {
   const node = document.createElement(tag);
@@ -29,9 +29,9 @@ function roleInfo(planning, role) {
   return planning.roles[role] ?? { label: role, color: '#424242' };
 }
 
-function roleChip(planning, role) {
+function roleChip(planning, role, slug) {
   const info = roleInfo(planning, role);
-  const chip = el('span', 'chip', info.label);
+  const chip = el('span', 'chip', roleLabel(info, slug));
   chip.style.background = info.color;
   return chip;
 }
@@ -48,22 +48,22 @@ function minutesLeft(end, now) {
   return `encore ${h} h${m ? String(m).padStart(2, '0') : ''}`;
 }
 
-function currentCard(planning, block, now) {
+function currentCard(planning, block, now, slug) {
   const info = roleInfo(planning, block.role);
   const card = el('section', 'card now',
     el('h2', null, 'En ce moment'),
-    el('p', 'role', info.label),
+    el('p', 'role', roleLabel(info, slug)),
     el('p', 'meta', `jusqu'à ${formatTime(block.end)} · ${minutesLeft(block.end, now)}`));
   card.style.background = info.color;
   return card;
 }
 
-function nextCard(planning, block, withDay) {
+function nextCard(planning, block, withDay, slug) {
   const info = roleInfo(planning, block.role);
   const when = withDay ? dayLabel(planning, parisDate(block.start)) : '';
   const card = el('section', 'card next',
     el('h2', null, 'Ensuite'),
-    el('p', 'role', info.label),
+    el('p', 'role', roleLabel(info, slug)),
     el('p', 'meta', `à ${formatTime(block.start)}${when ? ' · ' + when : ''}`));
   card.style.borderLeftColor = info.color;
   return card;
@@ -77,7 +77,7 @@ const MESSAGES = {
   'done-today': 'Ta journée est terminée. Merci !',
 };
 
-function timeline(planning, blocks, selectedDay, state, changed) {
+function timeline(planning, blocks, selectedDay, state, changed, slug) {
   const list = el('ol', 'timeline');
   const day = blocksOfDay(blocks, selectedDay);
   if (day.length === 0) {
@@ -88,7 +88,7 @@ function timeline(planning, blocks, selectedDay, state, changed) {
     const info = roleInfo(planning, b.role);
     const item = el('li', 'slot',
       el('span', 'slot-time', `${formatTime(b.start)}–${formatTime(b.end)}`),
-      roleChip(planning, b.role));
+      roleChip(planning, b.role, slug));
     item.style.borderLeftColor = info.color;
     if (state.current === b) item.classList.add('current');
     if (changed.has(b.start.toISOString())) item.classList.add('changed');
@@ -112,9 +112,9 @@ export function renderHome(root, ctx) {
 
   const content = el('main', 'content');
   content.append(...(ctx.extra ?? []).filter(Boolean));
-  if (state.current) content.append(currentCard(planning, state.current, now));
+  if (state.current) content.append(currentCard(planning, state.current, now, person.slug));
   else content.append(el('p', 'message', MESSAGES[state.kind] ?? ''));
-  if (state.next) content.append(nextCard(planning, state.next, state.kind === 'before' || state.kind === 'off-day' || state.kind === 'done-today'));
+  if (state.next) content.append(nextCard(planning, state.next, state.kind === 'before' || state.kind === 'off-day' || state.kind === 'done-today', person.slug));
 
   const team = el('a', 'action secondary', 'Voir le planning complet');
   team.href = '#equipe';
@@ -130,7 +130,7 @@ export function renderHome(root, ctx) {
     btn.addEventListener('click', () => ctx.onSelectDay(d.date));
     tabs.append(btn);
   }
-  content.append(tabs, timeline(planning, blocks, selectedDay, state, changed));
+  content.append(tabs, timeline(planning, blocks, selectedDay, state, changed, person.slug));
   root.replaceChildren(top, content);
 }
 

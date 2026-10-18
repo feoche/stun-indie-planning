@@ -184,8 +184,10 @@ def build_day_with_meals(day_name, cfg):
         if all_run_until is not None and h < all_run_until:
             # repas pendant la préparation : les groupes qui mangent sont Off, les autres restent en Run
             eating = eating_now(idx, crew + [MEDIA_PERSON])
+            # vendredi avant l'ouverture de 14h : le Run s'appelle « Installation »
+            prep_role = 'Run' if cfg.get('prep_counts_toward_limit', True) else 'Installation'
             for p in crew:
-                row[p] = 'Off' if p in eating else 'Run'
+                row[p] = 'Off' if p in eating else prep_role
                 if p in eating:
                     cur_role[p], run_len[p] = None, 0
                 elif cfg.get('prep_counts_toward_limit', True):

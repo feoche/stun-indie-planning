@@ -155,3 +155,21 @@ def test_awards_keep_at_least_3_people_while_others_eat():
 
 def test_no_vote_role_anymore():
     assert all('Vote' not in sched[d][i].values() for d in sched for i in sched[d])
+
+
+def test_friday_before_14h_run_is_installation():
+    for idx in range(10):
+        vals = sched[FRI][idx].values()
+        assert 'Run' not in vals, idx
+        if idx != 2:  # 10h00 : briefing
+            assert 'Installation' in vals, idx
+    for p in TEAM_FRI:
+        assert role(FRI, 0, p) == 'Installation'
+    assert role(FRI, 0, 'Chris') == 'Media'
+    assert role(FRI, 2, 'François') == 'Briefing'
+    assert role(FRI, 10, 'Jeff') != 'Installation'
+
+
+@pytest.mark.parametrize('day', [SAT, SUN])
+def test_installation_only_on_friday(day):
+    assert all('Installation' not in sched[day][i].values() for i in range(22))

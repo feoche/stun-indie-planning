@@ -154,7 +154,7 @@ def test_vote_role_removed_from_site():
 def test_every_role_has_a_description_and_a_stable_order():
     roles = PLANNING['roles']
     assert all(r['description'].strip() for r in roles.values())
-    assert list(roles) == ['Backup', 'Run', 'Stand', 'Awards', 'Briefing', 'Media', 'Off']
+    assert list(roles) == ['Backup', 'Run', 'Stand', 'Installation', 'Awards', 'Briefing', 'Media', 'Off']
     assert 'vote du public' in roles['Run']['description']
 
 

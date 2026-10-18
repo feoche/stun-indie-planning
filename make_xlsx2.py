@@ -79,7 +79,7 @@ for day, persons in DAY_PERSONS.items():
     for ci in range(2, ncols+1):
         ws.column_dimensions[get_column_letter(ci)].width = 11
 
-    legend_roles = ['Backup', 'Run', 'Stand', 'Awards', 'Media', 'Briefing', 'Off', '']
+    legend_roles = ['Backup', 'Run', 'Installation', 'Stand', 'Awards', 'Media', 'Briefing', 'Off', '']
     legend_row = last_row + 3
     ws.cell(row=legend_row, column=1, value='Légende').font = Font(name='Arial', bold=True, size=12)
     full_names = {
@@ -88,6 +88,7 @@ for day, persons in DAY_PERSONS.items():
         'Stand': 'Stand IC = Stand IC / Stunjam',
         'Awards': 'Awards = Indie Awards (18h30-20h, samedi) ; 2 personnes fixes restent en Standiers',
         'Media': 'Média = Captation média (Chris, en continu les 3 jours)',
+        'Installation': "Installation = montage du pôle avant l'ouverture du vendredi (9h-14h)",
         'Briefing': "Briefing = Briefing d'équipe (vendredi 10h00-10h30)",
         'Off': 'Off (inclut les repas : 30 min le midi, 30 min le soir, répartis sur les fenêtres 11h30-14h et 18h30-20h)',
         '': '— = pas encore arrivé / absent ce jour-là',
