@@ -159,4 +159,11 @@ def test_every_role_has_a_description_and_a_stable_order():
 
 
 def test_run_description_mentions_stand_check_one_day():
-    assert 'check des stands 1 jour' in PLANNING['roles']['Run']['description']
+    assert 'stands 1 jour sont bien installés' in PLANNING['roles']['Run']['description']
+
+
+def test_run_description_mentions_indie_spaces_and_freeplay():
+    desc = PLANNING['roles']['Run']['description']
+    assert 'espaces indés' in desc
+    assert 'freeplay' in desc
+    assert 'postes de vote du public fonctionnent' in desc

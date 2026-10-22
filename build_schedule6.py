@@ -19,6 +19,8 @@ awards_start, awards_end = slot_index(18, 1), slot_index(19, 1)  # 18h30 -> 20h 
 MEDIA_PERSON = 'Chris'
 PRESENCE = {'Jeff': (11, 20)}  # Jeff : de 11h à 20h (les autres : de 9h à 20h)
 CLOSING_SLOT = slot_index(19, 1)  # fermeture de la zone à 19h30 : rangement jusqu'à 20h
+HALF_STINT_BONUS = 100  # priorité à 1h sur un même poste plutôt que 30 min
+REPEAT_PENALTY = 3      # varier les postes d'un passage à l'autre (après une pause)
 
 DAYS = {
     'Vendredi 23 octobre': {
@@ -40,6 +42,7 @@ DAYS = {
         'all_run_until': 10,   # préparation 9h-10h avant ouverture : tout le monde en Run
         'prep_counts_toward_limit': True,
         'run_count': 2,
+        'away': {'Arthur': set(range(slot_index(18, 0), slot_index(18, 1)))},  # Arthur Off 18h-18h30
     },
     'Dimanche 25 octobre': {
         'full_day': ['François', 'Étienne', 'Florent', 'Arthur', 'Mael', 'Gabriel', 'Lylou', 'Suliac', 'Robin', 'Jeff'],
@@ -50,6 +53,7 @@ DAYS = {
         'all_run_until': 10,   # préparation 9h-10h avant ouverture : tout le monde en Run
         'prep_counts_toward_limit': True,
         'run_count': 2,
+        'away': {'Arthur': set(range(slot_index(12, 0), slot_index(13, 1)))},  # Arthur Off 12h-13h30
     },
 }
 
@@ -72,6 +76,7 @@ def build_day_with_meals(day_name, cfg):
     end_hour = cfg['end_hour']
     all_run_until = cfg.get('all_run_until')
     run_count_cfg = cfg.get('run_count', 2)
+    away = cfg.get('away', {})  # indisponibilités ponctuelles : la personne est Off sur ces créneaux
 
     team_end_slots, day_n_slots = day_layout(cfg)
     closing_slot = cfg.get('closing_slot')
@@ -79,6 +84,7 @@ def build_day_with_meals(day_name, cfg):
 
     cur_role = {p: None for p in full_day}
     run_len = {p: 0 for p in full_day}
+    last_work = {p: None for p in full_day}  # dernier poste tenu (Standiers / Stand IC / Run), pauses ignorées
     total_work = {p: 0 for p in full_day + [MEDIA_PERSON]}
     role_totals = {p: {'Backup': 0, 'Run': 0, 'Stand': 0} for p in full_day}
     taken = {p: {'lunch': False, 'dinner': False} for p in full_day + [MEDIA_PERSON]}
@@ -111,17 +117,22 @@ def build_day_with_meals(day_name, cfg):
             return set()
         todo = [p for p in eligible if not taken[p][meal]]
         slots = sorted(plan)
+
+        def meal_key(p):
+            # qui est indisponible mange pendant son absence ; on ne le fait pas manger avant
+            later_away = any(s > idx and s in away.get(p, ()) for s in slots)
+            return (0 if idx in away.get(p, ()) else 2 if later_away else 1, -total_work[p])
         pin_slot = slots[len(slots) // 2]
         if pinned:
             mine = [p for p in todo if p in pinned]
             others = [p for p in todo if p not in pinned]
             if idx == pin_slot:
-                rest = others if idx == max(plan) else sorted(others, key=lambda p: -total_work[p])[:max(0, plan[idx] - len(mine))]
+                rest = others if idx == max(plan) else sorted(others, key=meal_key)[:max(0, plan[idx] - len(mine))]
                 group = mine + rest
             else:
-                group = others if idx == max(plan) else sorted(others, key=lambda p: -total_work[p])[:plan[idx]]
+                group = others if idx == max(plan) else sorted(others, key=meal_key)[:plan[idx]]
         else:
-            group = todo if idx == max(plan) else sorted(todo, key=lambda p: -total_work[p])[:plan[idx]]
+            group = todo if idx == max(plan) else sorted(todo, key=meal_key)[:plan[idx]]
         for p in group:
             taken[p][meal] = True
         meals[idx] = sorted(group)
@@ -213,7 +224,7 @@ def build_day_with_meals(day_name, cfg):
 
         # Rotation normale : ceux qui mangent sont Off, les autres couvrent Standiers / Stand IC / Run
         eating = eating_now(idx, crew + [MEDIA_PERSON])
-        available = [p for p in crew if p not in eating]
+        available = [p for p in crew if p not in eating and idx not in away.get(p, ())]
         run_n, stand_n = run_count_cfg, 1
         backup_n = max(1, min(3, len(available) - stand_n - run_n)) if idx in meal_window else 1
         if idx in meal_window:
@@ -224,13 +235,20 @@ def build_day_with_meals(day_name, cfg):
         def valid(p, role):
             return not (cur_role.get(p) == role and run_len.get(p, 0) >= 4)
 
+        # Préférence pour des passages d'1h : qui a fait un nombre impair de demi-heures sur un poste
+        # y reste si ce poste est encore à pourvoir (moins de changements).
+        mid_stint = [p for p in available if cur_role[p] in needed and run_len[p] % 2 == 1]
         avail_sorted = sorted(available, key=lambda p: sum(role_totals[p].values()))
-        cand_pool = avail_sorted[:len(needed) + 2]
+        cand_pool = mid_stint + [p for p in avail_sorted if p not in mid_stint][:len(needed) + 2 - len(mid_stint)]
         best, best_score = None, None
         for combo in it.permutations(cand_pool, len(needed)):
             if not all(valid(p, role) for p, role in zip(combo, needed)):
                 continue
+            kept = sum(1 for p, role in zip(combo, needed) if p in mid_stint and cur_role[p] == role)
             score = sum(role_totals[p][role] for p, role in zip(combo, needed)) + sum(total_work[p] for p in combo) * 0.01
+            score -= HALF_STINT_BONUS * kept
+            score += REPEAT_PENALTY * sum(1 for p, role in zip(combo, needed)
+                                          if cur_role[p] is None and last_work[p] == role)
             if best_score is None or score < best_score:
                 best_score, best = score, combo
         if best is None:
@@ -248,6 +266,7 @@ def build_day_with_meals(day_name, cfg):
             if r in ('Backup', 'Run', 'Stand'):
                 run_len[p] = run_len[p] + 1 if cur_role[p] == r else 1
                 cur_role[p] = r
+                last_work[p] = r
                 total_work[p] += 1
                 role_totals[p][r] += 1
             else:

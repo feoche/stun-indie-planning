@@ -84,7 +84,7 @@ for day, persons in DAY_PERSONS.items():
     ws.cell(row=legend_row, column=1, value='Légende').font = Font(name='Arial', bold=True, size=12)
     full_names = {
         'Backup': 'Standiers = Back-up standiers Indie',
-        'Run': 'Run = IC volant / Run (inclut le vote du public et le check des stands 1 jour)',
+        'Run': 'Run = IC volant / Run (espaces indés + renfort freeplay ; vérifie les postes de vote du public et l\'installation des stands 1 jour)',
         'Stand': 'Stand IC = Stand IC / Stunjam',
         'Awards': 'Awards = Indie Awards (18h30-20h, samedi) ; 2 personnes fixes restent en Standiers',
         'Media': 'Média = Captation média (Chris, en continu les 3 jours)',

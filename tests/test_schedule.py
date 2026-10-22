@@ -173,3 +173,19 @@ def test_friday_before_14h_run_is_installation():
 @pytest.mark.parametrize('day', [SAT, SUN])
 def test_installation_only_on_friday(day):
     assert all('Installation' not in sched[day][i].values() for i in range(22))
+
+
+@pytest.mark.parametrize('day', [FRI, SAT, SUN])
+def test_one_hour_stints_in_the_afternoon(day):
+    """Préférence pour 1h sur un même poste : pas de passage isolé de 30 min entre 14h et 18h
+    (hors bords des fenêtres repas, de la clôture et des Awards, imposés par les horaires)."""
+    for p in DAYS[day]['full_day']:
+        for i in range(10, 18):
+            r = role(day, i, p)
+            if r in ('Backup', 'Run', 'Stand') and role(day, i - 1, p) != r:
+                assert role(day, i + 1, p) == r, (day, p, r, 9 + i / 2)
+
+
+def test_arthur_off_saturday_18h_and_sunday_12h_13h30():
+    assert role(SAT, 18, 'Arthur') == 'Off'
+    assert all(role(SUN, i, 'Arthur') == 'Off' for i in (6, 7, 8))

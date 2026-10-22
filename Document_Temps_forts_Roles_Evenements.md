@@ -31,7 +31,7 @@ Document d'accompagnement du planning bénévolat du pôle Indie pour le Stunfes
 | Poste | Définition                                                                                                                                                                                                                     |
 | --- |--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Standiers | Accueil et backup des standiers Indie. Aux horaires de repas, il n'y a plus de Run : les places de Run passent en Standiers (jusqu'à 5 Standiers, plus 1 Stand IC).                                                                                                                              |
-| Run | IC volant / Run : déplacement entre les différents points du pôle selon les besoins ; inclut le vote du public et le check des stands 1 jour. Le vendredi/samedi, le poste de Run intègre la gestion du jury des Indie Awards. |
+| Run | IC volant / Run : déplacement dans les espaces indés et renfort côté freeplay selon les besoins ; vérifie que les postes de vote du public fonctionnent et que les stands 1 jour sont bien installés. Le vendredi/samedi, le poste de Run intègre la gestion du jury des Indie Awards. |
 | Stand IC | Tenue du Stand IC / Stunjam.                                                                                                                                                                                                   |
 | Briefing | Briefing d'équipe du vendredi, 10h00–10h30.                                                                                                                                                                                    |
 | Installation | Installation du pôle le vendredi avant l'ouverture (9h00–14h00), à la place du Run. |
@@ -56,6 +56,6 @@ Règle générale : pas plus de 2 heures consécutives sur un même poste, sauf 
 
 - **Indie Awards** — samedi 24 octobre, 18h30–20h30. Cérémonie mobilisant l'équipe présente, y compris Jeff dès 18h30, hors Chris (captation média) et 2 personnes fixes qui restent sur l'accueil Standiers pendant toute la durée.
 
-Le vote du public et le check des stands 1 jour font partie du rôle Run (pas de créneau dédié).
+La vérification des postes de vote du public et de l'installation des stands 1 jour fait partie du rôle Run (pas de créneau dédié), tout comme le renfort côté freeplay.
 
 Aucun autre événement spécifique n'est identifié à ce stade pour le pôle Indie.

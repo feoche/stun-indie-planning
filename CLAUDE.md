@@ -13,17 +13,19 @@ Usage : `python build_schedule6.py && python make_xlsx2.py && python build_site.
 ## Règles métier (toutes implémentées)
 - Créneaux de 30 min, début à 9h00. Tout le monde finit à 20h tous les jours (décidé le 2026-10-18). La zone Indé ferme à 19h30 : de 19h30 à 20h, rangement, tout le monde en Run (Chris en Média) ; le samedi, les Awards occupent ce dernier créneau.
 - Ouverture au public : vendredi 14h, samedi et dimanche 10h. Bénévoles présents dès 9h pour la préparation (tout le monde en Run : vendredi 9h-14h, samedi/dimanche 9h-10h). Fermeture de la zone Indé à 19h30 tous les soirs.
-- Postes (libellé Excel) : Backup = « Standiers » (ex-Back-up standiers Indie), Run (IC volant), Stand = « Stand IC » (Stand IC / Stunjam), Awards, Média (Chris), Off (inclut les pauses repas).
+- Postes (libellé Excel) : Backup = « Standiers » (ex-Back-up standiers Indie), Run (IC volant : espaces indés + renfort freeplay), Stand = « Stand IC » (Stand IC / Stunjam), Awards, Média (Chris), Off (inclut les pauses repas).
+- Préférence pour 1h sur un même poste plutôt que 30 min (2026-10-22, `HALF_STINT_BONUS`), et varier le poste d'un passage à l'autre (`REPEAT_PENALTY`). Les passages de 30 min restants sont imposés par les horaires : bords des fenêtres repas, clôture de 19h30, Awards.
 - Max 2h consécutives sur un même poste. Dérogations explicites : préparation du vendredi matin (tout le monde en Run), Standiers fixes pendant les Awards (2h30, sans rotation).
 - Repas : 30 min déjeuner (fenêtre 11h30-14h) + 30 min dîner (fenêtre 18h30-20h) par personne, affichés en « Off » (le rôle « Pause » n'existe plus). Voir « Repas » ci-dessous.
 - Équipe (11) : François, Chris, Étienne, Florent, Arthur, Mael, Gabriel, Lylou, Robin (samedi et dimanche seulement), Suliac, Jeff (3 jours, de 11h à 20h, dans la rotation comme les autres ; seul en Run après la fermeture).
+- Indisponibilités ponctuelles (clé `away` de `DAYS`, 2026-10-22) : Arthur Off samedi 18h-18h30 et dimanche 12h-13h30 (il déjeune pendant son absence).
 - Chris : captation Média en continu les 3 jours (hors rotation), pause repas alignée.
 - 2 personnes en Run, sauf aux horaires de repas (voir ci-dessous) ; le renfort à 3 le samedi pour le jury des Awards a été abandonné.
 - Horaires de repas (2026-10-18) : plus aucun Run. Les places de Run passent en Standiers : jusqu'à 5 Standiers + 1 Stand IC, ceux qui mangent ou qui atteindraient 2h consécutives sont en Off. Hors vendredi midi (préparation, tout le monde en Run) et hors clôture 19h30-20h (tout le monde en Run).
 - Indie Awards (samedi 18h30-20h, tronqués à la fin de journée ; la cérémonie prévoyait jusqu'à 20h30, à confirmer) : 2 personnes fixes restent en Standiers sur toute la durée ; le reste de l'équipe (Jeff dès 18h30 inclus) est sur Awards ; Chris reste en Média.
 
 ## Points ouverts
-- Le rôle « Vote public » a été supprimé (2026-10-18) : le vote du public et le check des stands 1 jour font partie du Run.
+- Le rôle « Vote public » a été supprimé (2026-10-18) : le Run vérifie que les postes de vote du public fonctionnent et que les stands 1 jour sont bien installés.
 - Le script valide l'absence de dépassement des 2h consécutives hors dérogations (affiche `issues hors dérogations: []`). À conserver à chaque modification.
 
 ## Mises à jour décidées (2026-10-17)
