@@ -1,6 +1,8 @@
 .idea/
 .tokensave/
-.claude/
+.claude/*
+!.claude/settings.json
+!.claude/hooks/
 __pycache__/
 .superpowers/
 .pytest_cache/
