@@ -23,7 +23,9 @@ function nowSection(planning, now) {
 function grid(planning, selectedDay, now, mySlug) {
   const slots = slotsOfDay(planning, selectedDay);
   if (slots.length === 0) return el('p', 'empty', 'Aucun planning ce jour-là.');
-  const people = planning.people.map((p) => ({ ...p, parsed: parseBlocks(p) }));
+  const people = planning.people
+    .map((p) => ({ ...p, parsed: parseBlocks(p) }))
+    .filter((p) => slots.some((slot) => roleAtTime(p.parsed, slot))); // absents ce jour-là : pas de colonne
 
   const head = el('tr', null, el('th', 'corner', ''));
   for (const p of people) head.append(el('th', p.slug === mySlug ? 'me' : null, p.name));

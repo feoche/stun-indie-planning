@@ -2,7 +2,7 @@ import pytest
 from build_schedule6 import DAYS, build_day, build_day_with_meals, find_issues
 
 FRI, SAT, SUN = 'Vendredi 23 octobre', 'Samedi 24 octobre', 'Dimanche 25 octobre'
-TEAM_FRI = ['François', 'Étienne', 'Florent', 'Arthur', 'Mael', 'Gabriel', 'Lylou', 'Suliac']
+TEAM_FRI = ['François', 'Étienne', 'Florent', 'Arthur', 'Mael', 'Gabriel', 'Suliac']  # Lylou et Robin absents le vendredi
 
 sched = {d: build_day(d, c) for d, c in DAYS.items()}
 
@@ -66,8 +66,8 @@ LUNCH = range(5, 10)
 DINNER = range(19, 22)
 TEAM = {
     FRI: TEAM_FRI + ['Jeff', 'Chris'],
-    SAT: TEAM_FRI + ['Robin', 'Jeff', 'Chris'],
-    SUN: TEAM_FRI + ['Robin', 'Jeff', 'Chris'],
+    SAT: TEAM_FRI + ['Lylou', 'Robin', 'Jeff', 'Chris'],
+    SUN: TEAM_FRI + ['Lylou', 'Robin', 'Jeff', 'Chris'],
 }
 MEALS = {d: build_day_with_meals(d, c)[1] for d, c in DAYS.items()}  # {idx: [personnes en repas]}
 

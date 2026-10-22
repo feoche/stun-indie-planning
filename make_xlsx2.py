@@ -8,7 +8,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sched = json.load(open(os.path.join(HERE, 'schedule.json'), encoding='utf-8'))
 
 DAY_PERSONS = {
-    'Vendredi 23 octobre': ['François','Chris','Étienne','Florent','Arthur','Mael','Gabriel','Lylou','Suliac','Jeff'],
+    'Vendredi 23 octobre': ['François','Chris','Étienne','Florent','Arthur','Mael','Gabriel','Suliac','Jeff'],
     'Samedi 24 octobre':   ['François','Chris','Étienne','Florent','Arthur','Mael','Gabriel','Lylou','Suliac','Robin','Jeff'],
     'Dimanche 25 octobre': ['François','Chris','Étienne','Florent','Arthur','Mael','Gabriel','Lylou','Suliac','Robin','Jeff'],
 }

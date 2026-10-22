@@ -24,7 +24,7 @@ REPEAT_PENALTY = 3      # varier les postes d'un passage à l'autre (après une 
 
 DAYS = {
     'Vendredi 23 octobre': {
-        'full_day': ['François', 'Étienne', 'Florent', 'Arthur', 'Mael', 'Gabriel', 'Lylou', 'Suliac', 'Jeff'],
+        'full_day': ['François', 'Étienne', 'Florent', 'Arthur', 'Mael', 'Gabriel', 'Suliac', 'Jeff'],
         'presence': PRESENCE,
         'awards': None,
         'closing_slot': CLOSING_SLOT,

@@ -34,7 +34,8 @@ def test_jeff_blocks_span_11h_to_22h_each_day():
 
 
 def test_absent_person_has_no_blocks_that_day():
-    assert not [b for b in person('Robin')['blocks'] if b['start'].startswith('2026-10-23')]
+    for name in ('Robin', 'Lylou'):
+        assert not [b for b in person(name)['blocks'] if b['start'].startswith('2026-10-23')]
 
 
 def test_blocks_sorted_and_not_overlapping():
