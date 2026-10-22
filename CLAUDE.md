@@ -37,6 +37,14 @@ Usage : `python build_schedule6.py && python make_xlsx2.py && python build_site.
 1. Modifier les règles dans `build_schedule6.py`, puis `python build_schedule6.py && python make_xlsx2.py && python build_site.py`.
 2. `git add -A && git commit -m "Planning: ..." && git push` sur `main` : le workflow `.github/workflows/pages.yml` déploie `site/` (visible après environ une minute).
 3. Les bénévoles voient la bannière « Planning mis à jour » à la prochaine ouverture ou dans la minute si l'appli est ouverte.
+
+## Modifications depuis le téléphone pendant le festival (Claude Code web / appli mobile)
+François pilote les changements depuis son téléphone (session cloud, `CLAUDE_CODE_REMOTE=true`). Pour chaque demande :
+1. Dépendances si besoin : `pip install -r requirements.txt`.
+2. Appliquer la demande dans `build_schedule6.py` (absences ponctuelles : clé `away` de `DAYS`), puis `python build_schedule6.py && python make_xlsx2.py && python build_site.py`.
+3. `python -m pytest -q && npm run test:js` : tout doit passer et le script doit afficher `issues hors dérogations: []`. Sinon, ne rien publier et expliquer le blocage.
+4. Commiter (`Planning: ...`) et pousser directement sur `main`, sans branche `claude/` ni PR : c'est ce qui publie le site. Si le push sur `main` est refusé, le dire et donner le lien de la branche poussée.
+5. Répondre court (lecture sur téléphone) : qui change de poste, quand, et la confirmation que c'est publié.
 - Site : https://feoche.github.io/stun-indie-planning/ (réglage unique : Settings > Pages > Source = GitHub Actions, fait).
 - Tests : `python -m pytest` et `npm run test:js` ; test local : `python -m http.server 8000 -d site`, puis `?now=2026-10-24T14:10:00%2B02:00` pour simuler l'heure.
 - Si un fichier de `site/js` ou `site/*.css` change de façon incompatible, incrémenter `SHELL_CACHE` dans `site/sw.js`.
