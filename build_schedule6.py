@@ -33,6 +33,7 @@ DAYS = {
         'prep_counts_toward_limit': False,  # dérogation explicite : pas de limite de 2h sur cette période
         'briefing_slot': slot_index(10, 0),  # briefing 10h00-10h30, toute l'équipe sauf Jeff
         'run_count': 2,
+        'away': {'Arthur': set(range(slot_index(18, 0), slot_index(19, 0)))},  # Arthur Off 18h-19h
     },
     'Samedi 24 octobre': {
         'full_day': ['François', 'Étienne', 'Florent', 'Arthur', 'Mael', 'Gabriel', 'Lylou', 'Suliac', 'Robin', 'Jeff'],
