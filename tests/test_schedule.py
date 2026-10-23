@@ -195,5 +195,6 @@ def test_arthur_off_saturday_18h_and_sunday_12h_13h30():
 
 
 def test_friday_evening_run_covered_until_dinner_at_19h30():
-    for idx in (19, 20):  # 18h30, 19h00
-        assert sum(1 for p, r in sched[FRI][idx].items() if p != 'Chris' and r == 'Run') == 2, idx
+    run = lambda idx: sum(1 for p, r in sched[FRI][idx].items() if p != 'Chris' and r == 'Run')
+    assert run(19) == 2  # 18h30
+    assert run(20) >= 2 and 'Off' not in sched[FRI][20].values()  # 19h00 : tous les Off en Run

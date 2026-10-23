@@ -33,6 +33,7 @@ DAYS = {
         'prep_counts_toward_limit': False,  # dérogation explicite : pas de limite de 2h sur cette période
         'briefing_slot': slot_index(10, 0),  # briefing 10h00-10h30, toute l'équipe sauf Jeff
         'run_count': 2,
+        'off_to_run': {slot_index(19, 0)},  # vendredi 19h : tous les Off en Run (2026-10-23)
         'dinner_window': {slot_index(19, 1)},  # dîners décalés à 19h30 (pendant le rangement) : Run à 2 de 18h30 à 19h30
         'away': {'Arthur': set(range(slot_index(18, 0), slot_index(19, 0)))},  # Arthur Off 18h-19h
     },
@@ -234,6 +235,8 @@ def build_day_with_meals(day_name, cfg):
         eating = eating_now(idx, crew + [MEDIA_PERSON])
         available = [p for p in crew if p not in eating and idx not in away.get(p, ())]
         run_n, stand_n = run_count_cfg, 1
+        if idx in cfg.get('off_to_run', ()):  # créneaux où tous les Off disponibles passent en Run
+            run_n = max(run_n, len(available) - stand_n - 1)
         backup_n = max(1, min(3, len(available) - stand_n - run_n)) if idx in day_meal_window else 1
         if idx in day_meal_window:
             # Heures de repas : pas de Run. Les places de Run passent en Standiers.

@@ -221,12 +221,12 @@
    "Chris": "Media"
   },
   "20": {
-   "François": "Off",
-   "Étienne": "Off",
-   "Florent": "Off",
-   "Arthur": "Backup",
-   "Mael": "Stand",
-   "Gabriel": "Off",
+   "François": "Stand",
+   "Étienne": "Run",
+   "Florent": "Run",
+   "Arthur": "Run",
+   "Mael": "Run",
+   "Gabriel": "Backup",
    "Suliac": "Run",
    "Jeff": "Run",
    "Chris": "Media"
