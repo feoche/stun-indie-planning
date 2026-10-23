@@ -48,6 +48,9 @@ def test_friday_briefing_10h():
 @pytest.mark.parametrize('day', [FRI, SUN])
 def test_closing_half_hour_everyone_in_run(day):
     """Fermeture de la zone à 19h30 : tout le monde en Run (rangement) jusqu'à 20h, Chris en Média."""
+    if day == FRI:  # dérogation 2026-10-23 : le dîner du vendredi est à 19h30, tout le monde en Off ensemble
+        assert all(role(day, 21, p) == 'Off' for p in TEAM[day])
+        return
     for p in TEAM[day]:
         assert role(day, 21, p) == ('Media' if p == 'Chris' else 'Run'), (day, p)
 
@@ -87,7 +90,7 @@ def test_at_least_3_off_together_to_eat(day):
 @pytest.mark.parametrize('day', [FRI, SAT, SUN])
 def test_meals_only_inside_windows(day):
     assert all(idx in LUNCH or idx in DINNER for idx in MEALS[day])
-    if day != SAT:
+    if day == SUN:
         assert all(idx != 21 for idx in MEALS[day])  # pas de repas pendant la clôture
 
 
@@ -122,13 +125,13 @@ def test_meals_are_spread_over_the_windows(day):
     lunch_slots = [i for i in MEALS[day] if i in LUNCH]
     dinner_slots = [i for i in MEALS[day] if i in DINNER]
     assert len(lunch_slots) >= 3, (day, lunch_slots)
-    assert len(dinner_slots) >= 2, (day, dinner_slots)
-    assert max(len(MEALS[day][i]) for i in MEALS[day]) <= 6
+    assert len(dinner_slots) >= (1 if day == FRI else 2), (day, dinner_slots)  # vendredi : dîner unique à 19h30
+    assert max(len(MEALS[day][i]) for i in MEALS[day]) <= (10 if day == FRI else 6)
 
 
 # Aux heures de repas (hors préparation du vendredi et clôture) : pas de Run, que des Standiers (+ le Stand IC)
 MEAL_SLOTS = {
-    FRI: list(DINNER)[:2],            # 18h30, 19h00 (le déjeuner du vendredi est la préparation)
+    FRI: [],                          # déjeuner = préparation ; dîner à 19h30 (Run à 2 de 18h30 à 19h30)
     SAT: list(LUNCH),                 # déjeuner ; le dîner est sur Awards
     SUN: list(LUNCH) + list(DINNER)[:2],
 }
@@ -189,3 +192,8 @@ def test_one_hour_stints_in_the_afternoon(day):
 def test_arthur_off_saturday_18h_and_sunday_12h_13h30():
     assert role(SAT, 18, 'Arthur') == 'Off'
     assert all(role(SUN, i, 'Arthur') == 'Off' for i in (6, 7, 8))
+
+
+def test_friday_evening_run_covered_until_dinner_at_19h30():
+    for idx in (19, 20):  # 18h30, 19h00
+        assert sum(1 for p, r in sched[FRI][idx].items() if p != 'Chris' and r == 'Run') == 2, idx

@@ -210,37 +210,37 @@
    "Chris": "Media"
   },
   "19": {
+   "François": "Run",
+   "Étienne": "Off",
+   "Florent": "Run",
+   "Arthur": "Off",
+   "Mael": "Off",
+   "Gabriel": "Off",
+   "Suliac": "Backup",
+   "Jeff": "Stand",
+   "Chris": "Media"
+  },
+  "20": {
+   "François": "Off",
+   "Étienne": "Off",
+   "Florent": "Off",
+   "Arthur": "Backup",
+   "Mael": "Stand",
+   "Gabriel": "Off",
+   "Suliac": "Run",
+   "Jeff": "Run",
+   "Chris": "Media"
+  },
+  "21": {
    "François": "Off",
    "Étienne": "Off",
    "Florent": "Off",
    "Arthur": "Off",
    "Mael": "Off",
-   "Gabriel": "Backup",
-   "Suliac": "Backup",
-   "Jeff": "Backup",
-   "Chris": "Media"
-  },
-  "20": {
-   "François": "Backup",
-   "Étienne": "Backup",
-   "Florent": "Stand",
-   "Arthur": "Backup",
-   "Mael": "Backup",
    "Gabriel": "Off",
    "Suliac": "Off",
    "Jeff": "Off",
    "Chris": "Off"
-  },
-  "21": {
-   "François": "Run",
-   "Étienne": "Run",
-   "Florent": "Run",
-   "Arthur": "Run",
-   "Mael": "Run",
-   "Gabriel": "Run",
-   "Suliac": "Run",
-   "Jeff": "Run",
-   "Chris": "Media"
   }
  },
  "Samedi 24 octobre": {

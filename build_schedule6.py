@@ -33,6 +33,7 @@ DAYS = {
         'prep_counts_toward_limit': False,  # dérogation explicite : pas de limite de 2h sur cette période
         'briefing_slot': slot_index(10, 0),  # briefing 10h00-10h30, toute l'équipe sauf Jeff
         'run_count': 2,
+        'dinner_window': {slot_index(19, 1)},  # dîners décalés à 19h30 (pendant le rangement) : Run à 2 de 18h30 à 19h30
         'away': {'Arthur': set(range(slot_index(18, 0), slot_index(19, 0)))},  # Arthur Off 18h-19h
     },
     'Samedi 24 octobre': {
@@ -82,6 +83,12 @@ def build_day_with_meals(day_name, cfg):
     team_end_slots, day_n_slots = day_layout(cfg)
     closing_slot = cfg.get('closing_slot')
     meal_cutoff = closing_slot if closing_slot is not None else team_end_slots  # pas de repas pendant la clôture
+    dinner_window = cfg.get('dinner_window')  # dérogation : fenêtre dîner imposée (repas possible pendant la clôture)
+    if dinner_window is None:
+        dinner_window, dinner_cutoff = DINNER_WINDOW, meal_cutoff
+    else:
+        dinner_cutoff = max(dinner_window) + 1
+    day_meal_window = LUNCH_WINDOW | dinner_window
 
     cur_role = {p: None for p in full_day}
     run_len = {p: 0 for p in full_day}
@@ -107,8 +114,8 @@ def build_day_with_meals(day_name, cfg):
         `pinned` mangent ensemble au créneau central du plan (Standiers fixes des Awards)."""
         if idx in LUNCH_WINDOW:
             meal, window = 'lunch', LUNCH_WINDOW
-        elif idx in DINNER_WINDOW:
-            meal, window = 'dinner', {x for x in DINNER_WINDOW if x < meal_cutoff}
+        elif idx in dinner_window:
+            meal, window = 'dinner', {x for x in dinner_window if x < dinner_cutoff}
         else:
             return set()
         if meal not in plans:
@@ -215,11 +222,11 @@ def build_day_with_meals(day_name, cfg):
 
         # Clôture (hors samedi) : zone fermée, tout le monde en Run pour le rangement jusqu'à 20h
         if closing_slot is not None and idx >= closing_slot:
-            eating = set()
+            eating = eating_now(idx, crew + [MEDIA_PERSON]) if 'dinner_window' in cfg else set()
             for p in crew:
-                row[p] = 'Run'
+                row[p] = 'Off' if p in eating else 'Run'
                 cur_role[p], run_len[p] = None, 0
-            row[MEDIA_PERSON] = 'Media'
+            row[MEDIA_PERSON] = 'Off' if MEDIA_PERSON in eating else 'Media'
             schedule[idx] = row
             continue
 
@@ -227,8 +234,8 @@ def build_day_with_meals(day_name, cfg):
         eating = eating_now(idx, crew + [MEDIA_PERSON])
         available = [p for p in crew if p not in eating and idx not in away.get(p, ())]
         run_n, stand_n = run_count_cfg, 1
-        backup_n = max(1, min(3, len(available) - stand_n - run_n)) if idx in meal_window else 1
-        if idx in meal_window:
+        backup_n = max(1, min(3, len(available) - stand_n - run_n)) if idx in day_meal_window else 1
+        if idx in day_meal_window:
             # Heures de repas : pas de Run. Les places de Run passent en Standiers.
             backup_n, run_n = backup_n + run_n, 0
         needed = ['Backup'] * backup_n + ['Stand'] * stand_n + ['Run'] * run_n
